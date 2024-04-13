@@ -24,9 +24,9 @@ Version: V1 - description of EZElectronics in FUTURE form (as proposed by the te
 - [Use case diagram and use cases](#use-case-diagram-and-use-cases)
   - [Use case diagram](#use-case-diagram)
     - [Use case 1, UC1](#use-case-1-uc1)
-      - [Scenario 1.1](#scenario-11)
-      - [Scenario 1.2](#scenario-12)
-      - [Scenario 1.x](#scenario-1x)
+        - [Scenario 1.1](#scenario-11)
+        - [Scenario 1.2](#scenario-12)
+        - [Scenario 1.x](#scenario-1x)
     - [Use case 2, UC2](#use-case-2-uc2)
     - [Use case x, UCx](#use-case-x-ucx)
 - [Glossary](#glossary)
@@ -41,7 +41,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 | Stakeholder name | Description |
 | :--------------: | :---------: |
-| Stakeholder x..  |             |
+|    Google ads    |             |
 
 # Context Diagram and interfaces
 
