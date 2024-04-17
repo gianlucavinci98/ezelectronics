@@ -47,7 +47,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |     Customer     |                   Person that will buy products from the website                   |
 |     Employee     | Person who assists in managing the store, helps customers, and maintains inventory |
 |     Investor     |          Person that will invest money in the development of the website           |
-| Payment service  |                 Third party application that handles the payments                  |
+|    Inventory     |             Entity that represents the stock of products in the store              |
 
 
 # Context Diagram and interfaces
@@ -60,21 +60,17 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ## Interfaces
 
-\<describe here each interface in the context diagram>
-
-\<GUIs will be described graphically in a separate document>
-
-|   Actor   | Logical Interface | Physical Interface |
-| :-------: | :---------------: | :----------------: |
-| Actor x.. |                   |                    |
+|   Actor   | Logical Interface |    Physical Interface    |
+| :-------: | :---------------: | :----------------------: |
+|  Manager  |   GUI (webapp)    |       PC or Tablet       |
+| Customer  |   GUI (webapp)    | PC, Tablet or Smartphone |
+| Inventory |  SQLite Database  |    File on Filesystem    |
 
 # Stories and personas
 
-\<A Persona is a realistic impersonation of an actor. Define here a few personas and describe in plain text how a persona interacts with the system>
+**Mario** is a manager of an electronics store. He uses the _EZElectronics_ website to manage the products in his store. He can add new products, remove old ones, and set some product as sold. He can also see the history of the orders made by customers.
 
-\<Persona is-an-instance-of actor>
-
-\<stories will be formalized later as scenarios in use cases>
+**Luigi** is a customer of an electronics store. He uses the _EZElectronics_ website to see the products available in the store. He can add products to his cart, see the history of his past purchases, and confirm an order.
 
 # Functional and non functional requirements
 

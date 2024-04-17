@@ -42,6 +42,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | Stakeholder name | Description |
 | :--------------: | :---------: |
 |    Google ads    |             |
+| Payment service  |             |
 
 # Context Diagram and interfaces
 
@@ -57,9 +58,9 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 \<GUIs will be described graphically in a separate document>
 
-|   Actor   | Logical Interface | Physical Interface |
-| :-------: | :---------------: | :----------------: |
-| Actor x.. |                   |                    |
+|                  Actor                  | Logical Interface | Physical Interface |
+| :-------------------------------------: | :---------------: | :----------------: |
+| supplier (has access to `arrivals` api) |                   |                    |
 
 # Stories and personas
 
