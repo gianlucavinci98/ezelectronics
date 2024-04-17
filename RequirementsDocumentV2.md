@@ -78,11 +78,12 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 \<they match to high level use cases>
 
-|  ID   | Description |
-| :---: | :---------: |
-|  FR1  |             |
-|  FR2  |             |
-| FRx.. |             |
+|  ID   |                Description                 |
+| :---: | :----------------------------------------: |
+|  FR1  |                                            |
+|  FR2  |                                            |
+| FRx.. | someone can retrieve the list of customers |
+| FRx.. |             returned products              |
 
 ## Non Functional Requirements
 

@@ -39,15 +39,15 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 # Stakeholders
 
-| Stakeholder name |                                    Description                                     |
-| :--------------: | :--------------------------------------------------------------------------------: |
-|     Manager      |                 Person that will manage the website and the orders                 |
-|    Developer     |                        Person that will develop the website                        |
-|     Supplier     |               Person that will supply the goods sold on the website                |
-|     Customer     |                   Person that will buy products from the website                   |
-|     Employee     | Person who assists in managing the store, helps customers, and maintains inventory |
-|     Investor     |          Person that will invest money in the development of the website           |
-|    Inventory     |             Entity that represents the stock of products in the store              |
+| Stakeholder name | Description                                                                        |
+| :--------------- | :--------------------------------------------------------------------------------- |
+| Manager          | Person that will manage the website and the orders                                 |
+| Developer        | Person that will develop the website                                               |
+| Supplier         | Person that will supply the goods sold on the website                              |
+| Customer         | Person that will buy products from the website                                     |
+| Employee         | Person who assists in managing the store, helps customers, and maintains inventory |
+| Investor         | Person that will invest money in the development of the website                    |
+| Inventory        | Entity that represents the stock of products in the store                          |
 
 
 # Context Diagram and interfaces
@@ -60,11 +60,11 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ## Interfaces
 
-|   Actor   | Logical Interface |    Physical Interface    |
-| :-------: | :---------------: | :----------------------: |
-|  Manager  |   GUI (webapp)    |       PC or Tablet       |
-| Customer  |   GUI (webapp)    | PC, Tablet or Smartphone |
-| Inventory |  SQLite Database  |    File on Filesystem    |
+| Actor     | Logical Interface | Physical Interface       |
+| :-------- | :---------------- | :----------------------- |
+| Manager   | GUI (webapp)      | PC or Tablet             |
+| Customer  | GUI (webapp)      | PC, Tablet or Smartphone |
+| Inventory | SQLite Database   | File on Filesystem       |
 
 # Stories and personas
 
@@ -80,11 +80,36 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 \<they match to high level use cases>
 
-|  ID   | Description |
-| :---: | :---------: |
-|  FR1  |             |
-|  FR2  |             |
-| FRx.. |             |
+| ID         | Description                                                                                                     |
+| :--------- | :-------------------------------------------------------------------------------------------------------------- |
+| FR1        | Authorization and Authentication                                                                                |
+| FR1.1      | Login                                                                                                           |
+| FR1.2      | Logout                                                                                                          |
+| FR1.3      | Logged in users shall be able to obtain their information                                                       |
+| FR2        | Manage Users                                                                                                    |
+| FR2.1      | Unregistered users shall be able to register themselves                                                         |
+| **FR2.x**  | List all users / delete all users / retrive users by role / retrive user by username (for testing purposes) (?) |
+| FR 3       | Manage Products                                                                                                 |
+| FR 3.1     | Managers shall be able to add new products                                                                      |
+| FR 3.1.1   | Add a single new product                                                                                        |
+| FR 3.1.2   | Add multiple new equal products (product with quantity > 1)                                                     |
+| FR 3.2     | Managers shall be able to remove products                                                                       |
+| FR 3.3     | Managers shall be able to set a product as sold                                                                 |
+| FR 3.4     | Logged in users shall be able to get product information                                                        |
+| FR 3.5     | Logged in users shall be able to list products                                                                  |
+| FR 3.5.1   | List product of a specific category                                                                             |
+| FR 3.5.2   | List product of a specific model                                                                                |
+| FR 3.5.3   | List all products                                                                                               |
+| FR 3.6     | Managers shall be able to delete a product                                                                      |
+| **FR 3.x** | Delete all products (for testing purposes) (?)                                                                  |
+| FR 4       | Manage Carts                                                                                                    |
+| FR 4.1     | Customers shall be able to list all products in their cart                                                      |
+| FR 4.2     | Customers shall be able to add a product to their cart                                                          |
+| FR 4.3     | Customers shall be able to remove a product from their cart                                                     |
+| FR 4.4     | Customers shall be able to pay the cart                                                                         |
+| FR 4.5     | Customers shall be able to list all carts that have been payed                                                  |
+| FR 4.6     | Customers shall be able to delete the current cart                                                              |
+| **FR 4.x** | Delete all carts (for testing purposes) (?)                                                                     |
 
 ## Non Functional Requirements
 
