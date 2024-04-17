@@ -76,10 +76,6 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ## Functional Requirements
 
-\<In the form DO SOMETHING, or VERB NOUN, describe high level capabilities of the system>
-
-\<they match to high level use cases>
-
 | ID         | Description                                                                                                     |
 | :--------- | :-------------------------------------------------------------------------------------------------------------- |
 | FR1        | Authorization and Authentication                                                                                |
@@ -115,12 +111,12 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 \<Describe constraints on functional requirements>
 
-|   ID    | Type (efficiency, reliability, ..) | Description | Refers to |
-| :-----: | :--------------------------------: | :---------: | :-------: |
-|  NFR1   |                                    |             |           |
-|  NFR2   |                                    |             |           |
-|  NFR3   |                                    |             |           |
-| NFRx .. |                                    |             |           |
+| ID      | Type      | Description                                                                                 | Refers to |
+| :------ | :-------- | :------------------------------------------------------------------------------------------ | :-------- |
+| NFR1    | Usability | Customers shall be able to interact with the webapp with no training in less than 2 minutes | All       |
+| NFR2    | Usability | Managers shall be able to interact with the webapp with a training of 1 hour                | All       |
+| NFR3    |           |                                                                                             |           |
+| NFRx .. |           |                                                                                             |           |
 
 # Use case diagram and use cases
 
