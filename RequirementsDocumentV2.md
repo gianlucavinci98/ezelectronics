@@ -84,17 +84,19 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |  FR2  |                                            |
 | FRx.. | someone can retrieve the list of customers |
 | FRx.. |             returned products              |
+| FR..  |               reset password               |
+| FR..  |                list models                 |
 
 ## Non Functional Requirements
 
 \<Describe constraints on functional requirements>
 
-|   ID    | Type (efficiency, reliability, ..) | Description | Refers to |
-| :-----: | :--------------------------------: | :---------: | :-------: |
-|  NFR1   |          maintainability           |             |           |
-|  NFR2   |                                    |             |           |
-|  NFR3   |                                    |             |           |
-| NFRx .. |                                    |             |           |
+|   ID    | Type (efficiency, reliability, ..) |        Description         | Refers to |
+| :-----: | :--------------------------------: | :------------------------: | :-------: |
+|  NFR1   |          maintainability           |                            |           |
+|  NFR2   |                                    | password security standard |           |
+|  NFR3   |                                    |                            |           |
+| NFRx .. |                                    |                            |           |
 
 # Use case diagram and use cases
 
@@ -139,6 +141,8 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ### Use case 2, UC2
 
+login with external provider
+max number of login then block the user
 ..
 
 ### Use case x, UCx
