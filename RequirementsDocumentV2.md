@@ -91,7 +91,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 |   ID    | Type (efficiency, reliability, ..) | Description | Refers to |
 | :-----: | :--------------------------------: | :---------: | :-------: |
-|  NFR1   |                                    |             |           |
+|  NFR1   |          maintainability           |             |           |
 |  NFR2   |                                    |             |           |
 |  NFR3   |                                    |             |           |
 | NFRx .. |                                    |             |           |
