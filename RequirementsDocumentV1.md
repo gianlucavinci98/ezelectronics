@@ -24,42 +24,42 @@ Version: V1 - description of EZElectronics in CURRENT form (as received by teach
 - [Use case diagram and use cases](#use-case-diagram-and-use-cases)
   - [Use case diagram](#use-case-diagram)
     - [Use case 1, UC1: User registration](#use-case-1-uc1-user-registration)
-        - [Scenario 1.1](#scenario-11)
-        - [Scenario 1.2](#scenario-12)
-        - [Scenario 1.3](#scenario-13)
-        - [Scenario 1.4](#scenario-14)
-        - [Scenario 1.5](#scenario-15)
+      - [Scenario 1.1](#scenario-11)
+      - [Scenario 1.2](#scenario-12)
+      - [Scenario 1.3](#scenario-13)
+      - [Scenario 1.4](#scenario-14)
+      - [Scenario 1.5](#scenario-15)
     - [Use case 2, UC2: User login](#use-case-2-uc2-user-login)
-        - [Scenario 2.1](#scenario-21)
-        - [Scenario 2.2](#scenario-22)
+      - [Scenario 2.1](#scenario-21)
+      - [Scenario 2.2](#scenario-22)
     - [Use case 3, UC3: Add a product](#use-case-3-uc3-add-a-product)
-        - [Scenario 3.1](#scenario-31)
-        - [Scenario 3.2](#scenario-32)
-        - [Scenario 3.3](#scenario-33)
-        - [Scenario 3.4](#scenario-34)
+      - [Scenario 3.1](#scenario-31)
+      - [Scenario 3.2](#scenario-32)
+      - [Scenario 3.3](#scenario-33)
+      - [Scenario 3.4](#scenario-34)
     - [Use case 4, UC4: Sell a product](#use-case-4-uc4-sell-a-product)
-        - [Scenario 4.1](#scenario-41)
-        - [Scenario 4.2](#scenario-42)
-        - [Scenario 4.3](#scenario-43)
+      - [Scenario 4.1](#scenario-41)
+      - [Scenario 4.2](#scenario-42)
+      - [Scenario 4.3](#scenario-43)
     - [Use case 5, UC5: Delete a product](#use-case-5-uc5-delete-a-product)
-        - [Scenario 5.1](#scenario-51)
+      - [Scenario 5.1](#scenario-51)
     - [Use case 6, UC6: Search for products](#use-case-6-uc6-search-for-products)
-        - [Scenario 6.1](#scenario-61)
-        - [Scenario 6.2](#scenario-62)
-        - [Scenario 6.3](#scenario-63)
-        - [Scenario 6.4](#scenario-64)
+      - [Scenario 6.1](#scenario-61)
+      - [Scenario 6.2](#scenario-62)
+      - [Scenario 6.3](#scenario-63)
+      - [Scenario 6.4](#scenario-64)
     - [Use case 7, UC7: Add product to cart](#use-case-7-uc7-add-product-to-cart)
-        - [Scenario 7.1](#scenario-71)
-        - [Scenario 7.2](#scenario-72)
+      - [Scenario 7.1](#scenario-71)
+      - [Scenario 7.2](#scenario-72)
     - [Use case 8, UC8: Remove a product from the cart](#use-case-8-uc8-remove-a-product-from-the-cart)
-        - [Scenario 8.1](#scenario-81)
-        - [Scenario 8.2](#scenario-82)
-        - [Scenario 8.3](#scenario-83)
+      - [Scenario 8.1](#scenario-81)
+      - [Scenario 8.2](#scenario-82)
+      - [Scenario 8.3](#scenario-83)
     - [Use case 9, UC9: Pay the current cart](#use-case-9-uc9-pay-the-current-cart)
-        - [Scenario 9.1](#scenario-91)
-        - [Scenario 9.2](#scenario-92)
+      - [Scenario 9.1](#scenario-91)
+      - [Scenario 9.2](#scenario-92)
+    - [TODO -\> cart visualizing (current and old)](#todo---cart-visualizing-current-and-old)
 - [Glossary](#glossary)
-- [System Design](#system-design)
 - [Deployment Diagram](#deployment-diagram)
 
 # Informal description
@@ -164,7 +164,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |                  | [Scenario 1.4: Passwords don't match](#scenario-14)   |
 |                  | [Scenario 1.5: Invalid data](#scenario-15)            |
 
-##### Scenario 1.1
+#### Scenario 1.1
 
 \<describe here scenarios instances of UC1>
 
@@ -187,7 +187,7 @@ Customer registers successfully
 | 4              | System calls the API to register the user |
 | 5              | System returns a confirmation message     |
 
-##### Scenario 1.2
+#### Scenario 1.2
 
 Manager registers successfully
 
@@ -202,7 +202,7 @@ Manager registers successfully
 | 4              | System calls the API to register the user |
 | 5              | System returns a confirmation message     |
 
-##### Scenario 1.3
+#### Scenario 1.3
 
 User is already registered
 
@@ -219,7 +219,7 @@ User is already registered
 | 6              | An error message is shown to the user     |
 | 7              | Go to _Step 2_                            |
 
-##### Scenario 1.4
+#### Scenario 1.4
 
 Fields _Password_ and _Verify Password_ doesn't match
 
@@ -234,7 +234,7 @@ Fields _Password_ and _Verify Password_ doesn't match
 | 4              | An error message is shown to the user |
 | 5              | Go to _Step 2_                        |
 
-##### Scenario 1.5
+#### Scenario 1.5
 
 Invalid data
 
@@ -261,7 +261,7 @@ Invalid data
 | Variants         | -                                                        |
 | Exceptions       | [Scenario 2.2: Wrong username or password](#scenario-22) |
 
-##### Scenario 2.1
+#### Scenario 2.1
 
 User logs in successfully
 
@@ -277,7 +277,7 @@ User logs in successfully
 | 5              | System calls the API to login         |
 | 6              | System returns a confirmation message |
 
-##### Scenario 2.2
+#### Scenario 2.2
 
 User inserts a wrong username or password
 
@@ -305,7 +305,7 @@ User inserts a wrong username or password
 | Exceptions       | [Scenario 3.3: code already present](#scenario-33)                   |
 |                  | [Scenario 3.4: arrival date is after the current date](#scenario-34) |
 
-##### Scenario 3.1
+#### Scenario 3.1
 
 Manager adds a product successfully
 
@@ -320,7 +320,7 @@ Manager adds a product successfully
 | 4              | System calls the API to insert the product |
 | 5              | System returns a confirmation message      |
 
-##### Scenario 3.2
+#### Scenario 3.2
 
 Manager adds multiple products successfully
 
@@ -335,7 +335,7 @@ Manager adds multiple products successfully
 | 4              | System calls the API to insert multiple products |
 | 5              | System returns a confirmation message            |
 
-##### Scenario 3.3
+#### Scenario 3.3
 
 Product code is already present on the system
 
@@ -351,7 +351,7 @@ Product code is already present on the system
 | 5              | System returns an error message            |
 | 6              | Go to _Step 2_                             |
 
-##### Scenario 3.4
+#### Scenario 3.4
 
 Arrival date is after the current date
 
@@ -378,7 +378,7 @@ Arrival date is after the current date
 | Exceptions       | [Scenario 4.2: Invalid selling date](#scenario-42)   |
 |                  | [Scenario 4.3: Product already sold](#scenario-43)   |
 
-##### Scenario 4.1
+#### Scenario 4.1
 
 Product is sold correctly
 
@@ -394,7 +394,7 @@ Product is sold correctly
 | 5              | System calls the API to mark the product as sold |
 | 6              | System returns a confirmation message            |
 
-##### Scenario 4.2
+#### Scenario 4.2
 
 Selling date is not valid (because it is on the future or before the arrival date of the product)
 
@@ -411,7 +411,7 @@ Selling date is not valid (because it is on the future or before the arrival dat
 | 6              | System returns an error message                  |
 | 7              | Go to _Step 3_                                   |
 
-##### Scenario 4.3
+#### Scenario 4.3
 
 Product is already sold
 
@@ -438,7 +438,7 @@ Product is already sold
 | Variants         | -                                             |
 | Exceptions       | -                                             |
 
-##### Scenario 5.1
+#### Scenario 5.1
 
 Product is deleted correctly
 
@@ -465,7 +465,7 @@ Product is deleted correctly
 |                  | [Scenario 6.4: Get product information](#scenario-64)     |
 | Exceptions       | -                                                         |
 
-##### Scenario 6.1
+#### Scenario 6.1
 
 All products are shown to the user
 
@@ -478,7 +478,7 @@ All products are shown to the user
 | 2              | System calls the API to list all the products |
 | 3              | Products are shown to the user                |
 
-##### Scenario 6.2
+#### Scenario 6.2
 
 All products in a given category are shown to the user
 
@@ -491,7 +491,7 @@ All products in a given category are shown to the user
 | 2              | System calls the API to list products of the category |
 | 3              | Products of the category are shown to the user        |
 
-##### Scenario 6.3
+#### Scenario 6.3
 
 All products of a given model are shown to the user
 
@@ -504,7 +504,7 @@ All products of a given model are shown to the user
 | 2              | System calls the API to list products of model |
 | 3              | Products of the model are shown to the user    |
 
-##### Scenario 6.4
+#### Scenario 6.4
 
 Specific product is shown to the user
 
@@ -527,7 +527,7 @@ Specific product is shown to the user
 | Variants         | -                                                       |
 | Exceptions       | [Scanario 7.2: product not available](#scenario-72)     |
 
-##### Scenario 7.1
+#### Scenario 7.1
 
 Product is added to the cart
 
@@ -541,7 +541,7 @@ Product is added to the cart
 | 3              | System returns a confirmation message               |
 | 4              | A confirmation message is shown to the user         |
 
-##### Scenario 7.2
+#### Scenario 7.2
 
 Product is not available because it is already in another cart or is already sold
 
@@ -565,7 +565,7 @@ Product is not available because it is already in another cart or is already sol
 | Variants         | [Scenario 8.2: empty the cart](#scenario-82)           |
 | Exceptions       | [Scenario 8.3: invalid data](#scenario-83)             |
 
-##### Scenario 8.1
+#### Scenario 8.1
 
 Product is removed from the cart
 
@@ -579,7 +579,7 @@ Product is removed from the cart
 | 3              | System returns a confirmation message                    |
 | 4              | A confirmation message is shown to the user              |
 
-##### Scenario 8.2
+#### Scenario 8.2
 
 Customer empties the cart
 
@@ -593,7 +593,7 @@ Customer empties the cart
 | 3              | System returns a confirmation message                  |
 | 4              | A confirmation message is shown to the user            |
 
-##### Scenario 8.3
+#### Scenario 8.3
 
 The product customer wants to remove is not in the cart, the code of the product is not valid, or customer has no cart
 
@@ -617,7 +617,7 @@ The product customer wants to remove is not in the cart, the code of the product
 | Variants         | -                                                      |
 | Exceptions       | [Scenario 9.2: empty cart](#scenario-92)               |
 
-##### Scenario 9.1
+#### Scenario 9.1
 
 The cart is correctly marked as paid
 
@@ -631,7 +631,7 @@ The cart is correctly marked as paid
 | 3              | System returns a confirmation message                  |
 | 4              | A confirmation message is shown to the user            |
 
-##### Scenario 9.2
+#### Scenario 9.2
 
 The cart is empty or the cart does not exists
 
@@ -645,6 +645,7 @@ The cart is empty or the cart does not exists
 | 3              | System returns an error message                                             |
 | 4              | An error message is shown to the user                                       |
 
+### TODO -> cart visualizing (current and old)
 ..
 
 # Glossary
@@ -652,12 +653,6 @@ The cart is empty or the cart does not exists
 \<use UML class diagram to define important terms, or concepts in the domain of the application, and their relationships>
 
 \<concepts must be used consistently all over the document, ex in use cases, requirements etc>
-
-# System Design
-
-\<describe here system design>
-
-\<must be consistent with Context diagram>
 
 # Deployment Diagram
 
