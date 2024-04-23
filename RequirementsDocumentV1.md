@@ -1,12 +1,12 @@
 # Requirements Document - current EZElectronics
 
-Date:
+Date: May 5th, 2024
 
 Version: V1 - description of EZElectronics in CURRENT form (as received by teachers)
 
-| Version number | Change |
-| :------------: | :----: |
-|                |        |
+| Version number |      Change      |
+| :------------: | :--------------: |
+|       V1       | Initial proposal |
 
 # Contents
 
@@ -83,9 +83,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ## Context Diagram
 
-\<Define here Context diagram using UML use case diagram>
-
-\<actors are a subset of stakeholders>
+![Context Diagram](./assets/diagrams_v1/svg/Model1!ContextDiagram_1.svg)
 
 ## Interfaces
 
@@ -148,9 +146,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ## Use case diagram
 
-\<define here UML Use case diagram UCD summarizing all use cases, and their relationships>
-
-\<next describe here each use case in the UCD>
+![Use Case Diagram](./assets/diagrams_v1/svg/Model3!UseCaseDiagram1_3.svg)
 
 ### Use case 1, UC1: User registration
 
@@ -165,14 +161,6 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 |                  | [Scenario 1.5: Invalid data](#scenario-15)            |
 
 #### Scenario 1.1
-
-\<describe here scenarios instances of UC1>
-
-\<a scenario is a sequence of steps that corresponds to a particular execution of one use case>
-
-\<a scenario is a more formal description of a story>
-
-\<only relevant scenarios should be described>
 
 Customer registers successfully
 
@@ -316,7 +304,7 @@ Manager adds a product successfully
 | **Step#**      | **Description**                            |
 | 1              | Manager goes on the inventory management   |
 | 2              | Manager fills in required data             |
-| 3              | Manager clicks on submit button            |
+| 3              | Manager confirms                           |
 | 4              | System calls the API to insert the product |
 | 5              | System returns a confirmation message      |
 
@@ -331,7 +319,7 @@ Manager adds multiple products successfully
 | **Step#**      | **Description**                                  |
 | 1              | Manager goes on the inventory management         |
 | 2              | Manager fills in required data                   |
-| 3              | Manager clicks on submit button                  |
+| 3              | Manager confirms                                 |
 | 4              | System calls the API to insert multiple products |
 | 5              | System returns a confirmation message            |
 
@@ -346,7 +334,7 @@ Product code is already present on the system
 | **Step#**      | **Description**                            |
 | 1              | Manager goes on the inventory management   |
 | 2              | Manager fills in required data             |
-| 3              | Manager clicks on submit button            |
+| 3              | Manager confirms                           |
 | 4              | System calls the API to insert the product |
 | 5              | System returns an error message            |
 | 6              | Go to _Step 2_                             |
@@ -646,14 +634,12 @@ The cart is empty or the cart does not exists
 | 4              | An error message is shown to the user                                       |
 
 ### TODO -> cart visualizing (current and old)
-..
+
 
 # Glossary
 
-\<use UML class diagram to define important terms, or concepts in the domain of the application, and their relationships>
-
-\<concepts must be used consistently all over the document, ex in use cases, requirements etc>
+![Glossary](./assets/diagrams_v1/svg/Model2!Glossary_2.svg)
 
 # Deployment Diagram
 
-\<describe here deployment diagram >
+![Deployment Diagram](./assets/diagrams_v1/svg/Model4!DeploymentDiagram1_4.svg)
