@@ -639,8 +639,6 @@ The cart is empty or the cart does not exists
 
 ![Glossary](./assets/diagrams_v1/svg/Model2!Glossary_2.svg)
 
-TODO: remove quantity
-
 # Deployment Diagram
 
 ![Deployment Diagram](./assets/diagrams_v1/svg/Model4!DeploymentDiagram1_4.svg)
