@@ -95,7 +95,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 # Stories and personas
 
-**Mario** is a manager of an electronics store. He uses the _EZElectronics_ website to manage the products in his store. He can add new products, remove old ones, and set some product as sold. He can also see the history of the orders made by customers.
+**Mario** is a manager of an electronics store. He uses the _EZElectronics_ website to manage the products in his store. He can add new products, remove old ones, and set some product as sold.
 
 **Luigi** is a customer of an electronics store. He uses the _EZElectronics_ website to see the products available in the store. He can add products to his cart, see the history of his past purchases, and confirm an order.
 
@@ -103,33 +103,33 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ## Functional Requirements
 
-| ID       | Description                                                    |
-| :------- | :------------------------------------------------------------- |
-| FR1      | Authorization and Authentication                               |
-| FR1.1    | Login                                                          |
-| FR1.2    | Logout                                                         |
-| FR1.3    | Logged in users shall be able to obtain their information      |
-| FR2      | Manage Users                                                   |
-| FR2.1    | Unregistered users shall be able to register themselves        |
-| FR 3     | Manage Products                                                |
-| FR 3.1   | Managers shall be able to add new products                     |
-| FR 3.1.1 | Add a single new product                                       |
-| FR 3.1.2 | Add multiple new equal products (product with quantity > 1)    |
-| FR 3.2   | Managers shall be able to remove products                      |
-| FR 3.3   | Managers shall be able to set a product as sold                |
-| FR 3.4   | Logged in users shall be able to get product information       |
-| FR 3.5   | Logged in users shall be able to list products                 |
-| FR 3.5.1 | List product of a specific category                            |
-| FR 3.5.2 | List product of a specific model                               |
-| FR 3.5.3 | List all products                                              |
-| FR 3.6   | Managers shall be able to delete a product                     |
-| FR 4     | Manage Carts                                                   |
-| FR 4.1   | Customers shall be able to list all products in their cart     |
-| FR 4.2   | Customers shall be able to add a product to their cart         |
-| FR 4.3   | Customers shall be able to remove a product from their cart    |
-| FR 4.4   | Customers shall be able to pay the cart                        |
-| FR 4.5   | Customers shall be able to list all carts that have been payed |
-| FR 4.6   | Customers shall be able to delete the current cart             |
+| ID      | Description                                                    |
+| :------ | :------------------------------------------------------------- |
+| FR1     | Authorization and Authentication                               |
+| FR1.1   | Login                                                          |
+| FR1.2   | Logout                                                         |
+| FR1.3   | Logged in users shall be able to obtain their information      |
+| FR2     | Manage Users                                                   |
+| FR2.1   | Unregistered users shall be able to register themselves        |
+| FR3     | Manage Products                                                |
+| FR3.1   | Managers shall be able to add new products                     |
+| FR3.1.1 | Add a single new product                                       |
+| FR3.1.2 | Add multiple new equal products (product with quantity > 1)    |
+| FR3.2   | Managers shall be able to remove products                      |
+| FR3.3   | Managers shall be able to set a product as sold                |
+| FR3.4   | Logged in users shall be able to get product information       |
+| FR3.5   | Logged in users shall be able to list products                 |
+| FR3.5.1 | List product of a specific category                            |
+| FR3.5.2 | List product of a specific model                               |
+| FR3.5.3 | List all products                                              |
+| FR3.6   | Managers shall be able to delete a product                     |
+| FR4     | Manage Carts                                                   |
+| FR4.1   | Customers shall be able to list all products in their cart     |
+| FR4.2   | Customers shall be able to add a product to their cart         |
+| FR4.3   | Customers shall be able to remove a product from their cart    |
+| FR4.4   | Customers shall be able to pay the cart                        |
+| FR4.5   | Customers shall be able to list all carts that have been payed |
+| FR4.6   | Customers shall be able to delete the current cart             |
 
 ## Non Functional Requirements
 
@@ -140,7 +140,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | NFR3 | Efficiency  | All functions must complete in < 0.5 s                                                      | All                        |
 | NFR4 | Reliability | No more than 1 defect per year per user                                                     | All                        |
 | NFR5 | Portability | The API server must be connected to the Internet with a connection of at least 1Gb/s        | All                        |
-| NFR6 | Portability | The webapp must be accessible from >99% device with a browser                               | All                        |
+| NFR6 | Portability | The webapp must be accessible from >99% devices with a browser                              | All                        |
 
 # Use case diagram and use cases
 
@@ -169,7 +169,7 @@ Customer registers successfully
 | Precondition   | Customer is not registered                |
 | Post condition | Customer is registered and able to login  |
 | **Step#**      | **Description**                           |
-| 1              | Customer goes on the registration page    |
+| 1              | Customer asks for registration            |
 | 2              | Customer fills in the required data       |
 | 3              | Customer confirms                         |
 | 4              | System calls the API to register the user |
@@ -184,7 +184,7 @@ Manager registers successfully
 | Precondition   | Manager is not registered                 |
 | Post condition | Manager is registered and able to login   |
 | **Step#**      | **Description**                           |
-| 1              | Manager goes on the registration page     |
+| 1              | Manager asks for registration             |
 | 2              | Manager fills in the required data        |
 | 3              | Manager confirms                          |
 | 4              | System calls the API to register the user |
@@ -199,7 +199,7 @@ User is already registered
 | Precondition   | User is not registered                    |
 | Post condition | User is not registered                    |
 | **Step#**      | **Description**                           |
-| 1              | User goes on the registration page        |
+| 1              | User asks for registration                |
 | 2              | User fills in the required data           |
 | 3              | User confirms                             |
 | 4              | System calls the API to register the user |
@@ -209,14 +209,14 @@ User is already registered
 
 #### Scenario 1.4
 
-Fields _Password_ and _Verify Password_ doesn't match
+Fields _Password_ and _Verify Password_ don't match
 
 | Scenario 1.4   |                                       |
 | :------------- | :------------------------------------ |
 | Precondition   | User is not registered                |
 | Post condition | -                                     |
 | **Step#**      | **Description**                       |
-| 1              | User goes on the registration page    |
+| 1              | User asks for registration            |
 | 2              | User fills in the required data       |
 | 3              | User confirms                         |
 | 4              | An error message is shown to the user |
@@ -231,7 +231,7 @@ Invalid data
 | Precondition   | User is not registered                    |
 | Post condition | -                                         |
 | **Step#**      | **Description**                           |
-| 1              | User goes on the registration page        |
+| 1              | User asks for registration                |
 | 2              | User fills in the required data           |
 | 3              | User confirms                             |
 | 4              | System calls the API to register the user |
@@ -258,7 +258,7 @@ User logs in successfully
 | Precondition   | User is not authenicated              |
 | Post condition | User is authenticated                 |
 | **Step#**      | **Description**                       |
-| 1              | User goes on the login page           |
+| 1              | User asks for login                   |
 | 2              | User fills in the username            |
 | 3              | User fills in the password            |
 | 4              | User confirms                         |
@@ -274,7 +274,7 @@ User inserts a wrong username or password
 | Precondition   | User is not authenicated        |
 | Post condition | User is not authenticated       |
 | **Step#**      | **Description**                 |
-| 1              | User goes on the login page     |
+| 1              | User asks for login             |
 | 2              | User fills in the username      |
 | 3              | User fills in the password      |
 | 4              | User confirms                   |
@@ -524,10 +524,10 @@ Product is added to the cart
 | Precondition   | Customer is authenticated                           |
 | Post condition | Product is added to the cart                        |
 | **Step#**      | **Description**                                     |
-| 1              | User adds a product to the cart                     |
+| 1              | Customer adds a product to the cart                 |
 | 2              | System calls the API to add the product to the cart |
 | 3              | System returns a confirmation message               |
-| 4              | A confirmation message is shown to the user         |
+| 4              | A confirmation message is shown to the customer     |
 
 #### Scenario 7.2
 
@@ -538,10 +538,10 @@ Product is not available because it is already in another cart or is already sol
 | Precondition   | Customer is authenticated                           |
 | Post condition | Product is not added to the cart                    |
 | **Step#**      | **Description**                                     |
-| 1              | User adds a product to the cart                     |
+| 1              | Customer adds a product to the cart                 |
 | 2              | System calls the API to add the product to the cart |
 | 3              | System returns an error message                     |
-| 4              | An error message is shown to the user               |
+| 4              | An error message is shown to the customer           |
 
 ### Use case 8, UC8: Remove a product from the cart
 
@@ -562,10 +562,10 @@ Product is removed from the cart
 | Precondition   | Customer is authenticated and the product is in the cart |
 | Post condition | Product is removed from the cart                         |
 | **Step#**      | **Description**                                          |
-| 1              | User removes a product to the cart                       |
+| 1              | Customer removes a product to the cart                   |
 | 2              | System calls the API to remove the product to the cart   |
 | 3              | System returns a confirmation message                    |
-| 4              | A confirmation message is shown to the user              |
+| 4              | A confirmation message is shown to the customer          |
 
 #### Scenario 8.2
 
@@ -576,24 +576,24 @@ Customer empties the cart
 | Precondition   | Customer is authenticated and products are in the cart |
 | Post condition | All products are removed from the cart                 |
 | **Step#**      | **Description**                                        |
-| 1              | User empties the cart                                  |
+| 1              | Customer empties the cart                              |
 | 2              | System calls the API to remove the current cart        |
 | 3              | System returns a confirmation message                  |
-| 4              | A confirmation message is shown to the user            |
+| 4              | A confirmation message is shown to the customer        |
 
 #### Scenario 8.3
 
 The product customer wants to remove is not in the cart, the code of the product is not valid, or customer has no cart
 
-| Scenario 8.3   |                                                        |
-| :------------- | :----------------------------------------------------- |
-| Precondition   | Customer is authenticated                              |
-| Post condition | Product is not removed                                 |
-| **Step#**      | **Description**                                        |
-| 1              | User removes a product to the cart                     |
-| 2              | System calls the API to remove the product to the cart |
-| 3              | System returns an error message                        |
-| 4              | An error message is shown to the user                  |
+| Scenario 8.3   |                                                          |
+| :------------- | :------------------------------------------------------- |
+| Precondition   | Customer is authenticated                                |
+| Post condition | Product is not removed                                   |
+| **Step#**      | **Description**                                          |
+| 1              | Customer removes a product to the cart                   |
+| 2              | System calls the API to remove the product from the cart |
+| 3              | System returns an error message                          |
+| 4              | An error message is shown to the customer                |
 
 ### Use case 9, UC9: Pay the current cart
 
@@ -614,10 +614,10 @@ The cart is correctly marked as paid
 | Precondition   | Customer is authenticated and has products in the cart |
 | Post condition | Cart is marked as paid                                 |
 | **Step#**      | **Description**                                        |
-| 1              | User pays the cart                                     |
+| 1              | Customer pays the cart                                 |
 | 2              | System calls the API to set the cart as paid           |
 | 3              | System returns a confirmation message                  |
-| 4              | A confirmation message is shown to the user            |
+| 4              | A confirmation message is shown to the customer        |
 
 #### Scenario 9.2
 
@@ -628,17 +628,18 @@ The cart is empty or the cart does not exists
 | Precondition   | Customer is authenticated and the cart is empty or the cart does not exists |
 | Post condition | Nothing changes                                                             |
 | **Step#**      | **Description**                                                             |
-| 1              | User tries to pay the cart                                                  |
+| 1              | Customer tries to pay the cart                                              |
 | 2              | System calls the API to set the cart as paid                                |
 | 3              | System returns an error message                                             |
-| 4              | An error message is shown to the user                                       |
+| 4              | An error message is shown to the customer                                   |
 
 ### TODO -> cart visualizing (current and old)
-
 
 # Glossary
 
 ![Glossary](./assets/diagrams_v1/svg/Model2!Glossary_2.svg)
+
+TODO: remove quantity
 
 # Deployment Diagram
 
