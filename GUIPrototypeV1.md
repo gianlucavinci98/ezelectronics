@@ -16,9 +16,11 @@ Version: V1 - description of EZElectronics in CURRENT form (as received by teach
   - [Common parts](#common-parts)
     - [Homepage - Login](#homepage---login)
     - [Customer registration](#customer-registration)
+    - [User profile view](#user-profile-view)
   - [Customer view](#customer-view)
     - [List of products](#list-of-products)
     - [Cart view](#cart-view)
+    - [List of payed carts](#list-of-payed-carts)
   - [Manager view](#manager-view)
     - [Product management](#product-management)
     - [Add single product](#add-single-product)
@@ -34,6 +36,10 @@ Version: V1 - description of EZElectronics in CURRENT form (as received by teach
 
 ![Registration](./assets/gui_v1/02_registration.svg)
 
+### User profile view
+
+![User profile](./assets/gui_v1/03_user_profile.svg)
+
 ## Customer view
 
 ### List of products
@@ -43,6 +49,10 @@ Version: V1 - description of EZElectronics in CURRENT form (as received by teach
 ### Cart view
 
 ![Cart view](./assets/gui_v1/C02_cart.svg)
+
+### List of payed carts
+
+![List of payed carts](./assets/gui_v1/C03_payed_carts.svg)
 
 ## Manager view
 
