@@ -342,18 +342,19 @@ User logs in successfully
 
 User inserts a wrong username or password
 
-| Scenario 2.2   |                                 |
-| :------------- | :------------------------------ |
-| Precondition   | User is not authenicated        |
-| Post condition | User is not authenticated       |
-| **Step#**      | **Description**                 |
-| 1              | User asks for login             |
-| 2              | User fills in the username      |
-| 3              | User fills in the password      |
-| 4              | User confirms                   |
-| 5              | System calls the API to login   |
-| 6              | System returns an error message |
-| 7              | Go to _Step 2_                  |
+| Scenario 2.2   |                                         |
+| :------------- | :-------------------------------------- |
+| Precondition   | User is not authenicated                |
+| Post condition | User is not authenticated               |
+| **Step#**      | **Description**                         |
+| 1              | User asks for login                     |
+| 2              | User fills in the username              |
+| 3              | User fills in the password              |
+| 4              | User confirms                           |
+| 5              | System calls the API to login           |
+| 6              | System returns an error message         |
+| 7              | Go to _Step 2_ if low number of retries |
+| 8              | System locks the user account           |
 
 #### Scenario 2.3
 
