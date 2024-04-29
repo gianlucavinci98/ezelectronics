@@ -92,7 +92,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | Employee                           | Person who assists in managing the store, helps customers, and maintains inventory |
 | Investor                           | Person that will invest money in the development of the website                    |
 | Inventory                          | Entity that represents the stock of products in the store                          |
-| Google ads                         | Third party service that will collect profiling data about users                   |
+| Google ads        (?)              | Third party service that will collect profiling data about users                   |
 | Payment service                    | Third party service that will handle the payments on the website                   |
 | Email service                      | Third party service that will handle the email sent by the backend                 |
 | Google and Facebook authentication | Third party services that can be used in the authentication of the users           |
@@ -113,8 +113,8 @@ TODO
 | Inventory                          | SQLite Database   | File on Filesystem       |
 | Supplier                           | GUI (webapp)      | PC, Tablet or Smartphone |
 | Employee                           | GUI (webapp)      | PC or Tablet             |
-| Courier                            | API               | Internet                 |
-| Google ads                         | API               | Internet                 |
+| Shipping service                   | API               | Internet                 |
+| Google ads        (?)              | API               | Internet                 |
 | Payment service                    | API               | Internet                 |
 | Email service                      | API               | Internet                 |
 | Google and Facebook authentication | API               | Internet                 |
@@ -135,9 +135,13 @@ TODO
 | :------ | :----------------------------------------------------------------------- |
 | FR1     | Authorization and Authentication                                         |
 | FR1.1   | Login                                                                    |
+| FR1.1.1 | Login with username and password                                         |
+| FR1.1.2 | Login with Google                                                        |
+| FR1.1.3 | Login with Facebook                                                      |
 | FR1.2   | Logout                                                                   |
 | FR1.3   | Logged in users shall be able to obtain their information                |
 | FR1.4   | Users shall be able to reset their password if they forgot it            |
+| FR1.5   | Users shall be able to change their password                             |
 | FR2     | Manage Users                                                             |
 | FR2.1   | Unregistered users shall be able to register themselves                  |
 | FR2.2   | Employees and Managers shall be able to list all the customers           |
