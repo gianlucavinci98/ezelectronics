@@ -633,7 +633,6 @@ The cart is empty or the cart does not exists
 | 3              | System returns an error message                                             |
 | 4              | An error message is shown to the customer                                   |
 
-
 # Glossary
 
 ![Glossary](./assets/diagrams_v1/svg/Model2!Glossary_2.svg)
