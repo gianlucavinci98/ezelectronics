@@ -105,17 +105,18 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ## Interfaces
 
-| Actor                              | Logical Interface | Physical Interface       |
-| :--------------------------------- | :---------------- | :----------------------- |
-| Manager                            | GUI (webapp)      | PC or Tablet             |
-| Customer                           | GUI (webapp)      | PC, Tablet or Smartphone |
-| Inventory                          | SQLite Database   | File on Filesystem       |
-| Supplier                           | GUI (webapp)      | PC, Tablet or Smartphone |
-| Employee                           | GUI (webapp)      | PC or Tablet             |
-| Shipping service                   | API               | Internet                 |
-| Payment service                    | API               | Internet                 |
-| Email service                      | API               | Internet                 |
-| Google and Facebook authentication | API               | Internet                 |
+| Actor                   | Logical Interface                                                                                                      | Physical Interface       |
+| :---------------------- | :--------------------------------------------------------------------------------------------------------------------- | :----------------------- |
+| Manager                 | GUI (webapp)                                                                                                           | PC or Tablet             |
+| Customer                | GUI (webapp)                                                                                                           | PC, Tablet or Smartphone |
+| Inventory               | SQLite Database                                                                                                        | File on Filesystem       |
+| Supplier                | GUI (webapp)                                                                                                           | PC, Tablet or Smartphone |
+| Employee                | GUI (webapp)                                                                                                           | PC or Tablet             |
+| Shipping service        | API ([docs](https://www.shippypro.com/ShippyPro-API-Documentation/?_gl=1*2zlkpx*_gcl_au*NDU1NDYyMDI2LjE3MTQ0MDA5OTE.)) | Internet                 |
+| Payment service         | API ([docs](https://docs.stripe.com/))                                                                                 | Internet                 |
+| Email service           | API ([docs](https://docs.aws.amazon.com/ses/latest/APIReference/Welcome.html))                                         | Internet                 |
+| Google authentication   | API ([docs](https://developers.google.com/identity/gsi/web/guides/display-button?hl=it))                               | Internet                 |
+| Facebook authentication | API ([docs](https://developers.facebook.com/docs/facebook-login/web))                                                  | Internet                 |
 
 # Stories and personas
 
