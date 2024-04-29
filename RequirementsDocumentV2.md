@@ -187,7 +187,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ## Use case diagram
 
-TODO
+![Use Case Diagram](./assets/diagrams_v2/svg/UseCaseDiagramV2.svg)
 
 ### Use case 1, UC1: User registration
 
@@ -734,6 +734,7 @@ The cart is correctly marked as paid
 | 7              | Shipment service API is called                             |
 | 8              | Shipment service returns a confirmation message            |
 | 9              | A confirmation message is shown to the customer            |
+| 10             | An email is sent to the customer with the order details    |
 
 #### Scenario 9.2
 
@@ -906,6 +907,7 @@ The inserted data is invalid
 ### Use case x, UCx
 
 TODO change password
+TODO delete this section
 
 # Glossary
 

@@ -58,7 +58,6 @@ Version: V1 - description of EZElectronics in CURRENT form (as received by teach
     - [Use case 9, UC9: Pay the current cart](#use-case-9-uc9-pay-the-current-cart)
       - [Scenario 9.1](#scenario-91)
       - [Scenario 9.2](#scenario-92)
-    - [TODO -\> cart visualizing (current and old)](#todo---cart-visualizing-current-and-old)
 - [Glossary](#glossary)
 - [Deployment Diagram](#deployment-diagram)
 
@@ -634,7 +633,6 @@ The cart is empty or the cart does not exists
 | 3              | System returns an error message                                             |
 | 4              | An error message is shown to the customer                                   |
 
-### TODO -> cart visualizing (current and old)
 
 # Glossary
 
