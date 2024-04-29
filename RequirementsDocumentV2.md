@@ -73,7 +73,9 @@ Version: V1 - description of EZElectronics in FUTURE form (as proposed by the te
     - [Use case 12, UC12: Edit a product](#use-case-12-uc12-edit-a-product)
       - [Scenario 12.1](#scenario-121)
       - [Scenario 12.2](#scenario-122)
-    - [Use case x, UCx](#use-case-x-ucx)
+    - [Use case 13, UC13: Change password](#use-case-13-uc13-change-password)
+      - [Scenario 13.1](#scenario-131)
+      - [Scenario 13.2](#scenario-132)
 - [Glossary](#glossary)
 - [Deployment Diagram](#deployment-diagram)
 
@@ -904,10 +906,47 @@ The inserted data is invalid
 | 4              | System calls the API to edit the product     |
 | 5              | An error message is shown to the user        |
 
-### Use case x, UCx
+### Use case 13, UC13: Change password
 
-TODO change password
-TODO delete this section
+| Actors Involved  | Customer, Manager, Employee, Supplier            |
+| :--------------- | :----------------------------------------------- |
+| Precondition     | User is authenticated                            |
+| Post condition   | Password is changed                              |
+| Nominal Scenario | [Scenario 13.1: password changed](#scenario-131) |
+| Variants         | -                                                |
+| Exceptions       | [Scenario 13.2: invalid password](#scenario-132) |
+
+#### Scenario 13.1
+
+The password is changed correctly
+
+| Scenario 13.1  |                                             |
+| :------------- | :------------------------------------------ |
+| Precondition   | User is authenticated                       |
+| Post condition | Password is changed                         |
+| **Step#**      | **Description**                             |
+| 1              | User asks to change password                |
+| 2              | User inserts the old password               |
+| 3              | User inserts the new password               |
+| 4              | User confirms                               |
+| 5              | System calls the API to change the password |
+| 6              | A confirmation message is shown to the user |
+
+#### Scenario 13.2
+
+The new password is invalid
+
+| Scenario 13.2  |                                             |
+| :------------- | :------------------------------------------ |
+| Precondition   | User is authenticated                       |
+| Post condition | Password is not changed                     |
+| **Step#**      | **Description**                             |
+| 1              | User asks to change password                |
+| 2              | User inserts the old password               |
+| 3              | User inserts the new password               |
+| 4              | User confirms                               |
+| 5              | System calls the API to change the password |
+| 6              | An error message is shown to the user       |
 
 # Glossary
 
