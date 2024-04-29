@@ -63,6 +63,7 @@ Version: V1 - description of EZElectronics in FUTURE form (as proposed by the te
       - [Scenario 9.1](#scenario-91)
       - [Scenario 9.2](#scenario-92)
       - [Scenario 9.3](#scenario-93)
+      - [Scenario 9.4](#scenario-94)
     - [use case 10, UC10: Return a product](#use-case-10-uc10-return-a-product)
       - [Scenario 10.1](#scenario-101)
       - [Scenario 10.2](#scenario-102)
@@ -708,6 +709,8 @@ The product customer wants to remove is not in the cart, the code of the product
 | Nominal Scenario | [Scenario 9.1: cart paid](#scenario-91)                |
 | Variants         | -                                                      |
 | Exceptions       | [Scenario 9.2: empty cart](#scenario-92)               |
+|                  | [Scenario 9.3: payment service error](#scenario-93)    |
+|                  | [Scenario 9.4: shipment service error](#scenario-94)   |
 
 #### Scenario 9.1
 
@@ -718,7 +721,7 @@ The cart is correctly marked as paid
 | Precondition   | Customer is authenticated and has products in the cart     |
 | Post condition | Cart is marked as paid                                     |
 | **Step#**      | **Description**                                            |
-| 1              | Customer pays the cart                                     |
+| 1              | Customer tries to pay the cart                             |
 | 2              | System calls the API to set the cart as paid               |
 | 3              | System calls the payment service API to handle the payment |
 | 4              | Customer inserts payment method details                    |
@@ -744,7 +747,38 @@ The cart is empty or the cart does not exists
 
 #### Scenario 9.3
 
-TODO tutti gli errori
+Payment service returns an error message
+
+| Scenario 9.3   |                                                            |
+| :------------- | :--------------------------------------------------------- |
+| Precondition   | Customer is authenticated and has products in the cart     |
+| Post condition | Nothing changes                                            |
+| **Step#**      | **Description**                                            |
+| 1              | Customer tries to pay the cart                             |
+| 2              | System calls the API to set the cart as paid               |
+| 3              | System calls the payment service API to handle the payment |
+| 4              | Customer inserts payment method details                    |
+| 5              | The payment service returns an error message               |
+| 6              | An error message is shown to the user                      |
+
+#### Scenario 9.4
+
+Shipment service returns an error message
+
+| Scenario 9.4   |                                                            |
+| :------------- | :--------------------------------------------------------- |
+| Precondition   | Customer is authenticated and has products in the cart     |
+| Post condition | Nothing changes                                            |
+| **Step#**      | **Description**                                            |
+| 1              | Customer tries to pay the cart                             |
+| 2              | System calls the API to set the cart as paid               |
+| 3              | System calls the payment service API to handle the payment |
+| 4              | Customer inserts payment method details                    |
+| 5              | The payment service returns a confirmation message         |
+| 6              | User inserts shipment information                          |
+| 7              | Shipment service API is called                             |
+| 8              | Shipment service returns an error message                  |
+| 9              | An error message is shown to the user                      |
 
 ### use case 10, UC10: Return a product
 
