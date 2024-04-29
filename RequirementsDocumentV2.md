@@ -92,7 +92,6 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | Employee                           | Person who assists in managing the store, helps customers, and maintains inventory |
 | Investor                           | Person that will invest money in the development of the website                    |
 | Inventory                          | Entity that represents the stock of products in the store                          |
-| Google ads        (?)              | Third party service that will collect profiling data about users                   |
 | Payment service                    | Third party service that will handle the payments on the website                   |
 | Email service                      | Third party service that will handle the email sent by the backend                 |
 | Google and Facebook authentication | Third party services that can be used in the authentication of the users           |
@@ -102,7 +101,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ## Context Diagram
 
-TODO
+![Context Diagram](./assets/diagrams_v2/svg/ContextDiagramV2.svg)
 
 ## Interfaces
 
@@ -114,7 +113,6 @@ TODO
 | Supplier                           | GUI (webapp)      | PC, Tablet or Smartphone |
 | Employee                           | GUI (webapp)      | PC or Tablet             |
 | Shipping service                   | API               | Internet                 |
-| Google ads        (?)              | API               | Internet                 |
 | Payment service                    | API               | Internet                 |
 | Email service                      | API               | Internet                 |
 | Google and Facebook authentication | API               | Internet                 |
@@ -906,7 +904,7 @@ The inserted data is invalid
 
 ### Use case x, UCx
 
-TODO max number of login then block the user
+TODO change password
 
 # Glossary
 
