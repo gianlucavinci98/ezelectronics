@@ -132,58 +132,59 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ## Functional Requirements
 
-| ID      | Description                                                              |
-| :------ | :----------------------------------------------------------------------- |
-| FR1     | Authorization and Authentication                                         |
-| FR1.1   | Login                                                                    |
-| FR1.1.1 | Login with username and password                                         |
-| FR1.1.2 | Login with Google                                                        |
-| FR1.1.3 | Login with Facebook                                                      |
-| FR1.2   | Logout                                                                   |
-| FR1.3   | Logged in users shall be able to obtain their information                |
-| FR1.4   | Users shall be able to reset their password if they forgot it            |
-| FR1.5   | Users shall be able to change their password                             |
-| FR2     | Manage Users                                                             |
-| FR2.1   | Unregistered users shall be able to register themselves                  |
-| FR2.2   | Employees and Managers shall be able to list all the customers           |
-| FR2.3   | Managers shall be able to create Employee and Supplier user accounts     |
-| FR3     | Manage Products                                                          |
-| FR3.1   | Managers and Suppliers shall be able to add new products                 |
-| FR3.1.1 | Add a single new product                                                 |
-| FR3.1.2 | Add multiple new equal products (product with quantity > 1)              |
-| FR3.2   | Managers shall be able to remove products                                |
-| FR3.3   | Managers and Employees shall be able to set a product as sold            |
-| FR3.4   | Logged in users shall be able to get product information                 |
-| FR3.5   | Logged in users shall be able to list products                           |
-| FR3.5.1 | List product of a specific category                                      |
-| FR3.5.2 | List product of a specific model                                         |
-| FR3.5.3 | List all products                                                        |
-| FR3.6   | Managers shall be able to delete a product                               |
-| FR3.7   | Managers shall be able to edit a product                                 |
-| FR3.8   | Any user (logged or not logged in) shall be able to list public products |
-| FR4     | Manage Carts                                                             |
-| FR4.1   | Customers shall be able to list all products in their cart               |
-| FR4.2   | Customers shall be able to add a product to their cart                   |
-| FR4.3   | Customers shall be able to remove a product from their cart              |
-| FR4.4   | Customers shall be able to pay the cart                                  |
-| FR4.5   | Customers shall be able to list all carts that have been payed           |
-| FR4.6   | Customers shall be able to delete the current cart                       |
-| FR5     | Manage returned products                                                 |
-| FR5.1   | Managers and Employees shall be able to list all returned products       |
-| FR5.2   | Managers and Employees shall be able to mark a product as returned       |
-| FR5.3   | Customers shall be able to request a return of a product                 |
+| ID      | Description                                                          |
+| :------ | :------------------------------------------------------------------- |
+| FR1     | Authorization and Authentication                                     |
+| FR1.1   | Login                                                                |
+| FR1.1.1 | Login with username and password                                     |
+| FR1.1.2 | Login with Google                                                    |
+| FR1.1.3 | Login with Facebook                                                  |
+| FR1.2   | Logout                                                               |
+| FR1.3   | Logged in users shall be able to obtain their information            |
+| FR1.4   | Users shall be able to reset their password if they forgot it        |
+| FR1.5   | Users shall be able to change their password                         |
+| FR2     | Manage Users                                                         |
+| FR2.1   | Unregistered users shall be able to register themselves              |
+| FR2.2   | Managers shall be able to list all the users                         |
+| FR2.3   | Managers shall be able to create Employee and Supplier user accounts |
+| FR3     | Manage Products                                                      |
+| FR3.1   | Managers and Suppliers shall be able to add new products             |
+| FR3.1.1 | Add a single new product                                             |
+| FR3.1.2 | Add multiple new equal products (product with quantity > 1)          |
+| FR3.2   | Managers shall be able to remove products                            |
+| FR3.3   | Managers and Employees shall be able to set a product as sold        |
+| FR3.4   | Logged in users shall be able to get product information             |
+| FR3.5   | Logged in users shall be able to list products                       |
+| FR3.5.1 | List product of a specific category                                  |
+| FR3.5.2 | List product of a specific model                                     |
+| FR3.5.3 | List all products                                                    |
+| FR3.6   | Managers shall be able to delete a product                           |
+| FR3.7   | Managers shall be able to edit a product                             |
+| FR3.8   | Any user (logged or not logged in) shall be able to list products    |
+| FR4     | Manage Carts                                                         |
+| FR4.1   | Customers shall be able to list all products in their cart           |
+| FR4.2   | Customers shall be able to add a product to their cart               |
+| FR4.3   | Customers shall be able to remove a product from their cart          |
+| FR4.4   | Customers shall be able to pay the cart                              |
+| FR4.5   | Customers shall be able to list all carts that have been payed       |
+| FR4.6   | Customers shall be able to delete the current cart                   |
+| FR5     | Manage returned products                                             |
+| FR5.1   | Managers and Employees shall be able to list all returned products   |
+| FR5.2   | Managers and Employees shall be able to mark a product as returned   |
+| FR5.3   | Customers shall be able to request a return of a product             |
 
 ## Non Functional Requirements
 
-| ID   | Type        | Description                                                                                 | Refers to                  |
-| :--- | :---------- | :------------------------------------------------------------------------------------------ | :------------------------- |
-| NFR1 | Usability   | Customers shall be able to interact with the webapp with no training in less than 2 minutes | All                        |
-| NFR2 | Usability   | Managers shall be able to interact with the webapp with a training of 1 hour                | FR3.1, FR3.2, FR3.3, FR3.6 |
-| NFR3 | Efficiency  | All functions must complete in < 0.5 s                                                      | All                        |
-| NFR4 | Reliability | No more than 1 defect per year per user                                                     | All                        |
-| NFR5 | Portability | The API server must be connected to the Internet with a connection of at least 1Gb/s        | All                        |
-| NFR6 | Portability | The webapp must be accessible from >99% devices with a browser                              | All                        |
-| NFR7 | Security    | User passwords should meet at least basic security standards                                | FR1.4, FR2.1               |
+| ID   | Type        | Description                                                                                              | Refers to                  |
+| :--- | :---------- | :------------------------------------------------------------------------------------------------------- | :------------------------- |
+| NFR1 | Usability   | Customers shall be able to interact with the webapp with no training in less than 2 minutes              | All                        |
+| NFR2 | Usability   | Managers shall be able to interact with the webapp with a training of 1 hour                             | FR3.1, FR3.2, FR3.3, FR3.6 |
+| NFR3 | Efficiency  | All functions must complete in < 0.5 s                                                                   | All                        |
+| NFR4 | Reliability | No more than 1 defect per year per user                                                                  | All                        |
+| NFR5 | Portability | The API server must be connected to the Internet with a connection of at least 1Gb/s                     | All                        |
+| NFR6 | Portability | The webapp must be accessible from >99% devices with a browser                                           | All                        |
+| NFR7 | Security    | User passwords should meet at least basic security standards                                             | FR1.4, FR2.1               |
+| NFR8 | Usability   | Customers shall be able to insert a product in the cart and pay for it with no more than 15 interactions | FR4.2, FR4.4               |
 
 # Use case diagram and use cases
 
@@ -950,11 +951,7 @@ The new password is invalid
 
 # Glossary
 
-TODO
-TODO images
-TODO remove quantity
-TODO public product
-TODO shipment information
+![Glossary](./assets/diagrams_v2/svg/GlossaryV2.svg)
 
 # Deployment Diagram
 
