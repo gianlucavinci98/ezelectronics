@@ -955,4 +955,4 @@ The new password is invalid
 
 # Deployment Diagram
 
-TODO
+![Deployment Diagram](./assets/diagrams_v2/svg/DeploymentDiagramV2.svg)
