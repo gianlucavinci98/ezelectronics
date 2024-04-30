@@ -121,7 +121,6 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | FR3.5.1 | List product of a specific category                            |
 | FR3.5.2 | List product of a specific model                               |
 | FR3.5.3 | List all products                                              |
-| FR3.6   | Managers shall be able to delete a product                     |
 | FR4     | Manage Carts                                                   |
 | FR4.1   | Customers shall be able to list all products in their cart     |
 | FR4.2   | Customers shall be able to add a product to their cart         |
@@ -132,15 +131,15 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ## Non Functional Requirements
 
-| ID   | Type        | Description                                                                                              | Refers to                  |
-| :--- | :---------- | :------------------------------------------------------------------------------------------------------- | :------------------------- |
-| NFR1 | Usability   | Customers shall be able to interact with the webapp with no training in less than 2 minutes              | All                        |
-| NFR2 | Usability   | Managers shall be able to interact with the webapp with a training of 1 hour                             | FR3.1, FR3.2, FR3.3, FR3.6 |
-| NFR3 | Efficiency  | All functions must complete in < 0.5 s                                                                   | All                        |
-| NFR4 | Reliability | No more than 1 defect per year per user                                                                  | All                        |
-| NFR5 | Portability | The API server must be connected to the Internet with a connection of at least 1Gb/s                     | All                        |
-| NFR6 | Portability | The webapp must be accessible from >99% devices with a browser                                           | All                        |
-| NFR7 | Usability   | Customers shall be able to insert a product in the cart and pay for it with no more than 15 interactions | FR4.2, FR4.4               |
+| ID   | Type        | Description                                                                                              | Refers to           |
+| :--- | :---------- | :------------------------------------------------------------------------------------------------------- | :------------------ |
+| NFR1 | Usability   | Customers shall be able to interact with the webapp with no training in less than 2 minutes              | All                 |
+| NFR2 | Usability   | Managers shall be able to interact with the webapp with a training of 1 hour                             | FR3.1, FR3.2, FR3.3 |
+| NFR3 | Efficiency  | All functions must complete in < 0.5 s                                                                   | All                 |
+| NFR4 | Reliability | No more than 1 defect per year per user                                                                  | All                 |
+| NFR5 | Portability | The API server must be connected to the Internet with a connection of at least 1Gb/s                     | All                 |
+| NFR6 | Portability | The webapp must be accessible from >99% devices with a browser                                           | All                 |
+| NFR7 | Usability   | Customers shall be able to insert a product in the cart and pay for it with no more than 15 interactions | FR4.2, FR4.4        |
 
 # Use case diagram and use cases
 
