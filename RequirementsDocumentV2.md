@@ -146,7 +146,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | FR1.4   | Users shall be able to reset their password if they forgot it        |
 | FR1.5   | Users shall be able to change their password                         |
 | FR2     | Manage Users                                                         |
-| FR2.1   | Unregistered users shall be able to register themselves              |
+| FR2.1   | Unregistered customers shall be able to register themselves          |
 | FR2.2   | Managers shall be able to list all the users                         |
 | FR2.3   | Managers shall be able to create Employee and Supplier user accounts |
 | FR3     | Manage Products                                                      |
