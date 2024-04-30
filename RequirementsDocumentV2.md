@@ -149,6 +149,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | FR2.1   | Unregistered customers shall be able to register themselves                 |
 | FR2.2   | Managers shall be able to list all the users                                |
 | FR2.3   | Managers shall be able to create Employee and Supplier user accounts        |
+| FR2.8   | Manager shall be able to delete user accounts                               |
 | FR3     | Manage Products                                                             |
 | FR3.1   | Managers and Suppliers shall be able to add new products                    |
 | FR3.1.1 | Add a single new product                                                    |
