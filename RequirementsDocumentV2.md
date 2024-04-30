@@ -168,6 +168,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | FR4.2   | Customers shall be able to add a product to their cart               |
 | FR4.3   | Customers shall be able to remove a product from their cart          |
 | FR4.4   | Customers shall be able to pay the cart                              |
+| FR4.4.1 | System shall be able to send a confirmation email to the customer    |
 | FR4.5   | Customers shall be able to list all carts that have been payed       |
 | FR4.6   | Customers shall be able to delete the current cart                   |
 | FR5     | Manage returned products                                             |
@@ -187,6 +188,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | NFR6 | Portability | The webapp must be accessible from >99% devices with a browser                                           | All                        |
 | NFR7 | Security    | User passwords should meet at least basic security standards                                             | FR1.4, FR2.1               |
 | NFR8 | Usability   | Customers shall be able to insert a product in the cart and pay for it with no more than 15 interactions | FR4.2, FR4.4               |
+| NFR9 | Usability   | Emails need to be sent within 5 minutes from the event that triggers them                                | FR4.4.1                    |
 
 # Use case diagram and use cases
 
