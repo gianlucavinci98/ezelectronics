@@ -25,12 +25,10 @@ Consider the EZElectronics  project in CURRENT version (as given by the teachers
 | requirement document |               20                |
 | GUI prototype        |               15                |
 | design document      |               15                |
-| code                 |               640               |
-| unit tests           |               340               |
+| code                 |               700               |
+| unit tests           |               350               |
 | api tests            |               200               |
 | management documents |               20                |
-
-
 
 ## Estimate by activity decomposition
 
@@ -49,7 +47,3 @@ Report here the results of the three estimation approaches. The  estimates may d
 | estimate by size                   |                  |
 | estimate by product decomposition  |                  |
 | estimate by activity decomposition |                  |
-
-
-
-
