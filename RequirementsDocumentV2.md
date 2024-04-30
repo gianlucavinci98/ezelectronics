@@ -122,11 +122,13 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 # Stories and personas
 
-**Mario** is a manager of an electronics store. He uses the _EZElectronics_ website to manage the products in his store. He can order new products from a supplier, remove old ones, and set some product as sold. He can also see the history of the orders made by customers.
+**Mario** is a manager of an electronics store. He uses the _EZElectronics_ website to manage the products in his store. He can order new products from a supplier, remove old ones, and set some product as sold. He can also see the history of the orders made by customers. He can also see the list of products that customers have asked to be returned and she can accept them.
 
 **Luigi** is a customer of an electronics store. He uses the _EZElectronics_ website to see the products available in the store. He can add products to his cart, see the history of his past purchases, and confirm an order.
 
 **Guido** is a supplier of an electronics store. He uses the _EZElectronics_ website to register the products he delivered to the store. He can also see the list of products that an employee of the store has set to restock.
+
+**Lidia** is an employee of an electronics store. She uses the _EZElectronics_ website to mark product as sold on the website when they are sold in the shop. She can also see the list of products that customers have asked to be returned and she can accept them.
 
 # Functional and non functional requirements
 
