@@ -64,7 +64,7 @@ Version: V1 - description of EZElectronics in FUTURE form (as proposed by the te
       - [Scenario 9.2](#scenario-92)
       - [Scenario 9.3](#scenario-93)
       - [Scenario 9.4](#scenario-94)
-    - [use case 10, UC10: Return a product](#use-case-10-uc10-return-a-product)
+    - [Use case 10, UC10: Return a product](#use-case-10-uc10-return-a-product)
       - [Scenario 10.1](#scenario-101)
       - [Scenario 10.2](#scenario-102)
     - [Use case 11, UC11: Accept returned product](#use-case-11-uc11-accept-returned-product)
@@ -788,7 +788,7 @@ Shipment service returns an error message
 | 8              | Shipment service returns an error message                  |
 | 9              | An error message is shown to the user                      |
 
-### use case 10, UC10: Return a product
+### Use case 10, UC10: Return a product
 
 | Actors Involved  | Customer                                         |
 | :--------------- | :----------------------------------------------- |
