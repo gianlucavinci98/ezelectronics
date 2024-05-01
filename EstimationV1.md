@@ -34,15 +34,15 @@ Consider the EZElectronics  project in CURRENT version (as given by the teachers
 ## Estimate by activity decomposition
 
 | Activity name         | Estimated effort (person hours) |
-| --------------------- | ------------------------------- |
-| requirements document | 24                              |
-| GUI prototype         | 16                              |
-| estimation document   | 8                               |
-| design                | 16                              |
-| code                  | 720                             |
-| unit tests            | 360                             |
-| api tests             | 100                             |
-| management documents  | 16                              |
+| --------------------- | :-----------------------------: |
+| requirements document |               24                |
+| GUI prototype         |               16                |
+| estimation document   |                8                |
+| design                |               16                |
+| code                  |               720               |
+| unit tests            |               360               |
+| api tests             |               100               |
+| management documents  |               16                |
 
 ![Gantt chart](assets/estimation_v1/estimation_v1.png)
 
@@ -51,7 +51,7 @@ Consider the EZElectronics  project in CURRENT version (as given by the teachers
 Report here the results of the three estimation approaches. The  estimates may differ. Discuss here the possible reasons for the difference
 
 |                                    | Estimated effort | Estimated duration |
-| ---------------------------------- | ---------------- | ------------------ |
-| estimate by size                   | 1250             | 8                  |
-| estimate by product decomposition  | 1320             | 8                  |
-| estimate by activity decomposition | 1260             | 10                 |
+| ---------------------------------- | :--------------: | :----------------: |
+| estimate by size                   |       1250       |         8          |
+| estimate by product decomposition  |       1320       |         8          |
+| estimate by activity decomposition |       1260       |         10         |
