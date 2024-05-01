@@ -1,10 +1,11 @@
 # Project Estimation - CURRENT
+
 Date: May 5th, 2024
 
 Version: V1
 
-
 ## Estimation approach
+
 Consider the EZElectronics  project in CURRENT version (as given by the teachers), assume that you are going to develop the project INDEPENDENT of the deadlines of the course, and from scratch
 
 ## Estimate by size
@@ -32,11 +33,18 @@ Consider the EZElectronics  project in CURRENT version (as given by the teachers
 
 ## Estimate by activity decomposition
 
-| Activity name | Estimated effort (person hours) |
-| ------------- | ------------------------------- |
-|               |                                 |
-###
-Insert here Gantt chart with above activities
+| Activity name         | Estimated effort (person hours) |
+| --------------------- | ------------------------------- |
+| requirements document | 24                              |
+| GUI prototype         | 16                              |
+| estimation document   | 8                               |
+| design                | 16                              |
+| code                  | 720                             |
+| unit tests            | 360                             |
+| api tests             | 200                             |
+| management documents  | 16                              |
+
+<embed src="./assets/estimation_v1/estimationv1.pdf" type="application/pdf"/>
 
 ## Summary
 
@@ -44,6 +52,6 @@ Report here the results of the three estimation approaches. The  estimates may d
 
 |                                    | Estimated effort | Estimated duration |
 | ---------------------------------- | ---------------- | ------------------ |
-| estimate by size                   |                  |
-| estimate by product decomposition  |                  |
-| estimate by activity decomposition |                  |
+| estimate by size                   |                  |                    |
+| estimate by product decomposition  |                  |                    |
+| estimate by activity decomposition |                  |                    |
