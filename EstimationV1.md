@@ -41,10 +41,10 @@ Consider the EZElectronics  project in CURRENT version (as given by the teachers
 | design                | 16                              |
 | code                  | 720                             |
 | unit tests            | 360                             |
-| api tests             | 200                             |
+| api tests             | 100                             |
 | management documents  | 16                              |
 
-<embed src="./assets/estimation_v1/estimationv1.pdf" type="application/pdf"/>
+![Gantt chart](assets/estimation_v1/estimation_v1.png)
 
 ## Summary
 
@@ -52,6 +52,6 @@ Report here the results of the three estimation approaches. The  estimates may d
 
 |                                    | Estimated effort | Estimated duration |
 | ---------------------------------- | ---------------- | ------------------ |
-| estimate by size                   |                  |                    |
-| estimate by product decomposition  |                  |                    |
-| estimate by activity decomposition |                  |                    |
+| estimate by size                   | 1250             | 8                  |
+| estimate by product decomposition  | 1320             | 8                  |
+| estimate by activity decomposition | 1260             | 10                 |
