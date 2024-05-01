@@ -1,5 +1,11 @@
 # Project Estimation - CURRENT
 
+Authors:
+[Matteo Ghia](mailto:s331347@studenti.polito.it),
+[Giacomo Olivero](mailto:s323349@studenti.polito.it),
+[Luca Tirone](mailto:s292901@studenti.polito.it),
+[Gianluca Vinci](mailto:s331364@studenti.polito.it)
+
 Date: May 5th, 2024
 
 Version: V1

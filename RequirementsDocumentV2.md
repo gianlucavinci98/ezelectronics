@@ -1,12 +1,18 @@
 # Requirements Document - future EZElectronics
 
-Date:
+Authors:
+[Matteo Ghia](mailto:s331347@studenti.polito.it),
+[Giacomo Olivero](mailto:s323349@studenti.polito.it),
+[Luca Tirone](mailto:s292901@studenti.polito.it),
+[Gianluca Vinci](mailto:s331364@studenti.polito.it)
+
+Date: May 5th, 2024
 
 Version: V1 - description of EZElectronics in FUTURE form (as proposed by the team)
 
-| Version number | Change |
-| :------------: | :----: |
-|                |        |
+| Version number |      Change      |
+| :------------: | :--------------: |
+|       V1       | Initial proposal |
 
 # Contents
 
