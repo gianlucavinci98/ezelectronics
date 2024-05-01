@@ -34,11 +34,18 @@ Consider the EZElectronics  project in FUTURE version (as proposed by your team 
 
 ## Estimate by activity decomposition
 
-| Activity name | Estimated effort (person hours) |
-| ------------- | :-----------------------------: |
-|               |                                 |
+| Activity name         | Estimated effort (person hours) |
+| --------------------- | :-----------------------------: |
+| requirements document |               36                |
+| GUI prototype         |               24                |
+| estimation document   |               12                |
+| design                |               24                |
+| code                  |               951               |
+| unit tests            |               500               |
+| api tests             |               180               |
+| management documents  |               16                |
 
-Insert here Gantt chart with above activities
+![Gantt Chart](./assets/estimation_v2/estimation_v2.png)
 
 ## Summary
 
@@ -46,6 +53,6 @@ Report here the results of the three estimation approaches. The  estimates may d
 
 |                                    | Estimated effort | Estimated duration |
 | ---------------------------------- | :--------------: | :----------------: |
-| estimate by size                   |                  |                    |
-| estimate by product decomposition  |                  |                    |
-| estimate by activity decomposition |                  |                    |
+| estimate by size                   |       1850       |         12         |
+| estimate by product decomposition  |       2000       |         13         |
+| estimate by activity decomposition |       1743       |         11         |
