@@ -138,10 +138,11 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ## Table of rights
 
-|              |  FR1  |  FR2  | FR3.1, FR3.2, FR3.3 | FR3.4, FR3.5 |  FR4  |
-| :----------: | :---: | :---: | :-----------------: | :----------: | :---: |
-| **Manager**  |   Y   |   Y   |          Y          |      Y       |   N   |
-| **Customer** |   Y   |   Y   |          N          |      Y       |   Y   |
+|                          | FR1.1 | FR1.2, FR1.3 |  FR2  | FR3.1, FR3.2, FR3.3 | FR3.4, FR3.5 |  FR4  |
+| :----------------------: | :---: | :----------: | :---: | :-----------------: | :----------: | :---: |
+|       **Manager**        |   Y   |      Y       |   Y   |          Y          |      Y       |   N   |
+|       **Customer**       |   Y   |      Y       |   Y   |          N          |      Y       |   Y   |
+| **Unauthenticated User** |   Y   |      N       |   N   |          N          |      N       |   N   |
 
 ## Non Functional Requirements
 
