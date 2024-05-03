@@ -94,7 +94,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 | Stakeholder name                   | Description                                                                        |
 | :--------------------------------- | :--------------------------------------------------------------------------------- |
-| Manager                            | Person that will manage the website and the orders                                 |
+| Manager                            | Person that will manage the website                                                |
 | Developer                          | Person that will develop the website                                               |
 | Supplier                           | Person that will supply the goods sold on the website                              |
 | Customer                           | Person that will buy products from the website                                     |
