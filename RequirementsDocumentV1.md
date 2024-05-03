@@ -26,6 +26,7 @@ Version: V1 - description of EZElectronics in CURRENT form (as received by teach
 - [Stories and personas](#stories-and-personas)
 - [Functional and non functional requirements](#functional-and-non-functional-requirements)
   - [Functional Requirements](#functional-requirements)
+  - [Table of rights](#table-of-rights)
   - [Non Functional Requirements](#non-functional-requirements)
 - [Use case diagram and use cases](#use-case-diagram-and-use-cases)
   - [Use case diagram](#use-case-diagram)
@@ -134,6 +135,13 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | FR4.4   | Customers shall be able to pay the cart                        |
 | FR4.5   | Customers shall be able to list all carts that have been payed |
 | FR4.6   | Customers shall be able to delete the current cart             |
+
+## Table of rights
+
+|              |  FR1  |  FR2  | FR3.1, FR3.2, FR3.3 | FR3.4, FR3.5 |  FR4  |
+| :----------: | :---: | :---: | :-----------------: | :----------: | :---: |
+| **Manager**  |   Y   |   Y   |          Y          |      Y       |   N   |
+| **Customer** |   Y   |   Y   |          N          |      Y       |   Y   |
 
 ## Non Functional Requirements
 
