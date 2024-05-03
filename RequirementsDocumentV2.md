@@ -154,9 +154,10 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | FR1.5   | Change password                                             |
 | FR2     | Manage users                                                |
 | FR2.1   | Register user                                               |
+| FR2.1.1 | Register user who mate the request                          |
+| FR2.1.2 | Register Employee and Supplier user accounts                |
 | FR2.2   | List all the users                                          |
-| FR2.3   | Create Employee and Supplier user accounts                  |
-| FR2.4   | Delete user accounts                                        |
+| FR2.3   | Delete user accounts                                        |
 | FR3     | Manage Products                                             |
 | FR3.1   | Add new products                                            |
 | FR3.1.1 | Add a single new product                                    |
@@ -184,19 +185,19 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ## Table of rights
 
-|              |  FR1  | FR2.1 | FR2.2, FR2.3, FR2.4 | FR3.1 | FR3.2 | FR3.3 | FR3.4, FR3.5 | FR3.6 |  FR4  | FR5.1, FR5.2 | FR5.3 |
-| :----------: | :---: | :---: | :-----------------: | :---: | :---: | :---: | :----------: | :---: | :---: | :----------: | :---: |
-| **Manager**  |   Y   |   N   |          Y          |   Y   |   Y   |   Y   |      Y       |   Y   |   N   |      Y       |   N   |
-| **Customer** |   Y   |   Y   |          N          |   N   |   N   |   N   |      Y       |   N   |   Y   |      N       |   Y   |
-| **Supplier** |   Y   |   N   |          N          |   Y   |   N   |   N   |      Y       |   N   |   N   |      N       |   N   |
-| **Employee** |   Y   |   N   |          N          |   N   |   N   |   Y   |      Y       |   N   |   N   |      Y       |   Y   |
+|              |  FR1  | FR2.1.1 | FR2.1.2 | FR2.2, FR2.3 | FR3.1 | FR3.2 | FR3.3 | FR3.4, FR3.5 | FR3.6 |  FR4  | FR5.1, FR5.2 | FR5.3 |
+| :----------: | :---: | :-----: | :-----: | :----------: | :---: | :---: | :---: | :----------: | :---: | :---: | :----------: | :---: |
+| **Manager**  |   Y   |    N    |    Y    |      Y       |   Y   |   Y   |   Y   |      Y       |   Y   |   N   |      Y       |   N   |
+| **Customer** |   Y   |    Y    |    N    |      N       |   N   |   N   |   N   |      Y       |   N   |   Y   |      N       |   Y   |
+| **Supplier** |   Y   |    N    |    N    |      N       |   Y   |   N   |   N   |      Y       |   N   |   N   |      N       |   N   |
+| **Employee** |   Y   |    N    |    N    |      N       |   N   |   N   |   Y   |      Y       |   N   |   N   |      Y       |   Y   |
 
 ## Non Functional Requirements
 
 | ID   | Type        | Description                                                                                              | Refers to                                              |
 | :--- | :---------- | :------------------------------------------------------------------------------------------------------- | :----------------------------------------------------- |
 | NFR1 | Usability   | Customers shall be able to interact with the webapp with no training in less than 2 minutes              | All                                                    |
-| NFR2 | Usability   | Managers and Emplyees shall be able to interact with the webapp with a training of 1 hour                | FR2.2, FR2.3, FR3.1, FR3.2, FR3.3, FR3.6, FR5.1, FR5.2 |
+| NFR2 | Usability   | Managers and Employees shall be able to interact with the webapp with a training of 1 hour               | FR2.2, FR2.3, FR3.1, FR3.2, FR3.3, FR3.6, FR5.1, FR5.2 |
 | NFR3 | Efficiency  | All functions must complete in < 0.5 s                                                                   | All                                                    |
 | NFR4 | Reliability | No more than 1 defect per year per user                                                                  | All                                                    |
 | NFR5 | Usability   | The API server must be connected to the Internet with a connection of at least 1Gb/s                     | All                                                    |
