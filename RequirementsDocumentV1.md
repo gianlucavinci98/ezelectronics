@@ -114,7 +114,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | FR1     | Authorization and Authentication    |
 | FR1.1   | Login                               |
 | FR1.2   | Logout                              |
-| FR1.3   | Obtain user information             |
+| FR1.3   | Obtain user details                 |
 | FR2     | Manage users                        |
 | FR2.1   | Register user                       |
 | FR3     | Manage Products                     |
