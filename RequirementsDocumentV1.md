@@ -109,32 +109,32 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ## Functional Requirements
 
-| ID      | Description                                                    |
-| :------ | :------------------------------------------------------------- |
-| FR1     | Authorization and Authentication                               |
-| FR1.1   | Login                                                          |
-| FR1.2   | Logout                                                         |
-| FR1.3   | Logged in users shall be able to obtain their information      |
-| FR2     | Manage Users                                                   |
-| FR2.1   | Unregistered users shall be able to register themselves        |
-| FR3     | Manage Products                                                |
-| FR3.1   | Managers shall be able to add new products                     |
-| FR3.1.1 | Add a single new product                                       |
-| FR3.1.2 | Add multiple new equal products (product with quantity > 1)    |
-| FR3.2   | Managers shall be able to remove products                      |
-| FR3.3   | Managers shall be able to set a product as sold                |
-| FR3.4   | Logged in users shall be able to get product information       |
-| FR3.5   | Logged in users shall be able to list products                 |
-| FR3.5.1 | List product of a specific category                            |
-| FR3.5.2 | List product of a specific model                               |
-| FR3.5.3 | List all products                                              |
-| FR4     | Manage Carts                                                   |
-| FR4.1   | Customers shall be able to list all products in their cart     |
-| FR4.2   | Customers shall be able to add a product to their cart         |
-| FR4.3   | Customers shall be able to remove a product from their cart    |
-| FR4.4   | Customers shall be able to pay the cart                        |
-| FR4.5   | Customers shall be able to list all carts that have been payed |
-| FR4.6   | Customers shall be able to delete the current cart             |
+| ID      | Description                         |
+| :------ | :---------------------------------- |
+| FR1     | Authorization and Authentication    |
+| FR1.1   | Login                               |
+| FR1.2   | Logout                              |
+| FR1.3   | Obtain user information             |
+| FR2     | Manage users                        |
+| FR2.1   | Register user                       |
+| FR3     | Manage Products                     |
+| FR3.1   | Add new products                    |
+| FR3.1.1 | Add a single new product            |
+| FR3.1.2 | Add multiple new equal products     |
+| FR3.2   | Remove products                     |
+| FR3.3   | Set a product as sold               |
+| FR3.4   | Get product information             |
+| FR3.5   | List products                       |
+| FR3.5.1 | List product of a specific category |
+| FR3.5.2 | List product of a specific model    |
+| FR3.5.3 | List all products                   |
+| FR4     | Manage Carts                        |
+| FR4.1   | List all products in the cart       |
+| FR4.2   | Add a product to the cart           |
+| FR4.3   | Remove a product from the cart      |
+| FR4.4   | Pay the cart                        |
+| FR4.5   | List all carts that have been payed |
+| FR4.6   | Delete the current cart             |
 
 ## Table of rights
 
