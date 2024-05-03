@@ -196,7 +196,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 | ID   | Type        | Description                                                                                              | Refers to                                              |
 | :--- | :---------- | :------------------------------------------------------------------------------------------------------- | :----------------------------------------------------- |
-| NFR1 | Usability   | Customers shall be able to interact with the webapp with no training in less than 2 minutes              | All                                                    |
+| NFR1 | Usability   | Customers shall be able to interact with the webapp with no training in less than 2 minutes              | FR1, FR2.1.1, FR3.4, FR3.5, FR4, FR5.3                 |
 | NFR2 | Usability   | Managers and Employees shall be able to interact with the webapp with a training of 1 hour               | FR2.2, FR2.3, FR3.1, FR3.2, FR3.3, FR3.6, FR5.1, FR5.2 |
 | NFR3 | Efficiency  | All functions must complete in < 0.5 s                                                                   | All                                                    |
 | NFR4 | Reliability | No more than 1 defect per year per user                                                                  | All                                                    |
