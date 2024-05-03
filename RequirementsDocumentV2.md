@@ -26,6 +26,7 @@ Version: V1 - description of EZElectronics in FUTURE form (as proposed by the te
 - [Stories and personas](#stories-and-personas)
 - [Functional and non functional requirements](#functional-and-non-functional-requirements)
   - [Functional Requirements](#functional-requirements)
+  - [Table of rights](#table-of-rights)
   - [Non Functional Requirements](#non-functional-requirements)
 - [Use case diagram and use cases](#use-case-diagram-and-use-cases)
   - [Use case diagram](#use-case-diagram)
@@ -155,7 +156,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | FR2.1   | Unregistered customers shall be able to register themselves                 |
 | FR2.2   | Managers shall be able to list all the users                                |
 | FR2.3   | Managers shall be able to create Employee and Supplier user accounts        |
-| FR2.8   | Manager shall be able to delete user accounts                               |
+| FR2.4   | Manager shall be able to delete user accounts                               |
 | FR3     | Manage Products                                                             |
 | FR3.1   | Managers and Suppliers shall be able to add new products                    |
 | FR3.1.1 | Add a single new product                                                    |
@@ -180,6 +181,15 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | FR5.1   | Managers and Employees shall be able to list all returned products          |
 | FR5.2   | Managers and Employees shall be able to mark a product as returned          |
 | FR5.3   | Customers shall be able to request a return of a product                    |
+
+## Table of rights
+
+|              |  FR1  | FR2.1 | FR2.2, FR2.3, FR2.4 | FR3.1 | FR3.2 | FR3.3 | FR3.4, FR3.5 | FR3.6 |  FR4  | FR5.1, FR5.2 | FR5.3 |
+| :----------: | :---: | :---: | :-----------------: | :---: | :---: | :---: | :----------: | :---: | :---: | :----------: | :---: |
+| **Manager**  |   Y   |   N   |          Y          |   Y   |   Y   |   Y   |      Y       |   Y   |   N   |      Y       |   N   |
+| **Customer** |   Y   |   Y   |          N          |   N   |   N   |   N   |      Y       |   N   |   Y   |      N       |   Y   |
+| **Supplier** |   Y   |   N   |          N          |   Y   |   N   |   N   |      Y       |   N   |   N   |      N       |   N   |
+| **Employee** |   Y   |   N   |          N          |   N   |   N   |   Y   |      Y       |   N   |   N   |      Y       |   Y   |
 
 ## Non Functional Requirements
 
