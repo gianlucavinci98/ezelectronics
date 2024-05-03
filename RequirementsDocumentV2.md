@@ -141,46 +141,46 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ## Functional Requirements
 
-| ID      | Description                                |
-| :------ | :----------------------------------------- |
-| FR1     | Authorization and Authentication           |
-| FR1.1   | Login                                      |
-| FR1.1.1 | Login with username and password           |
-| FR1.1.2 | Login with Google                          |
-| FR1.1.3 | Login with Facebook                        |
-| FR1.2   | Logout                                     |
-| FR1.3   | Obtain user details                        |
-| FR1.4   | Reset forgotten password                   |
-| FR1.5   | Change password                            |
-| FR2     | Manage users                               |
-| FR2.1   | Register user                              |
-| FR2.2   | List all the users                         |
-| FR2.3   | Create Employee and Supplier user accounts |
-| FR2.4   | Delete user accounts                       |
-| FR3     | Manage Products                            |
-| FR3.1   | Add new products                           |
-| FR3.1.1 | Add a single new product                   |
-| FR3.1.2 | Add multiple new equal products            |
-| FR3.2   | Remove products                            |
-| FR3.3   | Set a product as sold                      |
-| FR3.4   | Get product information                    |
-| FR3.5   | List products                              |
-| FR3.5.1 | List product of a specific category        |
-| FR3.5.2 | List product of a specific model           |
-| FR3.5.3 | List all products                          |
-| FR3.6   | Edit a product                             |
-| FR4     | Manage Carts                               |
-| FR4.1   | List all products in the cart              |
-| FR4.2   | Add a product to the cart                  |
-| FR4.3   | Remove a product from the cart             |
-| FR4.4   | Pay the cart                               |
-| FR4.4.1 | Send a confirmation email                  |
-| FR4.5   | List all carts that have been payed        |
-| FR4.6   | Delete the current cart                    |
-| FR5     | Manage returned products                   |
-| FR5.1   | List all returned products                 |
-| FR5.2   | Mark a product as returned                 |
-| FR5.3   | Request a return of a product              |
+| ID      | Description                                                 |
+| :------ | :---------------------------------------------------------- |
+| FR1     | Authorization and Authentication                            |
+| FR1.1   | Login                                                       |
+| FR1.1.1 | Login with username and password                            |
+| FR1.1.2 | Login with Google                                           |
+| FR1.1.3 | Login with Facebook                                         |
+| FR1.2   | Logout                                                      |
+| FR1.3   | Obtain user details                                         |
+| FR1.4   | Reset forgotten password                                    |
+| FR1.5   | Change password                                             |
+| FR2     | Manage users                                                |
+| FR2.1   | Register user                                               |
+| FR2.2   | List all the users                                          |
+| FR2.3   | Create Employee and Supplier user accounts                  |
+| FR2.4   | Delete user accounts                                        |
+| FR3     | Manage Products                                             |
+| FR3.1   | Add new products                                            |
+| FR3.1.1 | Add a single new product                                    |
+| FR3.1.2 | Add multiple new equal products (product with quantity > 1) |
+| FR3.2   | Remove products                                             |
+| FR3.3   | Set a product as sold                                       |
+| FR3.4   | Get product information                                     |
+| FR3.5   | List products                                               |
+| FR3.5.1 | List product of a specific category                         |
+| FR3.5.2 | List product of a specific model                            |
+| FR3.5.3 | List all products                                           |
+| FR3.6   | Edit a product                                              |
+| FR4     | Manage Carts                                                |
+| FR4.1   | List all products in the cart                               |
+| FR4.2   | Add a product to the cart                                   |
+| FR4.3   | Remove a product from the cart                              |
+| FR4.4   | Pay the cart                                                |
+| FR4.4.1 | Send a confirmation email                                   |
+| FR4.5   | List all carts that have been payed                         |
+| FR4.6   | Delete the current cart                                     |
+| FR5     | Manage returned products                                    |
+| FR5.1   | List all returned products                                  |
+| FR5.2   | Mark a product as returned                                  |
+| FR5.3   | Request a return of a product                               |
 
 ## Table of rights
 
