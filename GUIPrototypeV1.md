@@ -123,7 +123,7 @@ Version: V1 - description of EZElectronics in CURRENT form (as received by teach
 
 **Used in:**
 - [Use Case 3: Add a product](./RequirementsDocumentV1.md#use-case-3-uc3-add-a-product)
-  - [Scenario 3.2: Add multiple products](./RequirementsDocumentV1.md#scenario-32-add-multiple-products)
+  - [Scenario 3.2](./RequirementsDocumentV1.md#scenario-32)
 
 **Refers to:**
 - FR3.1.2
