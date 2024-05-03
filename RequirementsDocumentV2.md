@@ -185,12 +185,13 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ## Table of rights
 
-|              |  FR1  | FR2.1.1 | FR2.1.2 | FR2.2, FR2.3 | FR3.1 | FR3.2 | FR3.3 | FR3.4, FR3.5 | FR3.6 |  FR4  | FR5.1, FR5.2 | FR5.3 |
-| :----------: | :---: | :-----: | :-----: | :----------: | :---: | :---: | :---: | :----------: | :---: | :---: | :----------: | :---: |
-| **Manager**  |   Y   |    N    |    Y    |      Y       |   Y   |   Y   |   Y   |      Y       |   Y   |   N   |      Y       |   N   |
-| **Customer** |   Y   |    Y    |    N    |      N       |   N   |   N   |   N   |      Y       |   N   |   Y   |      N       |   Y   |
-| **Supplier** |   Y   |    N    |    N    |      N       |   Y   |   N   |   N   |      Y       |   N   |   N   |      N       |   N   |
-| **Employee** |   Y   |    N    |    N    |      N       |   N   |   N   |   Y   |      Y       |   N   |   N   |      Y       |   Y   |
+|                          | FR1.1 | FR1.2,FR1.3,FR1.4,FR1.5, | FR2.1.1 | FR2.1.2 | FR2.2, FR2.3 | FR3.1 | FR3.2 | FR3.3 | FR3.4, FR3.5 | FR3.6 |  FR4  | FR5.1, FR5.2 | FR5.3 |
+| :----------------------: | :---: | :----------------------: | :-----: | :-----: | :----------: | :---: | :---: | :---: | :----------: | :---: | :---: | :----------: | :---: |
+|       **Manager**        |   Y   |            Y             |    N    |    Y    |      Y       |   Y   |   Y   |   Y   |      Y       |   Y   |   N   |      Y       |   N   |
+|       **Customer**       |   Y   |            Y             |    Y    |    N    |      N       |   N   |   N   |   N   |      Y       |   N   |   Y   |      N       |   Y   |
+|       **Supplier**       |   Y   |            Y             |    N    |    N    |      N       |   Y   |   N   |   N   |      Y       |   N   |   N   |      N       |   N   |
+|       **Employee**       |   Y   |            Y             |    N    |    N    |      N       |   N   |   N   |   Y   |      Y       |   N   |   N   |      Y       |   Y   |
+| **Unauthenticated User** |   Y   |            N             |    N    |    N    |      N       |   N   |   N   |   N   |      Y       |   N   |   N   |      N       |   N   |
 
 ## Non Functional Requirements
 
