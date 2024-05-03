@@ -154,7 +154,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | FR1.5   | Change password                                             |
 | FR2     | Manage users                                                |
 | FR2.1   | Register user                                               |
-| FR2.1.1 | Register user who mate the request                          |
+| FR2.1.1 | Register user who made the request                          |
 | FR2.1.2 | Register Employee and Supplier user accounts                |
 | FR2.2   | List all the users                                          |
 | FR2.3   | Delete user accounts                                        |
