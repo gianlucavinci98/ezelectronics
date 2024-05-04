@@ -203,7 +203,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | NFR4 | Reliability  | No more than 1 defect per year per user                                                                  | All                                                    |
 | NFR5 | Availability | The API server must be connected to the Internet with a connection of at least 1Gb/s                     | All                                                    |
 | NFR6 | Portability  | The webapp must be accessible from >99% devices with a browser                                           | All                                                    |
-| NFR7 | Security     | User passwords should meet at least basic security standards                                             | FR1.4, FR2.1                                           |
+| NFR7 | Security     | User passwords must have at least 8 characters, 1 number, 1 lowercase and 1 uppercase letter             | FR1.4, FR2.1                                           |
 | NFR8 | Usability    | Customers shall be able to insert a product in the cart and pay for it with no more than 15 interactions | FR4.2, FR4.4                                           |
 | NFR9 | Usability    | Emails need to be sent within 5 minutes from the event that triggers them                                | FR4.4.1                                                |
 
