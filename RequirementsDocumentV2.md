@@ -195,17 +195,18 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ## Non Functional Requirements
 
-| ID   | Type         | Description                                                                                              | Refers to                                              |
-| :--- | :----------- | :------------------------------------------------------------------------------------------------------- | :----------------------------------------------------- |
-| NFR1 | Usability    | Customers shall be able to interact with the webapp with no training in less than 2 minutes              | FR1, FR2.1.1, FR3.4, FR3.5, FR4, FR5.3                 |
-| NFR2 | Usability    | Managers and Employees shall be able to interact with the webapp with a training of 1 hour               | FR2.2, FR2.3, FR3.1, FR3.2, FR3.3, FR3.6, FR5.1, FR5.2 |
-| NFR3 | Efficiency   | All functions must complete in < 0.5 s                                                                   | All                                                    |
-| NFR4 | Reliability  | No more than 1 defect per year per user                                                                  | All                                                    |
-| NFR5 | Availability | The API server must be connected to the Internet with a connection of at least 1Gb/s                     | All                                                    |
-| NFR6 | Portability  | The webapp must be accessible from >99% devices with a browser                                           | All                                                    |
-| NFR7 | Security     | User passwords should meet at least basic security standards                                             | FR1.4, FR2.1                                           |
-| NFR8 | Usability    | Customers shall be able to insert a product in the cart and pay for it with no more than 15 interactions | FR4.2, FR4.4                                           |
-| NFR9 | Usability    | Emails need to be sent within 5 minutes from the event that triggers them                                | FR4.4.1                                                |
+| ID    | Type         | Description                                                                                              | Refers to                                              |
+| :---- | :----------- | :------------------------------------------------------------------------------------------------------- | :----------------------------------------------------- |
+| NFR1  | Usability    | Customers shall be able to interact with the webapp with no training in less than 2 minutes              | FR1, FR2.1.1, FR3.4, FR3.5, FR4, FR5.3                 |
+| NFR2  | Usability    | Managers and Employees shall be able to interact with the webapp with a training of 1 hour               | FR2.2, FR2.3, FR3.1, FR3.2, FR3.3, FR3.6, FR5.1, FR5.2 |
+| NFR3  | Efficiency   | All functions must complete in < 0.5 s                                                                   | All                                                    |
+| NFR4  | Reliability  | No more than 1 defect per year per user                                                                  | All                                                    |
+| NFR5  | Availability | The API server must be connected to the Internet with a connection of at least 1Gb/s                     | All                                                    |
+| NFR6  | Portability  | The webapp must be accessible from >99% devices with a browser                                           | All                                                    |
+| NFR7  | Security     | User passwords must have at least 8 characters, 1 number, 1 lowercase and 1 uppercase letter             | FR1.4, FR2.1                                           |
+| NFR8  | Usability    | Customers shall be able to insert a product in the cart and pay for it with no more than 15 interactions | FR4.2, FR4.4                                           |
+| NFR9  | Usability    | Emails need to be sent within 5 minutes from the event that triggers them                                | FR4.4.1                                                |
+| NFR10 | Usability    | Suppliers shall be able to interact with the webapp with a training of 30 minutes                        | FR3.1                                                  |
 
 # Use case diagram and use cases
 
@@ -576,9 +577,9 @@ Product is deleted correctly
 
 ### Use case 6, UC6: Search for products
 
-| Actors Involved  | Customer, Manager                                         |
+| Actors Involved  | Customer, Manager, Supplier, Employee                     |
 | :--------------- | :-------------------------------------------------------- |
-| Precondition     | User is authenticated                                     |
+| Precondition     | -                                                         |
 | Post condition   | Products are shown to the user                            |
 | Nominal Scenario | [Scenario 6.1: List all products](#scenario-61)           |
 | Variants         | [Scenario 6.2: List products of a category](#scenario-62) |
@@ -592,7 +593,7 @@ All products are shown to the user
 
 | Scenario 6.1   |                                               |
 | :------------- | :-------------------------------------------- |
-| Precondition   | User is authenticated                         |
+| Precondition   | -                                             |
 | Post condition | Products are shown to the user                |
 | **Step#**      | **Description**                               |
 | 1              | User goes to the product list                 |
@@ -605,7 +606,7 @@ All products in a given category are shown to the user
 
 | Scenario 6.2   |                                                       |
 | :------------- | :---------------------------------------------------- |
-| Precondition   | User is authenticated and the category exists         |
+| Precondition   | Category exists                                       |
 | Post condition | Products of the category are shown to the user        |
 | **Step#**      | **Description**                                       |
 | 1              | User selects a category                               |
@@ -618,7 +619,7 @@ All products of a given model are shown to the user
 
 | Scenario 6.3   |                                                |
 | :------------- | :--------------------------------------------- |
-| Precondition   | User is authenticated and the model exists     |
+| Precondition   | Model exists                                   |
 | Post condition | Products of the model is shown to the user     |
 | **Step#**      | **Description**                                |
 | 1              | User selects a category                        |
@@ -629,14 +630,14 @@ All products of a given model are shown to the user
 
 Specific product is shown to the user
 
-| Scenario 6.4   |                                              |
-| :------------- | :------------------------------------------- |
-| Precondition   | User is authenticated and the product exists |
-| Post condition | Product is shown to the user                 |
-| **Step#**      | **Description**                              |
-| 1              | User selects a product                       |
-| 2              | System calls the API to get product details  |
-| 3              | Product is shown to the user                 |
+| Scenario 6.4   |                                             |
+| :------------- | :------------------------------------------ |
+| Precondition   | Product exists                              |
+| Post condition | Product is shown to the user                |
+| **Step#**      | **Description**                             |
+| 1              | User selects a product                      |
+| 2              | System calls the API to get product details |
+| 3              | Product is shown to the user                |
 
 ### Use case 7, UC7: Add product to cart
 

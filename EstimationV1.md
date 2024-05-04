@@ -54,10 +54,13 @@ Consider the EZElectronics  project in CURRENT version (as given by the teachers
 
 ## Summary
 
-Report here the results of the three estimation approaches. The  estimates may differ. Discuss here the possible reasons for the difference
-
 |                                    | Estimated effort | Estimated duration |
 | ---------------------------------- | :--------------: | :----------------: |
 | estimate by size                   |       1250       |         8          |
 | estimate by product decomposition  |       1320       |         8          |
 | estimate by activity decomposition |       1260       |         10         |
+
+The estimated effort is quite similar in the three approaches, but the estimated duration is different.
+The reason is that the estimate by activity decomposition considers the time needed for each activity: some of them can be done in parallel, while others need to be done sequentially. The estimate by size and by product decomposition, instead, consider the total effort needed to complete the project, without considering the time needed for each activity.
+
+Overall, we can assume that the estimated effort is near 1300 person hours, and the estimated duration is around 8-10 weeks.

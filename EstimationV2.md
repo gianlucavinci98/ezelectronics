@@ -55,10 +55,11 @@ Consider the EZElectronics  project in FUTURE version (as proposed by your team 
 
 ## Summary
 
-Report here the results of the three estimation approaches. The  estimates may differ. Discuss here the possible reasons for the difference
-
 |                                    | Estimated effort | Estimated duration |
 | ---------------------------------- | :--------------: | :----------------: |
 | estimate by size                   |       1850       |         12         |
 | estimate by product decomposition  |       2000       |         13         |
 | estimate by activity decomposition |       1743       |         11         |
+
+The estimated effort of the different approaches is quite similar, but the estimated duration is different.
+This can be explained by the different distribution of the effort among the activities: the activity decomposition approach is the one that estimates the shortest duration, as it distributes the effort more evenly among the activities, thanks to the detailed analysis of the project's tasks in the Gantt chart.
