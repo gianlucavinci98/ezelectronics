@@ -26,6 +26,7 @@ Version: V1 - description of EZElectronics in CURRENT form (as received by teach
 - [Stories and personas](#stories-and-personas)
 - [Functional and non functional requirements](#functional-and-non-functional-requirements)
   - [Functional Requirements](#functional-requirements)
+  - [Table of rights](#table-of-rights)
   - [Non Functional Requirements](#non-functional-requirements)
 - [Use case diagram and use cases](#use-case-diagram-and-use-cases)
   - [Use case diagram](#use-case-diagram)
@@ -75,7 +76,7 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 | Stakeholder name | Description                                                                        |
 | :--------------- | :--------------------------------------------------------------------------------- |
-| Manager          | Person that will manage the website and the orders                                 |
+| Manager          | Person that will manage the website                                                |
 | Developer        | Person that will develop the website                                               |
 | Supplier         | Person that will supply the goods sold on the website                              |
 | Customer         | Person that will buy products from the website                                     |
@@ -108,44 +109,52 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ## Functional Requirements
 
-| ID      | Description                                                    |
-| :------ | :------------------------------------------------------------- |
-| FR1     | Authorization and Authentication                               |
-| FR1.1   | Login                                                          |
-| FR1.2   | Logout                                                         |
-| FR1.3   | Logged in users shall be able to obtain their information      |
-| FR2     | Manage Users                                                   |
-| FR2.1   | Unregistered users shall be able to register themselves        |
-| FR3     | Manage Products                                                |
-| FR3.1   | Managers shall be able to add new products                     |
-| FR3.1.1 | Add a single new product                                       |
-| FR3.1.2 | Add multiple new equal products (product with quantity > 1)    |
-| FR3.2   | Managers shall be able to remove products                      |
-| FR3.3   | Managers shall be able to set a product as sold                |
-| FR3.4   | Logged in users shall be able to get product information       |
-| FR3.5   | Logged in users shall be able to list products                 |
-| FR3.5.1 | List product of a specific category                            |
-| FR3.5.2 | List product of a specific model                               |
-| FR3.5.3 | List all products                                              |
-| FR4     | Manage Carts                                                   |
-| FR4.1   | Customers shall be able to list all products in their cart     |
-| FR4.2   | Customers shall be able to add a product to their cart         |
-| FR4.3   | Customers shall be able to remove a product from their cart    |
-| FR4.4   | Customers shall be able to pay the cart                        |
-| FR4.5   | Customers shall be able to list all carts that have been payed |
-| FR4.6   | Customers shall be able to delete the current cart             |
+| ID      | Description                                                 |
+| :------ | :---------------------------------------------------------- |
+| FR1     | Authorization and Authentication                            |
+| FR1.1   | Login                                                       |
+| FR1.2   | Logout                                                      |
+| FR1.3   | Obtain user details                                         |
+| FR2     | Manage users                                                |
+| FR2.1   | Register user                                               |
+| FR3     | Manage Products                                             |
+| FR3.1   | Add new products                                            |
+| FR3.1.1 | Add a single new product                                    |
+| FR3.1.2 | Add multiple new equal products (product with quantity > 1) |
+| FR3.2   | Remove products                                             |
+| FR3.3   | Set a product as sold                                       |
+| FR3.4   | Get product information                                     |
+| FR3.5   | List products                                               |
+| FR3.5.1 | List product of a specific category                         |
+| FR3.5.2 | List product of a specific model                            |
+| FR3.5.3 | List all products                                           |
+| FR4     | Manage Carts                                                |
+| FR4.1   | List all products in the cart                               |
+| FR4.2   | Add a product to the cart                                   |
+| FR4.3   | Remove a product from the cart                              |
+| FR4.4   | Pay the cart                                                |
+| FR4.5   | List all carts that have been payed                         |
+| FR4.6   | Delete the current cart                                     |
+
+## Table of rights
+
+|                          | FR1.1 | FR1.2, FR1.3 |  FR2  | FR3.1, FR3.2, FR3.3 | FR3.4, FR3.5 |  FR4  |
+| :----------------------: | :---: | :----------: | :---: | :-----------------: | :----------: | :---: |
+|       **Manager**        |   Y   |      Y       |   Y   |          Y          |      Y       |   N   |
+|       **Customer**       |   Y   |      Y       |   Y   |          N          |      Y       |   Y   |
+| **Unauthenticated User** |   Y   |      N       |   N   |          N          |      N       |   N   |
 
 ## Non Functional Requirements
 
-| ID   | Type        | Description                                                                                              | Refers to           |
-| :--- | :---------- | :------------------------------------------------------------------------------------------------------- | :------------------ |
-| NFR1 | Usability   | Customers shall be able to interact with the webapp with no training in less than 2 minutes              | All                 |
-| NFR2 | Usability   | Managers shall be able to interact with the webapp with a training of 1 hour                             | FR3.1, FR3.2, FR3.3 |
-| NFR3 | Efficiency  | All functions must complete in < 0.5 s                                                                   | All                 |
-| NFR4 | Reliability | No more than 1 defect per year per user                                                                  | All                 |
-| NFR5 | Portability | The API server must be connected to the Internet with a connection of at least 1Gb/s                     | All                 |
-| NFR6 | Portability | The webapp must be accessible from >99% devices with a browser                                           | All                 |
-| NFR7 | Usability   | Customers shall be able to insert a product in the cart and pay for it with no more than 15 interactions | FR4.2, FR4.4        |
+| ID   | Type         | Description                                                                                              | Refers to           |
+| :--- | :----------- | :------------------------------------------------------------------------------------------------------- | :------------------ |
+| NFR1 | Usability    | Customers shall be able to interact with the webapp with no training in less than 2 minutes              | All                 |
+| NFR2 | Usability    | Managers shall be able to interact with the webapp with a training of 1 hour                             | FR3.1, FR3.2, FR3.3 |
+| NFR3 | Efficiency   | All functions must complete in < 0.5 s                                                                   | All                 |
+| NFR4 | Reliability  | No more than 1 defect per year per user                                                                  | All                 |
+| NFR5 | Availability | The API server must be connected to the Internet with a connection of at least 1Gb/s                     | All                 |
+| NFR6 | Portability  | The webapp must be accessible from >99% devices with a browser                                           | All                 |
+| NFR7 | Usability    | Customers shall be able to insert a product in the cart and pay for it with no more than 15 interactions | FR4.2, FR4.4        |
 
 # Use case diagram and use cases
 
