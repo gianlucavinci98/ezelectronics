@@ -221,11 +221,11 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | Post condition   | The user is registered and able to login                        |
 | Nominal Scenario | [Scenario 1.1: Customer registration](#scenario-11)             |
 | Variants         | [Scenario 1.2: External provider](#scenario-12)                 |
+|                  | [Scenario 1.7: Manager creates Employee/Supplier](#scenario-17) |
 | Exceptions       | [Scenario 1.3: User already registered](#scenario-13)           |
 |                  | [Scenario 1.4: Passwords don't match](#scenario-14)             |
 |                  | [Scenario 1.5: Invalid data](#scenario-15)                      |
 |                  | [Scenario 1.6: External provider fails](#scenario-16)           |
-|                  | [Scenario 1.7: Manager creates Employee/Supplier](#scenario-17) |
 
 #### Scenario 1.1
 
