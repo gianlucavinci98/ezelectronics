@@ -195,17 +195,18 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 
 ## Non Functional Requirements
 
-| ID   | Type         | Description                                                                                              | Refers to                                              |
-| :--- | :----------- | :------------------------------------------------------------------------------------------------------- | :----------------------------------------------------- |
-| NFR1 | Usability    | Customers shall be able to interact with the webapp with no training in less than 2 minutes              | FR1, FR2.1.1, FR3.4, FR3.5, FR4, FR5.3                 |
-| NFR2 | Usability    | Managers and Employees shall be able to interact with the webapp with a training of 1 hour               | FR2.2, FR2.3, FR3.1, FR3.2, FR3.3, FR3.6, FR5.1, FR5.2 |
-| NFR3 | Efficiency   | All functions must complete in < 0.5 s                                                                   | All                                                    |
-| NFR4 | Reliability  | No more than 1 defect per year per user                                                                  | All                                                    |
-| NFR5 | Availability | The API server must be connected to the Internet with a connection of at least 1Gb/s                     | All                                                    |
-| NFR6 | Portability  | The webapp must be accessible from >99% devices with a browser                                           | All                                                    |
-| NFR7 | Security     | User passwords must have at least 8 characters, 1 number, 1 lowercase and 1 uppercase letter             | FR1.4, FR2.1                                           |
-| NFR8 | Usability    | Customers shall be able to insert a product in the cart and pay for it with no more than 15 interactions | FR4.2, FR4.4                                           |
-| NFR9 | Usability    | Emails need to be sent within 5 minutes from the event that triggers them                                | FR4.4.1                                                |
+| ID    | Type         | Description                                                                                              | Refers to                                              |
+| :---- | :----------- | :------------------------------------------------------------------------------------------------------- | :----------------------------------------------------- |
+| NFR1  | Usability    | Customers shall be able to interact with the webapp with no training in less than 2 minutes              | FR1, FR2.1.1, FR3.4, FR3.5, FR4, FR5.3                 |
+| NFR2  | Usability    | Managers and Employees shall be able to interact with the webapp with a training of 1 hour               | FR2.2, FR2.3, FR3.1, FR3.2, FR3.3, FR3.6, FR5.1, FR5.2 |
+| NFR3  | Efficiency   | All functions must complete in < 0.5 s                                                                   | All                                                    |
+| NFR4  | Reliability  | No more than 1 defect per year per user                                                                  | All                                                    |
+| NFR5  | Availability | The API server must be connected to the Internet with a connection of at least 1Gb/s                     | All                                                    |
+| NFR6  | Portability  | The webapp must be accessible from >99% devices with a browser                                           | All                                                    |
+| NFR7  | Security     | User passwords must have at least 8 characters, 1 number, 1 lowercase and 1 uppercase letter             | FR1.4, FR2.1                                           |
+| NFR8  | Usability    | Customers shall be able to insert a product in the cart and pay for it with no more than 15 interactions | FR4.2, FR4.4                                           |
+| NFR9  | Usability    | Emails need to be sent within 5 minutes from the event that triggers them                                | FR4.4.1                                                |
+| NFR10 | Usability    | Suppliers shall be able to interact with the webapp with a training of 30 minutes                        | FR3.1                                                  |
 
 # Use case diagram and use cases
 
