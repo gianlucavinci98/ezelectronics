@@ -576,9 +576,9 @@ Product is deleted correctly
 
 ### Use case 6, UC6: Search for products
 
-| Actors Involved  | Customer, Manager                                         |
+| Actors Involved  | Customer, Manager, Supplier, Employee                     |
 | :--------------- | :-------------------------------------------------------- |
-| Precondition     | User is authenticated                                     |
+| Precondition     | -                                                         |
 | Post condition   | Products are shown to the user                            |
 | Nominal Scenario | [Scenario 6.1: List all products](#scenario-61)           |
 | Variants         | [Scenario 6.2: List products of a category](#scenario-62) |
@@ -592,7 +592,7 @@ All products are shown to the user
 
 | Scenario 6.1   |                                               |
 | :------------- | :-------------------------------------------- |
-| Precondition   | User is authenticated                         |
+| Precondition   | -                                             |
 | Post condition | Products are shown to the user                |
 | **Step#**      | **Description**                               |
 | 1              | User goes to the product list                 |
@@ -605,7 +605,7 @@ All products in a given category are shown to the user
 
 | Scenario 6.2   |                                                       |
 | :------------- | :---------------------------------------------------- |
-| Precondition   | User is authenticated and the category exists         |
+| Precondition   | Category exists                                       |
 | Post condition | Products of the category are shown to the user        |
 | **Step#**      | **Description**                                       |
 | 1              | User selects a category                               |
@@ -618,7 +618,7 @@ All products of a given model are shown to the user
 
 | Scenario 6.3   |                                                |
 | :------------- | :--------------------------------------------- |
-| Precondition   | User is authenticated and the model exists     |
+| Precondition   | Model exists                                   |
 | Post condition | Products of the model is shown to the user     |
 | **Step#**      | **Description**                                |
 | 1              | User selects a category                        |
@@ -629,14 +629,14 @@ All products of a given model are shown to the user
 
 Specific product is shown to the user
 
-| Scenario 6.4   |                                              |
-| :------------- | :------------------------------------------- |
-| Precondition   | User is authenticated and the product exists |
-| Post condition | Product is shown to the user                 |
-| **Step#**      | **Description**                              |
-| 1              | User selects a product                       |
-| 2              | System calls the API to get product details  |
-| 3              | Product is shown to the user                 |
+| Scenario 6.4   |                                             |
+| :------------- | :------------------------------------------ |
+| Precondition   | Product exists                              |
+| Post condition | Product is shown to the user                |
+| **Step#**      | **Description**                             |
+| 1              | User selects a product                      |
+| 2              | System calls the API to get product details |
+| 3              | Product is shown to the user                |
 
 ### Use case 7, UC7: Add product to cart
 
