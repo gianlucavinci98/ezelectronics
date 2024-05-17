@@ -50,6 +50,8 @@ class CartRoutes {
          */
         this.router.get(
             "/",
+            this.authenticator.isLoggedIn,
+            this.authenticator.isCustomer,
             (req: any, res: any, next: any) => this.controller.getCart(req.user)
                 .then((cart: any /**Cart */) => {
                     res.status(200).json(cart)
