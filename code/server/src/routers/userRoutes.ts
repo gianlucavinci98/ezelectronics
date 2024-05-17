@@ -97,6 +97,10 @@ class UserRoutes {
          */
         this.router.get(
             "/roles/:role",
+            this.authService.isLoggedIn,
+            this.authService.isAdmin,
+            param("role").isString().isIn(["Manager", "Customer", "Admin"]),
+            this.errorHandler.validateRequest,
             (req: any, res: any, next: any) => this.controller.getUsersByRole(req.params.role)
                 .then((users: any /**User[] */) => res.status(200).json(users))
                 .catch((err) => next(err))
