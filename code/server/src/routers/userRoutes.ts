@@ -4,6 +4,7 @@ import { body, param } from "express-validator"
 import { User } from "../components/user"
 import ErrorHandler from "../helper"
 import UserController from "../controllers/userController"
+import { UserAlreadyExistsError } from "../errors/userError"
 
 /**
  * Represents a class that defines the routes for handling users.
@@ -56,10 +57,21 @@ class UserRoutes {
          */
         this.router.post(
             "/",
+            body("username").isString().isLength({ min: 1 }),
+            body("surname").isString().isLength({ min: 1 }),
+            body("name").isString().isLength({ min: 1 }),
+            body("password").isString().isLength({ min: 1 }),
+            body("role").isString().isIn(["Manager", "Customer", "Admin"]),
+            this.errorHandler.validateRequest,
             (req: any, res: any, next: any) => this.controller.createUser(req.body.username, req.body.name, req.body.surname, req.body.password, req.body.role)
                 .then(() => res.status(200).end())
                 .catch((err) => {
-                    next(err)
+                    if (err instanceof UserAlreadyExistsError) {
+                        res.status(409).end()
+                    }
+                    else {
+                        next(err)
+                    }
                 })
         )
 
