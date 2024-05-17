@@ -36,6 +36,12 @@ class ReviewRoutes {
          */
         this.router.post(
             "/:model",
+            this.authenticator.isLoggedIn,
+            this.authenticator.isCustomer,
+            param("model").isString().notEmpty(),
+            body("score").isInt({ min: 1, max: 5 }),
+            body("comment").isString().notEmpty(),
+            this.errorHandler.validateRequest,
             (req: any, res: any, next: any) => this.controller.addReview(req.params.model, req.user, req.body.score, req.body.comment)
                 .then(() => res.status(200).send())
                 .catch((err: Error) => {
