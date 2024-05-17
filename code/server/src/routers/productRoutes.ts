@@ -148,6 +148,30 @@ class ProductRoutes {
          */
         this.router.get(
             "/",
+            this.authenticator.isLoggedIn,
+            this.authenticator.isAdminOrManager,
+            query("grouping").optional().isString().isIn(["category", "model"]),
+            query("category").optional().isString().isIn(["Smartphone", "Laptop", "Appliance"]),
+            query("model").optional().isString().notEmpty(),
+            this.errorHandler.validateRequest,
+            (req: any, res: any, next: any) => {
+                if (req.query.grouping === "category" && req.query.category === undefined) {
+                    return res.status(422).json({ error: "Category is required when grouping is category" })
+                }
+                if (req.query.grouping === "category" && req.query.model !== undefined) {
+                    return res.status(422).json({ error: "Model cannot be present when grouping is category" })
+                }
+                if (req.query.grouping === "model" && req.query.model === undefined) {
+                    return res.status(422).json({ error: "Model is required when grouping is model" })
+                }
+                if (req.query.grouping === "model" && req.query.category !== undefined) {
+                    return res.status(422).json({ error: "Category cannot be present when grouping is model" })
+                }
+                if (req.query.grouping === undefined && (req.query.category !== undefined || req.query.model !== undefined)) {
+                    return res.status(422).json({ error: "Grouping is required when category or model are present" })
+                }
+                return next()
+            },
             (req: any, res: any, next: any) => this.controller.getProducts(req.query.grouping, req.query.category, req.query.model)
                 .then((products: any /*Product[]*/) => res.status(200).json(products))
                 .catch((err) => {
