@@ -89,6 +89,18 @@ class ProductRoutes {
          */
         this.router.patch(
             "/:model",
+            this.authenticator.isLoggedIn,
+            this.authenticator.isAdminOrManager,
+            param("model").isString().notEmpty(),
+            body("quantity").isInt({ gt: 0 }),
+            body("changeDate").optional().isDate({ format: "YYYY-MM-DD" }),
+            this.errorHandler.validateRequest,
+            (req: any, res: any, next: any) => {
+                if (req.body.changeDate !== undefined && new Date(req.body.changeDate) > new Date()) {
+                    return res.status(400).json({ error: "Change date is after current date" })
+                }
+                return next()
+            },
             (req: any, res: any, next: any) => this.controller.changeProductQuantity(req.params.model, req.body.quantity, req.body.changeDate)
                 .then((quantity: any /**number */) => res.status(200).json({ quantity: quantity }))
                 .catch((err) => next(err))
