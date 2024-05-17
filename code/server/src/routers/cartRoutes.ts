@@ -120,6 +120,10 @@ class CartRoutes {
          */
         this.router.delete(
             "/products/:model",
+            this.authenticator.isLoggedIn,
+            this.authenticator.isCustomer,
+            param("model").isString().notEmpty(),
+            this.errorHandler.validateRequest,
             (req: any, res: any, next: any) => this.controller.removeProductFromCart(req.user, req.params.model)
                 .then(() => res.status(200).end())
                 .catch((err) => {
