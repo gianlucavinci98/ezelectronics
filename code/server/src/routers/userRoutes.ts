@@ -163,6 +163,19 @@ class UserRoutes {
          */
         this.router.patch(
             "/:username",
+            this.authService.isLoggedIn,
+            param("username").isString().isLength({ min: 1 }),
+            body("name").isString().isLength({ min: 1 }),
+            body("surname").isString().isLength({ min: 1 }),
+            body("address").isString().isLength({ min: 1 }),
+            body("birthdate").notEmpty().isDate({ format: "YYYY-MM-DD" }),
+            this.errorHandler.validateRequest,
+            (req: any, res: any, next: any) => {
+                if (new Date(req.body.birthdate) > new Date()) {
+                    return res.status(400).json({ error: "Birthday is after current date" })
+                }
+                return next()
+            },
             (req: any, res: any, next: any) => this.controller.updateUserInfo(req.user, req.body.name, req.body.surname, req.body.address, req.body.birthdate, req.params.username)
                 .then((user: any /**User */) => res.status(200).json(user))
                 .catch((err: any) => next(err))
