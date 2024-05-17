@@ -167,6 +167,8 @@ class CartRoutes {
          */
         this.router.get(
             "/all",
+            this.authenticator.isLoggedIn,
+            this.authenticator.isAdminOrManager,
             (req: any, res: any, next: any) => this.controller.getAllCarts()
                 .then((carts: any/**Cart[] */) => res.status(200).json(carts))
                 .catch((err: any) => next(err))
