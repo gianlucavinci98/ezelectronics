@@ -58,6 +58,21 @@ class ProductRoutes {
          */
         this.router.post(
             "/",
+            this.authenticator.isLoggedIn,
+            this.authenticator.isAdminOrManager,
+            body("model").isString().notEmpty(),
+            body("category").isString().isIn(["Smartphone", "Laptop", "Appliance"]),
+            body("quantity").isInt({ gt: 0 }),
+            body("details").isString(),
+            body("sellingPrice").isFloat({ gt: 0 }),
+            body("arrivalDate").optional().isDate({ format: "YYYY-MM-DD" }),
+            this.errorHandler.validateRequest,
+            (req: any, res: any, next: any) => {
+                if (req.body.arrivalDate !== undefined && new Date(req.body.arrivalDate) > new Date()) {
+                    return res.status(400).json({ error: "Arrival date is after current date" })
+                }
+                return next()
+            },
             (req: any, res: any, next: any) => this.controller.registerProducts(req.body.model, req.body.category, req.body.quantity, req.body.details, req.body.sellingPrice, req.body.arrivalDate)
                 .then(() => res.status(200).end())
                 .catch((err) => next(err))
