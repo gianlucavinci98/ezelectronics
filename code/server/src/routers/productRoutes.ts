@@ -117,6 +117,18 @@ class ProductRoutes {
          */
         this.router.patch(
             "/:model/sell",
+            this.authenticator.isLoggedIn,
+            this.authenticator.isAdminOrManager,
+            param("model").isString().notEmpty(),
+            body("quantity").isInt({ gt: 0 }),
+            body("sellingDate").optional().isDate({ format: "YYYY-MM-DD" }),
+            this.errorHandler.validateRequest,
+            (req: any, res: any, next: any) => {
+                if (req.body.sellingDate !== undefined && new Date(req.body.sellingDate) > new Date()) {
+                    return res.status(400).json({ error: "Selling date is after current date" })
+                }
+                return next()
+            },
             (req: any, res: any, next: any) => this.controller.sellProduct(req.params.model, req.body.quantity, req.body.sellingDate)
                 .then((quantity: any /**number */) => res.status(200).json({ quantity: quantity }))
                 .catch((err) => {
