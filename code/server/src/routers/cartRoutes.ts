@@ -139,6 +139,8 @@ class CartRoutes {
          */
         this.router.delete(
             "/current",
+            this.authenticator.isLoggedIn,
+            this.authenticator.isCustomer,
             (req: any, res: any, next: any) => this.controller.clearCart(req.user)
                 .then(() => res.status(200).end())
                 .catch((err) => next(err))
