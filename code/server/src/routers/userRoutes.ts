@@ -254,6 +254,7 @@ class AuthRoutes {
          */
         this.router.get(
             "/current",
+            this.authService.isLoggedIn,
             (req: any, res: any) => res.status(200).json(req.user)
         )
     }
