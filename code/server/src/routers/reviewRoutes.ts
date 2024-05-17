@@ -74,6 +74,10 @@ class ReviewRoutes {
          */
         this.router.delete(
             "/:model",
+            this.authenticator.isLoggedIn,
+            this.authenticator.isCustomer,
+            param("model").isString().notEmpty(),
+            this.errorHandler.validateRequest,
             (req: any, res: any, next: any) => this.controller.deleteReview(req.params.model, req.user)
                 .then(() => res.status(200).send())
                 .catch((err: Error) => {
