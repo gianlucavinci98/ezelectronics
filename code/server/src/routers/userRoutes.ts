@@ -180,7 +180,6 @@ class UserRoutes {
                 .then((user: any /**User */) => res.status(200).json(user))
                 .catch((err: any) => next(err))
         )
-
     }
 }
 
@@ -227,6 +226,9 @@ class AuthRoutes {
          */
         this.router.post(
             "/",
+            body("username").isString().isLength({ min: 1 }),
+            body("password").isString().isLength({ min: 1 }),
+            this.errorHandler.validateRequest,
             (req, res, next) => this.authService.login(req, res, next)
                 .then((user: User) => res.status(200).json(user))
                 .catch((err: any) => { res.status(401).json(err) })
