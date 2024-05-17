@@ -89,6 +89,8 @@ class CartRoutes {
          */
         this.router.patch(
             "/",
+            this.authenticator.isLoggedIn,
+            this.authenticator.isCustomer,
             (req: any, res: any, next: any) => this.controller.checkoutCart(req.user)
                 .then(() => res.status(200).end())
                 .catch((err) => {
