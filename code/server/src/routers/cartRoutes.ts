@@ -153,6 +153,8 @@ class CartRoutes {
          */
         this.router.delete(
             "/",
+            this.authenticator.isLoggedIn,
+            this.authenticator.isAdminOrManager,
             (req: any, res: any, next: any) => this.controller.deleteAllCarts()
                 .then(() => res.status(200).end())
                 .catch((err: any) => next(err))
