@@ -1,4 +1,6 @@
 import ProductDAO from "../dao/productDAO";
+import { Product, Category } from "../components/product";
+import { ProductAlreadyExistsError } from "../errors/productError";
 
 /**
  * Represents a controller for managing products.
@@ -21,7 +23,16 @@ class ProductController {
      * @param arrivalDate The optional date in which the product arrived.
      * @returns A Promise that resolves to nothing.
      */
-    async registerProducts(model: string, category: string, quantity: number, details: string | null, sellingPrice: number, arrivalDate: string | null) /**:Promise<void> */ { }
+    async registerProducts(model: string, category: string, quantity: number, details: string | null, sellingPrice: number, arrivalDate: string | null): Promise<void> {
+        const today = new Date();
+        const date = new Date(arrivalDate || today);
+
+        if (await this.dao.modelAlreadyExists(model)) {
+            throw new ProductAlreadyExistsError();
+        }
+
+        return this.dao.registerProduct(sellingPrice, model, category, date.toISOString().split('T')[0], details, quantity);
+    }
 
     /**
      * Increases the available quantity of a product through the addition of new units.
