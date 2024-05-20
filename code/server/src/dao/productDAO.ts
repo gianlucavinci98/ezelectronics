@@ -33,6 +33,34 @@ class ProductDAO {
             }
         })
     }
+
+    changeProductQuantity(model: string, newQuantity: number, changeDate: string): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            try {
+                const sql = "UPDATE product SET quantity = quantity + ?, arrivalDate = ? WHERE model = ?"
+                db.run(sql, [newQuantity, changeDate, model], (err: Error | null) => {
+                    if (err) reject(err)
+                    else resolve()
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    getProduct(model: string): Promise<Product> {
+        return new Promise<Product>((resolve, reject) => {
+            try {
+                const sql = "SELECT * FROM product WHERE model = ?"
+                db.get(sql, [model], (err: Error | null, row: any) => {
+                    if (err) reject(err)
+                    else resolve(new Product(row.sellingPrice, row.model, row.category, row.arrivalDate, row.details, row.quantity))
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
 }
 
 export default ProductDAO
