@@ -1,5 +1,6 @@
 import db from "../db/db"
 import { Product } from "../components/product"
+import { ProductNotFoundError } from "../errors/productError"
 
 /**
  * A class that implements the interaction with the database for all product-related operations.
@@ -55,6 +56,7 @@ class ProductDAO {
                 const sql = "SELECT * FROM product WHERE model = ?"
                 db.get(sql, [model], (err: Error | null, row: any) => {
                     if (err) reject(err)
+                    else if (!row) reject(new ProductNotFoundError())
                     else resolve(new Product(row.sellingPrice, row.model, row.category, row.arrivalDate, row.details, row.quantity))
                 })
             } catch (error) {
