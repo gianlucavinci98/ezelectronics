@@ -1,4 +1,5 @@
 import db from "../db/db"
+import { Product } from "../components/product"
 
 /**
  * A class that implements the interaction with the database for all product-related operations.
@@ -55,6 +56,34 @@ class ProductDAO {
                 db.get(sql, [model], (err: Error | null, row: any) => {
                     if (err) reject(err)
                     else resolve(new Product(row.sellingPrice, row.model, row.category, row.arrivalDate, row.details, row.quantity))
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    getProducts(): Promise<Product[]> {
+        return new Promise<Product[]>((resolve, reject) => {
+            try {
+                const sql = "SELECT * FROM product"
+                db.all(sql, [], (err: Error | null, rows: any[]) => {
+                    if (err) reject(err)
+                    else resolve(rows.map(row => new Product(row.sellingPrice, row.model, row.category, row.arrivalDate, row.details, row.quantity)))
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    getProductsByCategory(category: string): Promise<Product[]> {
+        return new Promise<Product[]>((resolve, reject) => {
+            try {
+                const sql = "SELECT * FROM product WHERE category = ?"
+                db.all(sql, [category], (err: Error | null, rows: any[]) => {
+                    if (err) reject(err)
+                    else resolve(rows.map(row => new Product(row.sellingPrice, row.model, row.category, row.arrivalDate, row.details, row.quantity)))
                 })
             } catch (error) {
                 reject(error)
