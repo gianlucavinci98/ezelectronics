@@ -1,6 +1,5 @@
 DROP TABLE IF EXISTS review;
 CREATE TABLE review (
-    id INT PRIMARY KEY,
     model TEXT NOT NULL,
     user TEXT NOT NULL,
     score INT NOT NULL CHECK (
@@ -9,6 +8,7 @@ CREATE TABLE review (
     ),
     date DATE NOT NULL,
     comment TEXT NOT NULL,
+    PRIMARY KEY (model, user),
     FOREIGN KEY (model) REFERENCES product(model),
     FOREIGN KEY (user) REFERENCES users(username)
 );
