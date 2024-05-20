@@ -9,7 +9,6 @@ CREATE TABLE cart (
     FOREIGN KEY (customer) REFERENCES users(username)
 );
 CREATE TABLE cart_items (
-    id INTEGER PRIMARY KEY,
     cart INTEGER NOT NULL,
     model INTEGER NOT NULL,
     quantity INTEGER NOT NULL,
@@ -17,6 +16,7 @@ CREATE TABLE cart_items (
         category IN ('Smartphone', 'Laptop', 'Appliance')
     ),
     price DECIMAL(10, 2) NOT NULL CHECK (price >= 0.00),
+    PRIMARY KEY (cart, model),
     FOREIGN KEY (cart) REFERENCES cart(ROWID),
     FOREIGN KEY (model) REFERENCES products(model)
 );
