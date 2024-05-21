@@ -1,6 +1,6 @@
 import ProductDAO from "../dao/productDAO";
-import { Product, Category } from "../components/product";
-import { ProductAlreadyExistsError, ProductNotFoundError } from "../errors/productError";
+import { Product } from "../components/product";
+import { ProductAlreadyExistsError, ProductNotFoundError, ChangeDateBeforeArrivalDateError } from "../errors/productError";
 
 /**
  * Represents a controller for managing products.
@@ -42,14 +42,22 @@ class ProductController {
      * @returns A Promise that resolves to the new available quantity of the product.
      */
     async changeProductQuantity(model: string, newQuantity: number, changeDate: string | null): Promise<number> {
+        const today = new Date();
+        const date = new Date(changeDate || today);
+
         if (! await this.dao.modelAlreadyExists(model)) {
             throw new ProductNotFoundError();
         }
 
+        const product = await this.dao.getProduct(model);
+        if (product.arrivalDate > date.toISOString().split('T')[0]) {
+            throw new ChangeDateBeforeArrivalDateError();
+        }
+
         this.dao.changeProductQuantity(model, newQuantity);
 
-        const product = await this.dao.getProduct(model);
-        return product.quantity;
+        const product_updated = await this.dao.getProduct(model);
+        return product_updated.quantity;
     }
 
     /**

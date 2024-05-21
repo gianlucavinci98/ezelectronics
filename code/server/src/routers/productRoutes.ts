@@ -64,7 +64,7 @@ class ProductRoutes {
             body("category").isString().isIn(["Smartphone", "Laptop", "Appliance"]),
             body("quantity").isInt({ gt: 0 }),
             body("details").isString(),
-            body("sellingPrice").isFloat({ gt: 0 }),
+            body("sellingPrice").isFloat({ gt: 0.0 }),
             body("arrivalDate").optional().isDate({ format: "YYYY-MM-DD" }),
             this.errorHandler.validateRequest,
             (req: any, res: any, next: any) => {
