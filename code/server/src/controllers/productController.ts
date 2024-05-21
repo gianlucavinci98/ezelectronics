@@ -1,6 +1,12 @@
 import ProductDAO from "../dao/productDAO";
 import { Product } from "../components/product";
-import { ProductAlreadyExistsError, ProductNotFoundError, ChangeDateBeforeArrivalDateError } from "../errors/productError";
+import {
+    ProductAlreadyExistsError,
+    ProductNotFoundError,
+    EditDateBeforeArrivalDateError,
+    LowProductStockError,
+    EmptyProductStockError
+} from "../errors/productError";
 
 /**
  * Represents a controller for managing products.
@@ -45,13 +51,9 @@ class ProductController {
         const today = new Date();
         const date = new Date(changeDate || today);
 
-        if (! await this.dao.modelAlreadyExists(model)) {
-            throw new ProductNotFoundError();
-        }
-
         const product = await this.dao.getProduct(model);
         if (product.arrivalDate > date.toISOString().split('T')[0]) {
-            throw new ChangeDateBeforeArrivalDateError();
+            throw new EditDateBeforeArrivalDateError();
         }
 
         this.dao.changeProductQuantity(model, newQuantity);
@@ -68,14 +70,24 @@ class ProductController {
      * @returns A Promise that resolves to the new available quantity of the product.
      */
     async sellProduct(model: string, quantity: number, sellingDate: string | null): Promise<number> {
-        if (! await this.dao.modelAlreadyExists(model)) {
-            throw new ProductNotFoundError();
+        const today = new Date();
+        const date = new Date(sellingDate || today);
+
+        const product = await this.dao.getProduct(model);
+        if (product.arrivalDate > date.toISOString().split('T')[0]) {
+            throw new EditDateBeforeArrivalDateError();
+        }
+        if (product.quantity === 0) {
+            throw new EmptyProductStockError();
+        }
+        if (product.quantity < quantity) {
+            throw new LowProductStockError();
         }
 
         this.dao.sellProduct(model, quantity);
 
-        const product = await this.dao.getProduct(model);
-        return product.quantity;
+        const updated_product = await this.dao.getProduct(model);
+        return updated_product.quantity;
     }
 
     /**
