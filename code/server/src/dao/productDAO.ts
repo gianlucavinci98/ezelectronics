@@ -163,6 +163,20 @@ class ProductDAO {
             }
         })
     }
+
+    deleteProduct(model: string): Promise<Boolean> {
+        return new Promise<Boolean>((resolve, reject) => {
+            try {
+                const sql = "DELETE FROM product WHERE model = ?"
+                db.run(sql, [model], (err: Error | null) => {
+                    if (err) reject(err)
+                    else resolve(true)
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
 }
 
 export default ProductDAO
