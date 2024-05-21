@@ -112,7 +112,7 @@ class ProductController {
      * @param model An optional parameter. It can only be present if grouping is equal to "model" (in which case it must be present and not empty).
      * @returns A Promise that resolves to an array of Product objects.
      */
-    async getAvailableProducts(grouping: string | null, category: string | null, model: string | null) /**:Promise<Product[]> */ {
+    async getAvailableProducts(grouping: string | null, category: string | null, model: string | null): Promise<Product[]> {
         if (grouping === "category")
             return this.dao.getAvailableProductsByCategory(category);
         if (grouping === "model")
