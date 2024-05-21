@@ -106,6 +106,49 @@ class ProductDAO {
             }
         })
     }
+
+    getAvailableProductsByCategory(category: string): Promise<Product[]> {
+        return new Promise<Product[]>((resolve, reject) => {
+            try {
+                const sql = "SELECT * FROM product WHERE category = ? AND quantity > 0"
+                db.all(sql, [category], (err: Error | null, rows: any[]) => {
+                    if (err) reject(err)
+                    else resolve(rows.map(row => new Product(row.sellingPrice, row.model, row.category, row.arrivalDate, row.details, row.quantity)))
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    getProductAvailable(model: string): Promise<Product> {
+        return new Promise<Product>((resolve, reject) => {
+            try {
+                const sql = "SELECT * FROM product WHERE model = ? AND quantity > 0"
+                db.get(sql, [model], (err: Error | null, row: any) => {
+                    if (err) reject(err)
+                    else if (!row) reject(new ProductNotFoundError())
+                    else resolve(new Product(row.sellingPrice, row.model, row.category, row.arrivalDate, row.details, row.quantity))
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    getAvailableProducts(): Promise<Product[]> {
+        return new Promise<Product[]>((resolve, reject) => {
+            try {
+                const sql = "SELECT * FROM product WHERE quantity > 0"
+                db.all(sql, [], (err: Error | null, rows: any[]) => {
+                    if (err) reject(err)
+                    else resolve(rows.map(row => new Product(row.sellingPrice, row.model, row.category, row.arrivalDate, row.details, row.quantity)))
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
 }
 
 export default ProductDAO
