@@ -36,11 +36,11 @@ class ProductDAO {
         })
     }
 
-    changeProductQuantity(model: string, newQuantity: number, changeDate: string): Promise<void> {
+    changeProductQuantity(model: string, newQuantity: number): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             try {
-                const sql = "UPDATE product SET quantity = quantity + ?, arrivalDate = ? WHERE model = ?"
-                db.run(sql, [newQuantity, changeDate, model], (err: Error | null) => {
+                const sql = "UPDATE product SET quantity = quantity + ? WHERE model = ?"
+                db.run(sql, [newQuantity, model], (err: Error | null) => {
                     if (err) reject(err)
                     else resolve()
                 })

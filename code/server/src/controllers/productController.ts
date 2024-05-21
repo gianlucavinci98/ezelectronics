@@ -42,14 +42,11 @@ class ProductController {
      * @returns A Promise that resolves to the new available quantity of the product.
      */
     async changeProductQuantity(model: string, newQuantity: number, changeDate: string | null): Promise<number> {
-        const today = new Date();
-        const date = new Date(changeDate || today);
-
         if (! await this.dao.modelAlreadyExists(model)) {
             throw new ProductNotFoundError();
         }
 
-        this.dao.changeProductQuantity(model, newQuantity, date.toISOString().split('T')[0]);
+        this.dao.changeProductQuantity(model, newQuantity);
 
         const product = await this.dao.getProduct(model);
         return product.quantity;
