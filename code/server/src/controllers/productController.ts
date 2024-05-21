@@ -59,7 +59,16 @@ class ProductController {
      * @param sellingDate The optional date in which the sale occurred.
      * @returns A Promise that resolves to the new available quantity of the product.
      */
-    async sellProduct(model: string, quantity: number, sellingDate: string | null) /**:Promise<number> */ { }
+    async sellProduct(model: string, quantity: number, sellingDate: string | null): Promise<number> {
+        if (! await this.dao.modelAlreadyExists(model)) {
+            throw new ProductNotFoundError();
+        }
+
+        this.dao.sellProduct(model, quantity);
+
+        const product = await this.dao.getProduct(model);
+        return product.quantity;
+    }
 
     /**
      * Returns all products in the database, with the option to filter them by category or model.

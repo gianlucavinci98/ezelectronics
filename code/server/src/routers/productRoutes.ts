@@ -130,7 +130,7 @@ class ProductRoutes {
                 return next()
             },
             (req: any, res: any, next: any) => this.controller.sellProduct(req.params.model, req.body.quantity, req.body.sellingDate)
-                .then((quantity: any /**number */) => res.status(200).json({ quantity: quantity }))
+                .then((quantity: number) => res.status(200).json({ quantity: quantity }))
                 .catch((err) => {
                     console.log(err)
                     next(err)
