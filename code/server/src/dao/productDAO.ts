@@ -7,20 +7,6 @@ import { ProductNotFoundError } from "../errors/productError"
  * You are free to implement any method you need here, as long as the requirements are satisfied.
  */
 class ProductDAO {
-    modelAlreadyExists(model: string): Promise<boolean> {
-        return new Promise<boolean>((resolve, reject) => {
-            try {
-                const sql = "SELECT COUNT(*) FROM product WHERE model = ?"
-                db.get(sql, [model], (err: Error | null, row: any) => {
-                    if (err) reject(err)
-                    else resolve(row["COUNT(*)"] > 0)
-                })
-            } catch (error) {
-                reject(error)
-            }
-        })
-    }
-
     registerProduct(sellingPrice: number, model: string, category: string, arrivalDate: string, details: string | null, quantity: number): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             try {

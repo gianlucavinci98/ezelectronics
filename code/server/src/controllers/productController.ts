@@ -33,11 +33,16 @@ class ProductController {
         const today = new Date();
         const date = new Date(arrivalDate || today);
 
-        if (await this.dao.modelAlreadyExists(model)) {
-            throw new ProductAlreadyExistsError();
+        try {
+            await this.dao.getProduct(model);
         }
-
-        return this.dao.registerProduct(sellingPrice, model, category, date.toISOString().split('T')[0], details, quantity);
+        catch (error) {
+            if (error instanceof ProductNotFoundError) {
+                return this.dao.registerProduct(sellingPrice, model, category, date.toISOString().split('T')[0], details, quantity);
+            }
+            throw error;
+        }
+        throw new ProductAlreadyExistsError();
     }
 
     /**
@@ -135,8 +140,14 @@ class ProductController {
      * @returns A Promise that resolves to `true` if the product has been successfully deleted.
      */
     async deleteProduct(model: string): Promise<Boolean> {
-        if (! await this.dao.modelAlreadyExists(model)) {
-            throw new ProductNotFoundError();
+        try {
+            await this.dao.getProduct(model);
+        }
+        catch (error) {
+            if (error instanceof ProductNotFoundError) {
+                return false;
+            }
+            throw error;
         }
         return this.dao.deleteProduct(model);
     }
