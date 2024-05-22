@@ -164,7 +164,7 @@ class UserRoutes {
             body("name").isString().isLength({ min: 1 }),
             body("surname").isString().isLength({ min: 1 }),
             body("address").isString().isLength({ min: 1 }),
-            body("birthdate").notEmpty().isDate({ format: "YYYY-MM-DD" }).isBefore(new Date().toISOString().split("T")[0]),
+            body("birthdate").notEmpty().isDate({ format: "YYYY-MM-DD" }).isBefore(),
             this.errorHandler.validateRequest,
             (req: any, res: any, next: any) => this.controller.updateUserInfo(req.user, req.body.name, req.body.surname, req.body.address, req.body.birthdate, req.params.username)
                 .then((user: User) => res.status(200).json(user))
