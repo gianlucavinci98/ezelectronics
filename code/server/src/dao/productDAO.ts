@@ -78,20 +78,6 @@ class ProductDAO {
         })
     }
 
-    sellProduct(model: string, quantity: number): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            try {
-                const sql = "UPDATE product SET quantity = quantity - ? WHERE model = ?"
-                db.run(sql, [quantity, model], (err: Error | null) => {
-                    if (err) reject(err)
-                    else resolve()
-                })
-            } catch (error) {
-                reject(error)
-            }
-        })
-    }
-
     getAvailableProductsByCategory(category: string): Promise<Product[]> {
         return new Promise<Product[]>((resolve, reject) => {
             try {

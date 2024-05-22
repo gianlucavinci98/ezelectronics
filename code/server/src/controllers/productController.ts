@@ -89,7 +89,7 @@ class ProductController {
             throw new LowProductStockError();
         }
 
-        this.dao.sellProduct(model, quantity);
+        this.dao.changeProductQuantity(model, -quantity);
 
         const updated_product = await this.dao.getProduct(model);
         return updated_product.quantity;
