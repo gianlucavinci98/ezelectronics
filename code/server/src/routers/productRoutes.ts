@@ -65,7 +65,7 @@ class ProductRoutes {
             body("quantity").isInt({ gt: 0 }),
             body("details").isString(),
             body("sellingPrice").isFloat({ gt: 0.0 }),
-            body("arrivalDate").optional().isDate({ format: "YYYY-MM-DD" }),
+            body("arrivalDate").optional({ nullable: true }).isDate({ format: "YYYY-MM-DD" }),
             this.errorHandler.validateRequest,
             (req: any, res: any, next: any) => {
                 if (req.body.arrivalDate !== undefined && new Date(req.body.arrivalDate) > new Date()) {
@@ -93,7 +93,7 @@ class ProductRoutes {
             this.authenticator.isAdminOrManager,
             param("model").isString().notEmpty(),
             body("quantity").isInt({ gt: 0 }),
-            body("changeDate").optional().isDate({ format: "YYYY-MM-DD" }),
+            body("changeDate").optional({ nullable: true }).isDate({ format: "YYYY-MM-DD" }),
             this.errorHandler.validateRequest,
             (req: any, res: any, next: any) => {
                 if (req.body.changeDate !== undefined && new Date(req.body.changeDate) > new Date()) {
@@ -121,7 +121,7 @@ class ProductRoutes {
             this.authenticator.isAdminOrManager,
             param("model").isString().notEmpty(),
             body("quantity").isInt({ gt: 0 }),
-            body("sellingDate").optional().isDate({ format: "YYYY-MM-DD" }),
+            body("sellingDate").optional({ nullable: true }).isDate({ format: "YYYY-MM-DD" }),
             this.errorHandler.validateRequest,
             (req: any, res: any, next: any) => {
                 if (req.body.sellingDate !== undefined && new Date(req.body.sellingDate) > new Date()) {
