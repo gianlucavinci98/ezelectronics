@@ -13,8 +13,7 @@ class ProductDAO {
                 const sql = "SELECT COUNT(*) FROM product WHERE model = ?"
                 db.get(sql, [model], (err: Error | null, row: any) => {
                     if (err) reject(err)
-                    else if (row["COUNT(*)"] > 0) resolve(true)
-                    else resolve(false)
+                    else resolve(row["COUNT(*)"] > 0)
                 })
             } catch (error) {
                 reject(error)
