@@ -3,7 +3,7 @@ const PRODUCT_ALREADY_EXISTS = "The product already exists"
 const PRODUCT_SOLD = "Product already sold"
 const EMPTY_PRODUCT_STOCK = "Product stock is empty"
 const LOW_PRODUCT_STOCK = "Product stock cannot satisfy the requested quantity"
-const EDITDATE_VEFORE_ARRIVALDATE = "The specified date cannot be before the arrival date"
+const EDITDATE_BEFORE_ARRIVALDATE = "The specified date cannot be before the arrival date"
 
 /**
  * Represents an error that occurs when a product is not found.
@@ -75,7 +75,7 @@ class EditDateBeforeArrivalDateError extends Error {
 
     constructor() {
         super()
-        this.customMessage = EDITDATE_VEFORE_ARRIVALDATE
+        this.customMessage = EDITDATE_BEFORE_ARRIVALDATE
         this.customCode = 400
     }
 }
