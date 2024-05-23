@@ -7,6 +7,8 @@ import { Role } from "../../src/components/user"
 const baseURL = "/ezelectronics"
 const usersBaseURL = baseURL + "/users"
 
+jest.mock("../../src/controllers/userController")
+
 //Example of a unit test for the POST ezelectronics/users route
 //The test checks if the route returns a 200 success code
 //The test also expects the createUser method of the controller to be called once with the correct parameters
