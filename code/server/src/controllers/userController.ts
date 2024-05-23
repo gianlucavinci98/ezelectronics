@@ -1,4 +1,3 @@
-import { BadRequestError } from "../errors/genericError"
 import { Role, User } from "../components/user"
 import UserDAO from "../dao/userDAO"
 import { UserIsAdminError, UserNotAdminError } from "../errors/userError"
@@ -41,17 +40,7 @@ class UserController {
      * @returns A Promise that resolves to an array of users with the specified role.
      */
     async getUsersByRole(role: string): Promise<User[]> {
-        return new Promise((resolve, reject) => {
-            if (Object.values(Role).includes(role as any)) {
-                this.dao.getUsers(role as Role).then((users) => {
-                    resolve(users)
-                }).catch((error) => {
-                    reject(error)
-                })
-            } else {
-                reject(new BadRequestError())
-            }
-        })
+        return this.dao.getUsers(role as Role);
     }
 
     /**
@@ -63,17 +52,10 @@ class UserController {
      * @returns A Promise that resolves to the user with the specified username.
      */
     async getUserByUsername(user: User, username: string): Promise<User> {
-        return new Promise((resolve, reject) => {
-            if (user.role === Role.ADMIN || user.username === username) {
-                this.dao.getUserByUsername(username).then((user) => {
-                    resolve(user)
-                }).catch((error) => {
-                    reject(error)
-                })
-            } else {
-                reject(new UserNotAdminError())
-            }
-        })
+        if (user.role !== Role.ADMIN && user.username !== username) {
+            throw new UserNotAdminError()
+        }
+        return this.dao.getUserByUsername(username)
     }
 
     /**
@@ -85,29 +67,16 @@ class UserController {
      * @returns A Promise that resolves to true if the user has been deleted.
      */
     async deleteUser(user: User, username: string): Promise<Boolean> {
-        return new Promise((resolve, reject) => {
-            if (user.username === username) {
-                this.dao.deleteUser(username).then((deleted) => {
-                    resolve(deleted)
-                }).catch((error) => {
-                    reject(error)
-                })
-            } else if (user.role === Role.ADMIN) {
-                this.dao.getUserByUsername(username).then((target) => {
-                    if (target.role === Role.ADMIN) {
-                        reject(new UserIsAdminError())
-                    } else {
-                        return this.dao.deleteUser(username)
-                    }
-                }).then((deleted) => {
-                    resolve(deleted)
-                }).catch((error) => {
-                    reject(error)
-                })
-            } else {
-                reject(new UserNotAdminError())
+        if (user.role === Role.ADMIN) {
+            // check if the target is an admin
+            let target = await this.dao.getUserByUsername(username)
+            if (target.role === Role.ADMIN) {
+                throw new UserIsAdminError()
             }
-        })
+        } else if (user.username !== username) {
+            throw new UserNotAdminError()
+        }
+        return this.dao.deleteUser(username)
     }
 
     /**
@@ -130,35 +99,18 @@ class UserController {
      * @returns A Promise that resolves to the updated user
      */
     async updateUserInfo(user: User, name: string, surname: string, address: string, birthdate: string, username: string): Promise<User> {
-        return new Promise((resolve, reject) => {
-            let p: Promise<boolean>
-            if (username === user.username) {
-                // current user
-                p = this.dao.updateUser(username, name, surname, address, birthdate)
-            } else if (user.role === Role.ADMIN) {
-                // admin
-                p = this.dao.getUserByUsername(username).then((target) => {
-                    if (target.role === Role.ADMIN) {
-                        reject(new UserIsAdminError())
-                    } else {
-                        return this.dao.updateUser(username, name, surname, address, birthdate)
-                    }
-                })
-            } else {
-                reject(new UserNotAdminError())
+        if (username !== user.username && user.role !== Role.ADMIN) {
+            throw new UserNotAdminError()
+        }
+        if (user.role === Role.ADMIN) {
+            // check if the target is an admin
+            let target = await this.dao.getUserByUsername(username)
+            if (target.role === Role.ADMIN) {
+                throw new UserIsAdminError()
             }
-            p.then((updated) => {
-                if (updated) {
-                    return this.dao.getUserByUsername(username)
-                } else {
-                    reject(new BadRequestError())
-                }
-            }).then((updatedUser) => {
-                resolve(updatedUser)
-            }).catch((error) => {
-                reject(error)
-            })
-        })
+        }
+        await this.dao.updateUser(username, name, surname, address, birthdate)
+        return this.dao.getUserByUsername(username)
     }
 }
 

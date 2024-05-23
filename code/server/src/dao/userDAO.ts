@@ -176,15 +176,15 @@ class UserDAO {
      * @param surname The new surname of the user
      * @param address The new address of the user
      * @param birthdate The new birthdate of the user
-     * @returns A Promise that resolves to true if the user has been updated
+     * @returns A Promise that resolves if the user has been updated
      */
-    updateUser(username: string, name: string, surname: string, address: string, birthdate: string): Promise<boolean> {
-        return new Promise<boolean>((resolve, reject) => {
+    updateUser(username: string, name: string, surname: string, address: string, birthdate: string): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
             try {
                 const sql = "UPDATE users SET name = ?, surname = ?, address = ?, birthdate = ? WHERE username = ?"
                 db.run(sql, [name, surname, address, birthdate, username], (err: Error | null) => {
                     if (err) reject(err)
-                    resolve(true)
+                    resolve()
                 })
             } catch (error) {
                 reject(error)
