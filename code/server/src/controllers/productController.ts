@@ -61,7 +61,7 @@ class ProductController {
             throw new EditDateBeforeArrivalDateError();
         }
 
-        this.dao.changeProductQuantity(model, newQuantity);
+        await this.dao.changeProductQuantity(model, newQuantity);
 
         const product_updated = await this.dao.getProduct(model);
         return product_updated.quantity;
@@ -89,7 +89,7 @@ class ProductController {
             throw new LowProductStockError();
         }
 
-        this.dao.changeProductQuantity(model, -quantity);
+        await this.dao.changeProductQuantity(model, -quantity);
 
         const updated_product = await this.dao.getProduct(model);
         return updated_product.quantity;
