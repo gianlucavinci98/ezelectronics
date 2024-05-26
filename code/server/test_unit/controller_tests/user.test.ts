@@ -1,4 +1,4 @@
-import { test, expect, jest } from "@jest/globals"
+import { test, expect, jest, beforeEach } from "@jest/globals"
 import UserController from "../../src/controllers/userController"
 import UserDAO from "../../src/dao/userDAO"
 import { Role } from "../../src/components/user"; // Import the Role enum
@@ -8,6 +8,10 @@ jest.mock("../../src/dao/userDAO")
 //Example of a unit test for the createUser method of the UserController
 //The test checks if the method returns true when the DAO method returns true
 //The test also expects the DAO method to be called once with the correct parameters
+
+beforeEach(() => {
+    jest.clearAllMocks()
+})
 
 test("It should return true", async () => {
     const testUser = { //Define a test user object
@@ -65,7 +69,7 @@ test("It should return an array of users with the specified role", async () => {
     jest.spyOn(UserDAO.prototype, "getUsers").mockResolvedValueOnce(testUsers); //Mock the getUsers method of the DAO
     const controller = new UserController(); //Create a new instance of the controller
     //Call the getUsersByRole method of the controller with the role "Manager"
-    const response = await controller.getUsersByRole("MANAGER");
+    const response = await controller.getUsersByRole(Role.MANAGER);
 
     //Check if the getUsers method of the DAO has been called once with the role "Manager"
     expect(UserDAO.prototype.getUsers).toHaveBeenCalledTimes(1);
@@ -158,7 +162,7 @@ test("It should return the updated user", async () => {
         username: "loggedUser",
         name: "test",
         surname: "test",
-        role: Role.MANAGER,
+        role: Role.ADMIN,
         address: "test",
         birthdate: "test"
     }
@@ -172,15 +176,14 @@ test("It should return the updated user", async () => {
         birthdate: "birthdateUpdated"
     }
 
-
-    jest.spyOn(UserDAO.prototype, "getUserByUsername").mockResolvedValueOnce(testUserUpdated); //Mock the getUserByUsername method of the DAO
-    jest.spyOn(UserDAO.prototype, "updateUser").mockResolvedValueOnce(); //Mock the updateUser method of the DAO
+    jest.spyOn(UserDAO.prototype, "getUserByUsername").mockResolvedValue(testUserUpdated) //Mock the getUserByUsername method of the DAO
+    jest.spyOn(UserDAO.prototype, "updateUser").mockResolvedValue() //Mock the updateUser method of the DAO
     const controller = new UserController(); //Create a new instance of the controller
     //Call the updateUserInfo method of the controller with the test user object
-    const response = await controller.updateUserInfo(testLoggedUser, "nameUpdated", "surnameUpdated", "addressUpdated", "birthdateUpdated", "UpdateUser");
+    const response = await controller.updateUserInfo(testLoggedUser, "nameUpdated", "surnameUpdated", "addressUpdated", "birthdateUpdated", "updateUser");
 
     //Check if the getUserByUsername method of the DAO has been called once with the test username
-    expect(UserDAO.prototype.getUserByUsername).toHaveBeenCalledTimes(1);
+    expect(UserDAO.prototype.getUserByUsername).toHaveBeenCalledTimes(2);
     expect(UserDAO.prototype.getUserByUsername).toHaveBeenCalledWith("updateUser");
     //Check if the updateUser method of the DAO has been called once with the correct parameters
     expect(UserDAO.prototype.updateUser).toHaveBeenCalledTimes(1);

@@ -1,10 +1,10 @@
-import { describe, test, expect, beforeAll, afterAll, jest } from "@jest/globals"
+import { test, expect, jest } from "@jest/globals"
 
-import UserController from "../../src/controllers/userController"
 import UserDAO from "../../src/dao/userDAO"
 import crypto from "crypto"
 import db from "../../src/db/db"
 import { Database } from "sqlite3"
+import { Role, User } from "../../src/components/user"
 
 jest.mock("crypto")
 jest.mock("../../src/db/db.ts")
@@ -40,11 +40,11 @@ test("It should resolve true", async () => {
 test("It should resolve the user object", async () => {
     const userDAO = new UserDAO()
     const mockDBGet = jest.spyOn(db, "get").mockImplementation((sql, params, callback) => {
-        callback(null, { username: "username", name: "name", surname: "surname", role: "role", password: "password", salt: "salt" })
+        callback(null, { username: "username", name: "name", surname: "surname", role: Role.CUSTOMER, password: "password", salt: "salt", address: "", birthdate: "" })
         return {} as Database
     });
     const result = await userDAO.getUserByUsername("username")
-    expect(result).toEqual({ username: "username", name: "name", surname: "surname", role: "role", password: "password", salt: "salt" })
+    expect(result).toEqual({ username: "username", name: "name", surname: "surname", role: Role.CUSTOMER, address: "", birthdate: "" } as User)
     mockDBGet.mockRestore()
 })
 
@@ -55,12 +55,19 @@ test("It should resolve the user object", async () => {
 
 test("It should resolve an array of user objects", async () => {
     const userDAO = new UserDAO()
+    const users = [
+        {
+            username: "username1", name: "name", surname: "surname", role: Role.CUSTOMER, address: "", birthdate: ""
+        } as User,
+        {
+            username: "username2", name: "name2", surname: "surname2", role: Role.MANAGER, address: "", birthdate: ""
+        } as User]
     const mockDBAll = jest.spyOn(db, "all").mockImplementation((sql, params, callback) => {
-        callback(null, [{ username: "username1", name: "name1", surname: "surname1", role: "role1", password: "password1", salt: "salt1" }, { username: "username2", name: "name2", surname: "surname2", role: "role2", password: "password2", salt: "salt2" }])
+        callback(null, users)
         return {} as Database
     });
     const result = await userDAO.getUsers()
-    expect(result).toEqual([{ username: "username1", name: "name1", surname: "surname1", role: "role1", password: "password1", salt: "salt1" }, { username: "username2", name: "name2", surname: "surname2", role: "role2", password: "password2", salt: "salt2" }])
+    expect(result).toEqual(users)
     mockDBAll.mockRestore()
 })
 

@@ -77,7 +77,6 @@ class UserRoutes {
             "/",
             this.authService.isLoggedIn,
             this.authService.isAdmin,
-            this.errorHandler.validateRequest,
             (req: any, res: any, next: any) => this.controller.getUsers()
                 .then((users: User[]) => res.status(200).json(users))
                 .catch((err) => next(err))
