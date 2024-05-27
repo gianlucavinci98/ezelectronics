@@ -3,7 +3,7 @@ import ErrorHandler from "../helper"
 import { body, param, query } from "express-validator"
 import ProductController from "../controllers/productController"
 import Authenticator from "./auth"
-import { Product } from "../components/product"
+import { Product, Category } from "../components/product"
 
 /**
  * Represents a class that defines the routes for handling proposals.
@@ -61,7 +61,7 @@ class ProductRoutes {
             this.authenticator.isLoggedIn,
             this.authenticator.isAdminOrManager,
             body("model").isString().notEmpty(),
-            body("category").isString().isIn(["Smartphone", "Laptop", "Appliance"]),
+            body("category").isString().isIn(Object.values(Category)),
             body("quantity").isInt({ gt: 0 }),
             body("details").isString(),
             body("sellingPrice").isFloat({ gt: 0.0 }),
@@ -151,7 +151,7 @@ class ProductRoutes {
             this.authenticator.isLoggedIn,
             this.authenticator.isAdminOrManager,
             query("grouping").optional().isString().isIn(["category", "model"]),
-            query("category").optional().isString().isIn(["Smartphone", "Laptop", "Appliance"]),
+            query("category").optional().isString().isIn(Object.values(Category)),
             query("model").optional().isString().notEmpty(),
             this.errorHandler.validateRequest,
             (req: any, res: any, next: any) => {
@@ -193,7 +193,7 @@ class ProductRoutes {
             "/available",
             this.authenticator.isLoggedIn,
             query("grouping").optional().isString().isIn(["category", "model"]),
-            query("category").optional().isString().isIn(["Smartphone", "Laptop", "Appliance"]),
+            query("category").optional().isString().isIn(Object.values(Category)),
             query("model").optional().isString().notEmpty(),
             this.errorHandler.validateRequest,
             (req: any, res: any, next: any) => {
