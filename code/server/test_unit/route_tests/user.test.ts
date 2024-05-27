@@ -1,9 +1,10 @@
 import { test, describe, expect, jest, beforeEach } from "@jest/globals"
 import request from 'supertest'
 import { app } from "../../index"
+import { mockAdmin, mockIsLoggedIn } from "../utilities"
 
 import UserController from "../../src/controllers/userController"
-import { Role, User } from "../../src/components/user"
+import { Role } from "../../src/components/user"
 import Authenticator from "../../src/routers/auth"
 const baseURL = "/ezelectronics"
 const usersBaseURL = baseURL + "/users"
@@ -15,22 +16,7 @@ jest.mock("../../src/routers/auth")
 //The test checks if the route returns a 200 success code
 //The test also expects the createUser method of the controller to be called once with the correct parameters
 
-function mockIsLoggedIn(user: User | null = null) {
-    jest.spyOn(Authenticator.prototype, 'isLoggedIn').mockImplementation((req, res, next) => {
-        req.user = user || {}
-        next()
-    })
-}
 
-function mockAdminOrManager(user: User | null = null) {
-    mockIsLoggedIn(user)
-    jest.spyOn(Authenticator.prototype, 'isAdminOrManager').mockImplementation((req, res, next) => next())
-}
-
-function mockAdmin(user: User | null = null) {
-    mockIsLoggedIn(user)
-    jest.spyOn(Authenticator.prototype, 'isAdmin').mockImplementation((req, res, next) => next())
-}
 
 beforeEach(() => {
     jest.restoreAllMocks()
@@ -65,8 +51,8 @@ test("POST / shoud return the user", async () => {
 
 test("GET / should return the list of users", async () => {
     const testUsers = [ //Define an array of test users returned by the route
-        { username: "test1", name: "test1", surname: "test1", role: Role.MANAGER, address: "test1", birthdate: "test1"},
-        { username: "test2", name: "test2", surname: "test2", role: Role.CUSTOMER, address: "test2", birthdate: "test2"}
+        { username: "test1", name: "test1", surname: "test1", role: Role.MANAGER, address: "test1", birthdate: "test1" },
+        { username: "test2", name: "test2", surname: "test2", role: Role.CUSTOMER, address: "test2", birthdate: "test2" }
     ]
     mockAdmin()
     jest.spyOn(UserController.prototype, "getUsers").mockResolvedValueOnce(testUsers) //Mock the getUsers method of the controller
@@ -82,8 +68,8 @@ test("GET / should return the list of users", async () => {
 
 test("GET /roles/:role should return the list of user with that role", async () => {
     const testUsers = [ //Define an array of test users returned by the route
-        { username: "test1", name: "test1", surname: "test1", role: Role.MANAGER, address: "test1", birthdate: "test1"},
-        { username: "test2", name: "test2", surname: "test2", role: Role.CUSTOMER, address: "test2", birthdate: "test2"}
+        { username: "test1", name: "test1", surname: "test1", role: Role.MANAGER, address: "test1", birthdate: "test1" },
+        { username: "test2", name: "test2", surname: "test2", role: Role.CUSTOMER, address: "test2", birthdate: "test2" }
     ]
     mockAdmin()
     jest.spyOn(UserController.prototype, "getUsersByRole").mockResolvedValueOnce(testUsers) //Mock the getUsersByRole method of the controller
