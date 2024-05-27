@@ -12,9 +12,9 @@ export function cleanup() {
         // Delete all data from the database.
         db.run("DELETE FROM users");
         //Add delete statements for other tables here
-        db.run("DELETE FROM products");
-        db.run("DELETE FROM cart");
+        db.run("DELETE FROM product");
         db.run("DELETE FROM cart_items");
+        db.run("DELETE FROM cart");
         db.run("DELETE FROM review");
     })
 }
