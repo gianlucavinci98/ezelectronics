@@ -1,4 +1,4 @@
-import { test, expect, describe, beforeAll, afterEach } from "@jest/globals"
+import { test, expect, describe, beforeAll, afterEach, afterAll } from "@jest/globals"
 import request from 'supertest'
 import { app } from "../../index"
 import UserDAO from "../../src/dao/userDAO"
@@ -33,6 +33,10 @@ beforeAll(async () => {
     await userDAO.createUser(admin.username, admin.name, admin.surname, "password", admin.role)
 })
 
+afterAll(async () => {
+    cleanup()
+})
+
 afterEach(async () => {
     await logout(agent)
     await cleanProducts()
@@ -45,11 +49,6 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(200)
 
-        // const sql = "SELECT * FROM product WHERE model = ?"
-        // db.get(sql, [product.model], (err, row) => {
-        //     expect(err).toBeNull()
-        //     expect(row).toEqual(product)
-        // })
         expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
     })
 
@@ -58,11 +57,6 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(401)
 
-        // const sql = "SELECT * FROM product WHERE model = ?"
-        // db.get(sql, [product.model], (err, row) => {
-        //     expect(err).toBeNull()
-        //     expect(row).toBeUndefined()
-        // })
         expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
@@ -72,11 +66,6 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(401)
 
-        // const sql = "SELECT * FROM product WHERE model = ?"
-        // db.get(sql, [product.model], (err, row) => {
-        //     expect(err).toBeNull()
-        //     expect(row).toBeUndefined()
-        // })
         expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
@@ -87,10 +76,6 @@ describe("Products registration API tests", () => {
         expect(response.status).toBe(200)
 
         const sql = "SELECT * FROM product WHERE model = ?"
-        // db.get(sql, [product.model], (err, row) => {
-        //     expect(err).toBeNull()
-        //     expect(row).toEqual(product)
-        // })
         expect(dbGet(sql, [product.model])).resolves.toEqual(product)
     })
 
@@ -100,11 +85,6 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(422)
 
-        // const sql = "SELECT * FROM product WHERE model = ?"
-        // db.get(sql, [product.model], (err, row) => {
-        //     expect(err).toBeNull()
-        //     expect(row).toBeUndefined()
-        // })
         expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
@@ -121,11 +101,6 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(422)
 
-        // const sql = "SELECT * FROM product WHERE model = ?"
-        // db.get(sql, [product.model], (err, row) => {
-        //     expect(err).toBeNull()
-        //     expect(row).toBeUndefined()
-        // })
         expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
@@ -135,11 +110,6 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(422)
 
-        // const sql = "SELECT * FROM product WHERE model = ?"
-        // db.get(sql, [product.model], (err, row) => {
-        //     expect(err).toBeNull()
-        //     expect(row).toBeUndefined()
-        // })
         expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
@@ -149,11 +119,6 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(422)
 
-        // const sql = "SELECT * FROM product WHERE model = ?"
-        // db.get(sql, [product.model], (err, row) => {
-        //     expect(err).toBeNull()
-        //     expect(row).toBeUndefined()
-        // })
         expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
@@ -163,11 +128,6 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(422)
 
-        // const sql = "SELECT * FROM product WHERE model = ?"
-        // db.get(sql, [product.model], (err, row) => {
-        //     expect(err).toBeNull()
-        //     expect(row).toBeUndefined()
-        // })
         expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
@@ -177,11 +137,6 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(422)
 
-        // const sql = "SELECT * FROM product WHERE model = ?"
-        // db.get(sql, [product.model], (err, row) => {
-        //     expect(err).toBeNull()
-        //     expect(row).toBeUndefined()
-        // })
         expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
@@ -191,11 +146,6 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(422)
 
-        // const sql = "SELECT * FROM product WHERE model = ?"
-        // db.get(sql, [product.model], (err, row) => {
-        //     expect(err).toBeNull()
-        //     expect(row).toBeUndefined()
-        // })
         expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
@@ -205,11 +155,6 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(422)
 
-        // const sql = "SELECT * FROM product WHERE model = ?"
-        // db.get(sql, [product.model], (err, row) => {
-        //     expect(err).toBeNull()
-        //     expect(row).toBeUndefined()
-        // })
         expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
@@ -219,11 +164,6 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(200)
 
-        // const sql = "SELECT * FROM product WHERE model = ?"
-        // db.get(sql, [product.model], (err, row) => {
-        //     expect(err).toBeNull()
-        //     expect(row).toEqual(product)
-        // })
         expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
     })
 
@@ -233,11 +173,6 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(422)
 
-        // const sql = "SELECT * FROM product WHERE model = ?"
-        // db.get(sql, [product.model], (err, row) => {
-        //     expect(err).toBeNull()
-        //     expect(row).toBeUndefined()
-        // })
         expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
@@ -247,12 +182,6 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(422)
 
-        // const sql = "SELECT * FROM product WHERE model = ?"
-        // db.get(sql, [product.model], (err, row) => {
-        //     expect(err).toBeNull()
-        //     expect(row).toBeUndefined()
-        // })
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
     test("sellingPrice not a number", async () => {
@@ -261,11 +190,6 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(422)
 
-        // const sql = "SELECT * FROM product WHERE model = ?"
-        // db.get(sql, [product.model], (err, row) => {
-        //     expect(err).toBeNull()
-        //     expect(row).toBeUndefined()
-        // })
         expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
@@ -275,11 +199,6 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(200)
 
-        // const sql = "SELECT * FROM product WHERE model = ?"
-        // db.get(sql, [product.model], (err, row) => {
-        //     expect(err).toBeNull()
-        //     expect(row).toEqual({ ...product, arrivalDate: new Date().toISOString().split('T')[0] })
-        // })
         expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, arrivalDate: new Date().toISOString().split('T')[0] })
     })
 
@@ -289,11 +208,6 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(200)
 
-        // const sql = "SELECT * FROM product WHERE model = ?"
-        // db.get(sql, [product.model], (err, row) => {
-        //     expect(err).toBeNull()
-        //     expect(row).toEqual({ ...product, arrivalDate: new Date().toISOString().split('T')[0] })
-        // })
         expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, arrivalDate: new Date().toISOString().split('T')[0] })
     })
 
@@ -303,11 +217,6 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(422)
 
-        // const sql = "SELECT * FROM product WHERE model = ?"
-        // db.get(sql, [product.model], (err, row) => {
-        //     expect(err).toBeNull()
-        //     expect(row).toBeUndefined()
-        // })
         expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
@@ -317,11 +226,6 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(400)
 
-        // const sql = "SELECT * FROM product WHERE model = ?"
-        // db.get(sql, [product.model], (err, row) => {
-        //     expect(err).toBeNull()
-        //     expect(row).toBeUndefined()
-        // })
         expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
@@ -331,25 +235,14 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(422)
 
-        // const sql = "SELECT * FROM product WHERE model = ?"
-        // db.get(sql, [product.model], (err, row) => {
-        //     expect(err).toBeNull()
-        //     expect(row).toBeUndefined()
-        // })
         expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
     test("model already exists", async () => {
         const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 5)
 
-        // const sql = "INSERT INTO product VALUES (?, ?, ?, ?, ?, ?)"
-        // db.run(
-        //     sql,
-        //     [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice],
-        //     (err) => expect(err).toBeNull()
-        // )
-        await dbRun("INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)", [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
-        console.log("INSERTED", product)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        expect(dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])).resolves.toBeUndefined()
 
         const product2 = new Product(100, product.model, Category.LAPTOP, "2021-01-01", "details2", 50)
 
@@ -357,11 +250,6 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product2)
         expect(response.status).toBe(409)
 
-        // const sql2 = "SELECT * FROM product WHERE model = ?"
-        // db.get(sql2, [product.model], (err, row) => {
-        //     expect(err).toBeNull()
-        //     expect(row).toEqual(product)
-        // })
         expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
     })
 })
