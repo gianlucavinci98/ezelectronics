@@ -253,3 +253,210 @@ describe("Products registration API tests", () => {
         expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
     })
 })
+
+describe("Patch product quantity API tests", () => {
+    test("test successful", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 5)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: 10 }
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + "/" + product.model).send(patch)
+        expect(response.status).toBe(200)
+        expect(response.body).toEqual({ quantity: product.quantity + patch.quantity })
+
+        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, quantity: product.quantity + patch.quantity })
+    })
+
+    test("test without login", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 5)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: 10 }
+        const response = await agent.patch(productsBaseURL + "/" + product.model).send(patch)
+        expect(response.status).toBe(401)
+
+        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+    })
+
+    test("test with customer login", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 5)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: 10 }
+        await login(customer.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + "/" + product.model).send(patch)
+        expect(response.status).toBe(401)
+
+        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+    })
+
+    test("test with admin login", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 5)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: 10 }
+        await login(admin.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + "/" + product.model).send(patch)
+        expect(response.status).toBe(200)
+        expect(response.body).toEqual({ quantity: product.quantity + patch.quantity })
+
+        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, quantity: product.quantity + patch.quantity })
+    })
+
+    test("test product not found", async () => {
+        const patch = { quantity: 10 }
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + "/notFound").send(patch)
+        expect(response.status).toBe(404)
+    })
+
+    test("test quantity less than 1", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 5)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: 0 }
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + "/" + product.model).send(patch)
+        expect(response.status).toBe(422)
+
+        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+    })
+
+    test("test quantity not an integer", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 5)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: "notAnInteger" }
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + "/" + product.model).send(patch)
+        expect(response.status).toBe(422)
+
+        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+    })
+
+    test("test quantity float", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 5)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: 1.5 }
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + "/" + product.model).send(patch)
+        expect(response.status).toBe(422)
+
+        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+    })
+
+    test("test quantity missing", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 5)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = {}
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + "/" + product.model).send(patch)
+        expect(response.status).toBe(422)
+
+        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+    })
+
+    test("test quantity negative", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 5)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: -1 }
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + "/" + product.model).send(patch)
+        expect(response.status).toBe(422)
+
+        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+    })
+
+    test("test with changeDate", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 5)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: 10, changeDate: "2020-01-01" }
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + "/" + product.model).send(patch)
+        expect(response.status).toBe(200)
+        expect(response.body).toEqual({ quantity: product.quantity + patch.quantity })
+
+        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, quantity: product.quantity + patch.quantity })
+    })
+
+    test("test with changeDate in the future", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 5)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: 10, changeDate: "2050-01-01" }
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + "/" + product.model).send(patch)
+        expect(response.status).toBe(400)
+
+        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+    })
+
+    test("test with changeDate in wrong format", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 5)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: 10, changeDate: "01-01-2020" }
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + "/" + product.model).send(patch)
+        expect(response.status).toBe(422)
+
+        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+    })
+
+    test("test with changeDate not a date", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 5)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: 10, changeDate: "notADate" }
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + "/" + product.model).send(patch)
+        expect(response.status).toBe(422)
+
+        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+    })
+
+    test("test with changeDate null", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 5)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: 10, changeDate: null as null }
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + "/" + product.model).send(patch)
+        expect(response.status).toBe(200)
+        expect(response.body).toEqual({ quantity: product.quantity + patch.quantity })
+
+        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, quantity: product.quantity + patch.quantity })
+    })
+
+    test("test with changeDate before product arrivalDate", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2021-01-01", "details", 5)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: 10, changeDate: "2020-01-01" }
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + "/" + product.model).send(patch)
+        expect(response.status).toBe(400)
+
+        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+    })
+})
