@@ -119,6 +119,5 @@ test("deleteProduct deletes the product with the specified model", async () => {
     expect(result).toBe(true);
 
     // Verify that the product is no longer in the database
-    const retrievedProduct = await productDAO.getProduct(product.model);
-    expect(retrievedProduct).toBeNull(); // getProduct should return null if the product is deleted
+    expect(productDAO.getProduct(product.model)).rejects.toThrowError(ProductNotFoundError);
 })
