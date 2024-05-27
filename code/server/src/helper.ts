@@ -37,7 +37,7 @@ class ErrorHandler {
     }
 
     static returnError(res: any, err: EzError) {
-        return res.status(status).json({ error: err.customMessage, status: err.customCode })
+        return res.status(err.customCode).json({ error: err.customMessage, status: err.customCode })
     }
 }
 
