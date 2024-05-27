@@ -17,6 +17,6 @@ CREATE TABLE cart_items (
     ),
     price DECIMAL(10, 2) NOT NULL CHECK (price >= 0.00),
     PRIMARY KEY (cart, model),
-    FOREIGN KEY (cart) REFERENCES cart(id),
-    FOREIGN KEY (model) REFERENCES products(model)
+    FOREIGN KEY (cart) REFERENCES cart(id) ON DELETE CASCADE,
+    FOREIGN KEY (model) REFERENCES products(model) ON DELETE CASCADE
 );
