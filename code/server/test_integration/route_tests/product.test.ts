@@ -2,7 +2,6 @@ import { test, expect, describe, beforeAll, afterEach, afterAll, beforeEach } fr
 import request from 'supertest'
 import { app } from "../../index"
 import UserDAO from "../../src/dao/userDAO"
-import db from "../../src/db/db"
 import { User, Role } from "../../src/components/user"
 import { Product, Category } from "../../src/components/product"
 import { cleanup } from "../../src/db/cleanup"
@@ -11,7 +10,6 @@ import TestAgent from "supertest/lib/agent"
 
 const baseURL = "/ezelectronics"
 const productsBaseURL = baseURL + "/products"
-const sessionsBaseURL = baseURL + "/sessions"
 
 
 const manager: User = new User("manager", "manager", "manager", Role.MANAGER, "manager", "2021-01-01")
