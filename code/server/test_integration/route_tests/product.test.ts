@@ -973,3 +973,51 @@ describe("Delete product API tests", () => {
         expect(response.status).toBe(404)
     })
 })
+
+describe("Delete all products API tests", () => {
+    let products: Product[] = [
+        new Product(10, "testProduct1", Category.SMARTPHONE, "2020-01-01", "details1", 5),
+        new Product(20, "testProduct2", Category.LAPTOP, "2020-01-01", "details2", 10),
+        new Product(30, "testProduct3", Category.APPLIANCE, "2020-01-01", "details3", 15),
+        new Product(40, "testProduct4", Category.SMARTPHONE, "2020-01-01", "details4", 20),
+        new Product(50, "testProduct5", Category.LAPTOP, "2020-01-01", "details5", 25),
+        new Product(60, "testProduct6", Category.APPLIANCE, "2020-01-01", "details6", 30),
+    ]
+
+    beforeEach(async () => {
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await Promise.all(
+            products.map(product => dbRun(
+                sql,
+                [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice]
+            ))
+        )
+    })
+
+    test("test success", async () => {
+        await login(manager.username, "password", agent)
+        const response = await agent.delete(productsBaseURL)
+        expect(response.status).toBe(200)
+
+        await expect(dbGet("SELECT COUNT(*) FROM product", [])).resolves.toEqual({ "COUNT(*)": 0 })
+    })
+
+    test("test without login", async () => {
+        const response = await agent.delete(productsBaseURL)
+        expect(response.status).toBe(401)
+    })
+
+    test("test with customer login", async () => {
+        await login(customer.username, "password", agent)
+        const response = await agent.delete(productsBaseURL)
+        expect(response.status).toBe(401)
+    })
+
+    test("test with admin login", async () => {
+        await login(admin.username, "password", agent)
+        const response = await agent.delete(productsBaseURL)
+        expect(response.status).toBe(200)
+
+        await expect(dbGet("SELECT COUNT(*) FROM product", [])).resolves.toEqual({ "COUNT(*)": 0 })
+    })
+})
