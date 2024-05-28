@@ -67,15 +67,15 @@ describe("Get current cart", () => {
         cart_id_customer2 = (await dbGet("SELECT id FROM cart WHERE customer = ? AND paid = false", [customer2.username]) as { id: number }).id
 
         await dbRun(
-            "INSERT INTO cart_items (cart, model, quantity, category, price) VALUES (?, ?, ?)",
+            "INSERT INTO cart_items (cart, model, quantity, category, price) VALUES (?, ?, ?, ?, ?)",
             [cart_id_customer, products[0].model, 1, products[0].category, products[0].sellingPrice]
         )
         await dbRun(
-            "INSERT INTO cart_items (cart, model, quantity, category, price) VALUES (?, ?, ?)",
+            "INSERT INTO cart_items (cart, model, quantity, category, price) VALUES (?, ?, ?, ?, ?)",
             [cart_id_customer2, products[1].model, 1, products[1].category, products[1].sellingPrice]
         )
         await dbRun(
-            "INSERT INTO cart_items (cart, model, quantity, category, price) VALUES (?, ?, ?)",
+            "INSERT INTO cart_items (cart, model, quantity, category, price) VALUES (?, ?, ?, ?, ?)",
             [cart_id_customer2, products[2].model, 2, products[2].category, products[2].sellingPrice]
         )
     })
@@ -196,7 +196,7 @@ describe("Post product add to cart", () => {
         cart_id_customer = (await dbGet("SELECT id FROM cart WHERE customer = ? AND paid = false", [customer.username]) as { id: number }).id
 
         await dbRun(
-            "INSERT INTO cart_items (cart, model, quantity, category, price) VALUES (?, ?, ?)",
+            "INSERT INTO cart_items (cart, model, quantity, category, price) VALUES (?, ?, ?, ?, ?)",
             [cart_id_customer, products[0].model, 1, products[0].category, products[0].sellingPrice]
         )
     })
