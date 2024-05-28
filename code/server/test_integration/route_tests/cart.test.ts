@@ -7,7 +7,7 @@ import UserDAO from "../../src/dao/userDAO"
 import { User, Role } from "../../src/components/user"
 import { Product, Category } from "../../src/components/product"
 import { cleanup } from "../../src/db/cleanup"
-import { login, logout, dbGet, dbRun } from "../utilities"
+import { login, logout, dbGet, dbRun, dbAll } from "../utilities"
 
 
 const baseURL = "/ezelectronics"
@@ -20,7 +20,8 @@ const admin: User = new User("admin", "admin", "admin", Role.ADMIN, "admin", "20
 const products: Product[] = [
     new Product(10, "product1", Category.SMARTPHONE, "2020-01-01", "details", 10),
     new Product(20, "product2", Category.LAPTOP, "2020-01-01", "details", 20),
-    new Product(30, "product3", Category.APPLIANCE, "2020-01-01", "details", 30)
+    new Product(30, "product3", Category.APPLIANCE, "2020-01-01", "details", 30),
+    new Product(40, "product4", Category.SMARTPHONE, "2020-01-01", "details", 0),
 ]
 
 const agent: TestAgent = request.agent(app)
@@ -186,3 +187,113 @@ describe("Get current cart", () => {
     })
 })
 
+describe("Post product add to cart", () => {
+    let cart_id_customer: number
+
+    beforeEach(async () => {
+        await dbRun("INSERT INTO cart (customer, total) VALUES (?, ?)", [customer.username, products[0].sellingPrice])
+
+        cart_id_customer = (await dbGet("SELECT id FROM cart WHERE customer = ? AND paid = false", [customer.username]) as { id: number }).id
+
+        await dbRun(
+            "INSERT INTO cart_items (cart, model, quantity, category, price) VALUES (?, ?, ?)",
+            [cart_id_customer, products[0].model, 1, products[0].category, products[0].sellingPrice]
+        )
+    })
+
+    test("Add product to existing cart successfully", async () => {
+        await login(customer.username, "password", agent)
+        const response = await agent.post(cartsBaseURL).send({ model: products[1].model })
+        expect(response.status).toBe(200)
+        const cart_items = await dbAll("SELECT * FROM cart_items WHERE cart = ?", [cart_id_customer])
+        expect(cart_items).toEqual(expect.arrayContaining(
+            [
+                {
+                    cart: cart_id_customer,
+                    model: products[0].model,
+                    quantity: 1,
+                    category: products[0].category,
+                    price: products[0].sellingPrice
+                },
+                {
+                    cart: cart_id_customer,
+                    model: products[1].model,
+                    quantity: 1,
+                    category: products[1].category,
+                    price: products[1].sellingPrice
+                }
+            ]
+        ))
+        const cart_total = (await dbGet("SELECT total FROM cart WHERE id = ?", [cart_id_customer]) as { total: number }).total
+        expect(cart_total).toEqual(expect.closeTo(products[0].sellingPrice + products[1].sellingPrice))
+    })
+
+    test("test with no login", async () => {
+        const response = await agent.post(cartsBaseURL).send({ model: products[1].model })
+        expect(response.status).toBe(401)
+    })
+
+    test("test with manager login", async () => {
+        await login(manager.username, "password", agent)
+        const response = await agent.post(cartsBaseURL).send({ model: products[1].model })
+        expect(response.status).toBe(401)
+    })
+
+    test("test with admin login", async () => {
+        await login(admin.username, "password", agent)
+        const response = await agent.post(cartsBaseURL).send({ model: products[1].model })
+        expect(response.status).toBe(401)
+    })
+
+    test("test with missing cart", async () => {
+        await login(customer2.username, "password", agent)
+        await expect(dbGet("SELECT COUNT(*) FROM cart WHERE customer = ? AND paid = false", [customer2.username])).resolves.toEqual({ "COUNT(*)": 0 })
+        const response = await agent.post(cartsBaseURL).send({ model: products[1].model })
+        expect(response.status).toBe(200)
+        await expect(dbGet("SELECT COUNT(*) FROM cart WHERE customer = ? AND paid = false", [customer2.username])).resolves.toEqual({ "COUNT(*)": 1 })
+        const total = (await dbGet("SELECT total FROM cart WHERE customer = ? AND paid = false", [customer2.username]) as { total: number }).total
+        expect(total).toEqual(products[1].sellingPrice)
+    })
+
+    test("test with invalid product", async () => {
+        await login(customer.username, "password", agent)
+        const response = await agent.post(cartsBaseURL).send({ model: "invalid" })
+        expect(response.status).toBe(404)
+    })
+
+    test("test with empty model", async () => {
+        await login(customer.username, "password", agent)
+        const response = await agent.post(cartsBaseURL).send({ model: "" })
+        expect(response.status).toBe(422)
+    })
+
+    test("test with product with no quantity", async () => {
+        await login(customer.username, "password", agent)
+        const response = await agent.post(cartsBaseURL).send({ model: products[3].model })
+        expect(response.status).toBe(409)
+        await expect(dbGet(
+            "SELECT COUNT(*) FROM cart_items WHERE cart = ? AND model = ?",
+            [cart_id_customer, products[3].model]
+        )).resolves.toEqual({ "COUNT(*)": 0 })
+    })
+
+    test("test with product already in cart", async () => {
+        await login(customer.username, "password", agent)
+        const response = await agent.post(cartsBaseURL).send({ model: products[0].model })
+        expect(response.status).toBe(200)
+        const cart_items = await dbAll("SELECT * FROM cart_items WHERE cart = ?", [cart_id_customer])
+        expect(cart_items).toEqual(
+            [
+                {
+                    cart: cart_id_customer,
+                    model: products[0].model,
+                    quantity: 2,
+                    category: products[0].category,
+                    price: products[0].sellingPrice
+                }
+            ]
+        )
+        const cart_total = (await dbGet("SELECT total FROM cart WHERE id = ?", [cart_id_customer]) as { total: number }).total
+        expect(cart_total).toEqual(expect.closeTo(products[0].sellingPrice * 2))
+    })
+})
