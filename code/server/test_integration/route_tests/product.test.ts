@@ -795,4 +795,140 @@ describe("Get all products API tests", () => {
         const response = await agent.get(productsBaseURL + `?grouping=model`)
         expect(response.status).toBe(422)
     })
+
+    test("test missing product", async () => {
+        await login(manager.username, "password", agent)
+        const response = await agent.get(productsBaseURL + `?grouping=model&model=testProductNotExists`)
+        expect(response.status).toBe(404)
+    })
+})
+
+describe("Get available products API tests", () => {
+    let products: Product[] = [
+        new Product(10, "testProduct1", Category.SMARTPHONE, "2020-01-01", "details1", 5),
+        new Product(20, "testProduct2", Category.LAPTOP, "2020-01-01", "details2", 10),
+        new Product(30, "testProduct3", Category.APPLIANCE, "2020-01-01", "details3", 15),
+        new Product(40, "testProduct4", Category.SMARTPHONE, "2020-01-01", "details4", 0),
+        new Product(50, "testProduct5", Category.LAPTOP, "2020-01-01", "details5", 0),
+        new Product(60, "testProduct6", Category.APPLIANCE, "2020-01-01", "details6", 0),
+    ]
+
+    beforeEach(async () => {
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await Promise.all(
+            products.map(product => dbRun(
+                sql,
+                [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice]
+            ))
+        )
+    })
+
+    test("test success no grouping", async () => {
+        await login(manager.username, "password", agent)
+        const response = await agent.get(productsBaseURL + "/available")
+        expect(response.status).toBe(200)
+
+        const expected = products.filter(product => product.quantity > 0)
+
+        expect(response.body).toStrictEqual(expect.arrayContaining(expected))
+    })
+
+    test("test without login", async () => {
+        const response = await agent.get(productsBaseURL + "/available")
+        expect(response.status).toBe(401)
+    })
+
+    test("test with customer login", async () => {
+        await login(customer.username, "password", agent)
+        const response = await agent.get(productsBaseURL + "/available")
+        expect(response.status).toBe(200)
+
+        const expected = products.filter(product => product.quantity > 0)
+
+        expect(response.body).toStrictEqual(expect.arrayContaining(expected))
+    })
+
+    test("test with admin login", async () => {
+        await login(admin.username, "password", agent)
+        const response = await agent.get(productsBaseURL + "/available")
+        expect(response.status).toBe(200)
+
+        const expected = products.filter(product => product.quantity > 0)
+
+        expect(response.body).toStrictEqual(expect.arrayContaining(expected))
+    })
+
+    test("test success with grouping by category", async () => {
+        await login(manager.username, "password", agent)
+        const response = await agent.get(productsBaseURL + "/available?grouping=category&category=" + Category.SMARTPHONE)
+        expect(response.status).toBe(200)
+
+        const expected = products.filter(product => product.category === Category.SMARTPHONE && product.quantity > 0)
+
+        expect(response.body).toStrictEqual(expect.arrayContaining(expected))
+    })
+
+    test("test with category invalid", async () => {
+        await login(manager.username, "password", agent)
+        const response = await agent.get(productsBaseURL + "/available?grouping=category&category=invalid")
+        expect(response.status).toBe(422)
+    })
+
+    test("test with missing category", async () => {
+        await login(manager.username, "password", agent)
+        const response = await agent.get(productsBaseURL + "/available?grouping=category")
+        expect(response.status).toBe(422)
+    })
+
+    test("test with category and model", async () => {
+        await login(manager.username, "password", agent)
+        const response = await agent.get(productsBaseURL + "/available?grouping=category&category=" + Category.SMARTPHONE + "&model=testProduct1")
+        expect(response.status).toBe(422)
+
+        const response2 = await agent.get(productsBaseURL + "/available?grouping=model&category=" + Category.SMARTPHONE + "&model=testProduct1")
+        expect(response2.status).toBe(422)
+    })
+
+    test("test with grouping invalid", async () => {
+        await login(manager.username, "password", agent)
+        const response = await agent.get(productsBaseURL + "/available?grouping=invalid")
+        expect(response.status).toBe(422)
+    })
+
+    test("test with grouping missing", async () => {
+        await login(manager.username, "password", agent)
+        const response = await agent.get(productsBaseURL + "/available?category=" + Category.SMARTPHONE)
+        expect(response.status).toBe(422)
+
+        const response2 = await agent.get(productsBaseURL + "/available?model=testProduct1")
+        expect(response2.status).toBe(422)
+    })
+
+    test("test success with grouping by model", async () => {
+        await login(manager.username, "password", agent)
+        const response = await agent.get(productsBaseURL + "/available?grouping=model&model=testProduct1")
+        expect(response.status).toBe(200)
+
+        const expected = products.filter(product => product.model === "testProduct1" && product.quantity > 0)
+
+        expect(response.body).toStrictEqual(expect.arrayContaining(expected))
+    })
+
+    test("test with model missing", async () => {
+        await login(manager.username, "password", agent)
+        const response = await agent.get(productsBaseURL + "/available?grouping=model")
+        expect(response.status).toBe(422)
+    })
+
+    test("test missing product", async () => {
+        await login(manager.username, "password", agent)
+        const response = await agent.get(productsBaseURL + "/available?grouping=model&model=testProductNotExists")
+        expect(response.status).toBe(404)
+    })
+
+    test("test with grouping by product and product not available", async () => {
+        await login(manager.username, "password", agent)
+        const response = await agent.get(productsBaseURL + "/available?grouping=model&model=testProduct4")
+        expect(response.status).toBe(404)
+    })
 })
