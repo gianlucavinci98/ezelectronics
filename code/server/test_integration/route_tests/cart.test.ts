@@ -297,3 +297,98 @@ describe("Post product add to cart", () => {
         expect(cart_total).toEqual(expect.closeTo(products[0].sellingPrice * 2))
     })
 })
+
+describe("Patch checkout cart", () => {
+    let cart_id_customer: number
+
+    beforeEach(async () => {
+        await dbRun("INSERT INTO cart (customer, total) VALUES (?, ?)", [customer.username, products[0].sellingPrice, products[1].sellingPrice * 2])
+        await dbRun("INSERT INTO cart (customer) VALUES (?)", [customer2.username])
+
+        cart_id_customer = (await dbGet("SELECT id FROM cart WHERE customer = ? AND paid = false", [customer.username]) as { id: number }).id
+
+        await dbRun(
+            "INSERT INTO cart_items (cart, model, quantity, category, price) VALUES (?, ?, ?, ?, ?)",
+            [cart_id_customer, products[0].model, 1, products[0].category, products[0].sellingPrice]
+        )
+        await dbRun(
+            "INSERT INTO cart_items (cart, model, quantity, category, price) VALUES (?, ?, ?, ?, ?)",
+            [cart_id_customer, products[1].model, 2, products[1].category, products[1].sellingPrice]
+        )
+    })
+
+    test("Checkout cart successfully", async () => {
+        await login(customer.username, "password", agent)
+        const response = await agent.patch(cartsBaseURL)
+        expect(response.status).toBe(200)
+        const cart = await dbGet("SELECT * FROM cart WHERE id = ?", [cart_id_customer])
+        expect(cart).toEqual({
+            id: cart_id_customer,
+            customer: customer.username,
+            paid: true,
+            paymentDate: new Date().toISOString().split("T")[0],
+            total: products[0].sellingPrice + products[1].sellingPrice * 2
+        })
+        const product0_quantity = (await dbGet("SELECT quantity FROM product WHERE model = ?", [products[0].model]) as { quantity: number }).quantity
+        expect(product0_quantity).toBe(products[0].quantity - 1)
+        const product1_quantity = (await dbGet("SELECT quantity FROM product WHERE model = ?", [products[1].model]) as { quantity: number }).quantity
+        expect(product1_quantity).toBe(products[1].quantity - 2)
+    })
+
+    test("test with no login", async () => {
+        const response = await agent.patch(cartsBaseURL)
+        expect(response.status).toBe(401)
+    })
+
+    test("test with manager login", async () => {
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(cartsBaseURL)
+        expect(response.status).toBe(401)
+    })
+
+    test("test with admin login", async () => {
+        await login(admin.username, "password", agent)
+        const response = await agent.patch(cartsBaseURL)
+        expect(response.status).toBe(401)
+    })
+
+    test("test with empty cart", async () => {
+        await login(customer.username, "password", agent)
+        await dbRun("DELETE FROM cart_items WHERE cart = ?", [cart_id_customer])
+        const response = await agent.patch(cartsBaseURL)
+        expect(response.status).toBe(400)
+        const paid = (await dbGet("SELECT paid FROM cart WHERE id = ?", [cart_id_customer]) as { paid: boolean }).paid
+        expect(paid).toBe(false)
+    })
+
+    test("test with missing cart", async () => {
+        await login(customer.username, "password", agent)
+        await dbRun("DELETE FROM cart WHERE customer = ?", [customer.username])
+        const response = await agent.patch(cartsBaseURL)
+        expect(response.status).toBe(404)
+    })
+
+    test("test with product with 0 available quantity", async () => {
+        await login(customer.username, "password", agent)
+        await dbRun(
+            "INSERT INTO cart_items (cart, model, quantity, category, price) VALUES (?, ?, ?, ?, ?)",
+            [cart_id_customer, products[4].model, 1, products[4].category, products[4].sellingPrice]
+        )
+        const response = await agent.patch(cartsBaseURL)
+        expect(response.status).toBe(409)
+        const paid = (await dbGet("SELECT paid FROM cart WHERE id = ?", [cart_id_customer]) as { paid: boolean }).paid
+        expect(paid).toBe(false)
+    })
+
+    test("test with product with insufficient quantity", async () => {
+        await login(customer.username, "password", agent)
+        await dbRun(
+            "UPDATE cart_items SET quantity = ? WHERE cart = ? AND model = ?",
+            [products[1].quantity + 1, cart_id_customer, products[1].model]
+        )
+        const response = await agent.patch(cartsBaseURL)
+        expect(response.status).toBe(409)
+        const paid = (await dbGet("SELECT paid FROM cart WHERE id = ?", [cart_id_customer]) as { paid: boolean }).paid
+        expect(paid).toBe(false)
+    })
+})
