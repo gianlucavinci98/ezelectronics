@@ -49,7 +49,7 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(200)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
     })
 
     test("test without login", async () => {
@@ -57,7 +57,7 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(401)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
     test("test with customer login", async () => {
@@ -66,7 +66,7 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(401)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
     test("test with admin login", async () => {
@@ -76,7 +76,7 @@ describe("Products registration API tests", () => {
         expect(response.status).toBe(200)
 
         const sql = "SELECT * FROM product WHERE model = ?"
-        expect(dbGet(sql, [product.model])).resolves.toEqual(product)
+        await expect(dbGet(sql, [product.model])).resolves.toEqual(product)
     })
 
     test("test with empty model", async () => {
@@ -85,7 +85,7 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(422)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
     test("test with missing model", async () => {
@@ -101,7 +101,7 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(422)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
     test("test with missing category", async () => {
@@ -110,7 +110,7 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(422)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
     test("quantity less than 1", async () => {
@@ -119,7 +119,7 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(422)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
     test("quantity not an integer", async () => {
@@ -128,7 +128,7 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(422)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
     test("quantity float", async () => {
@@ -137,7 +137,7 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(422)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
     test("quantity missing", async () => {
@@ -146,7 +146,7 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(422)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
     test("details missing", async () => {
@@ -155,7 +155,7 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(422)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
     test("details empty", async () => {
@@ -164,7 +164,7 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(200)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
     })
 
     test("sellingPrice missing", async () => {
@@ -173,7 +173,7 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(422)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
     test("sellingPrice less than 0", async () => {
@@ -181,7 +181,6 @@ describe("Products registration API tests", () => {
         await login(manager.username, "password", agent)
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(422)
-
     })
 
     test("sellingPrice not a number", async () => {
@@ -190,7 +189,7 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(422)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
     test("arrivalDate missing", async () => {
@@ -199,7 +198,7 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(200)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, arrivalDate: new Date().toISOString().split('T')[0] })
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, arrivalDate: new Date().toISOString().split('T')[0] })
     })
 
     test("arrivalDate null", async () => {
@@ -208,7 +207,7 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(200)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, arrivalDate: new Date().toISOString().split('T')[0] })
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, arrivalDate: new Date().toISOString().split('T')[0] })
     })
 
     test("arrivalDate not a date", async () => {
@@ -217,7 +216,7 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(422)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
     test("arrivalDate in the future", async () => {
@@ -226,7 +225,7 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(400)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
     test("arrivalDate in wrong format", async () => {
@@ -235,7 +234,7 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product)
         expect(response.status).toBe(422)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
     })
 
     test("model already exists", async () => {
@@ -250,7 +249,7 @@ describe("Products registration API tests", () => {
         const response = await agent.post(productsBaseURL).send(product2)
         expect(response.status).toBe(409)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
     })
 })
 
@@ -266,7 +265,7 @@ describe("Patch product quantity API tests", () => {
         expect(response.status).toBe(200)
         expect(response.body).toEqual({ quantity: product.quantity + patch.quantity })
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, quantity: product.quantity + patch.quantity })
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, quantity: product.quantity + patch.quantity })
     })
 
     test("test without login", async () => {
@@ -278,7 +277,7 @@ describe("Patch product quantity API tests", () => {
         const response = await agent.patch(productsBaseURL + "/" + product.model).send(patch)
         expect(response.status).toBe(401)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
     })
 
     test("test with customer login", async () => {
@@ -291,7 +290,7 @@ describe("Patch product quantity API tests", () => {
         const response = await agent.patch(productsBaseURL + "/" + product.model).send(patch)
         expect(response.status).toBe(401)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
     })
 
     test("test with admin login", async () => {
@@ -305,7 +304,7 @@ describe("Patch product quantity API tests", () => {
         expect(response.status).toBe(200)
         expect(response.body).toEqual({ quantity: product.quantity + patch.quantity })
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, quantity: product.quantity + patch.quantity })
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, quantity: product.quantity + patch.quantity })
     })
 
     test("test product not found", async () => {
@@ -325,7 +324,7 @@ describe("Patch product quantity API tests", () => {
         const response = await agent.patch(productsBaseURL + "/" + product.model).send(patch)
         expect(response.status).toBe(422)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
     })
 
     test("test quantity not an integer", async () => {
@@ -338,7 +337,7 @@ describe("Patch product quantity API tests", () => {
         const response = await agent.patch(productsBaseURL + "/" + product.model).send(patch)
         expect(response.status).toBe(422)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
     })
 
     test("test quantity float", async () => {
@@ -351,7 +350,7 @@ describe("Patch product quantity API tests", () => {
         const response = await agent.patch(productsBaseURL + "/" + product.model).send(patch)
         expect(response.status).toBe(422)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
     })
 
     test("test quantity missing", async () => {
@@ -364,7 +363,7 @@ describe("Patch product quantity API tests", () => {
         const response = await agent.patch(productsBaseURL + "/" + product.model).send(patch)
         expect(response.status).toBe(422)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
     })
 
     test("test quantity negative", async () => {
@@ -377,7 +376,7 @@ describe("Patch product quantity API tests", () => {
         const response = await agent.patch(productsBaseURL + "/" + product.model).send(patch)
         expect(response.status).toBe(422)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
     })
 
     test("test with changeDate", async () => {
@@ -391,7 +390,7 @@ describe("Patch product quantity API tests", () => {
         expect(response.status).toBe(200)
         expect(response.body).toEqual({ quantity: product.quantity + patch.quantity })
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, quantity: product.quantity + patch.quantity })
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, quantity: product.quantity + patch.quantity })
     })
 
     test("test with changeDate in the future", async () => {
@@ -404,7 +403,7 @@ describe("Patch product quantity API tests", () => {
         const response = await agent.patch(productsBaseURL + "/" + product.model).send(patch)
         expect(response.status).toBe(400)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
     })
 
     test("test with changeDate in wrong format", async () => {
@@ -417,7 +416,7 @@ describe("Patch product quantity API tests", () => {
         const response = await agent.patch(productsBaseURL + "/" + product.model).send(patch)
         expect(response.status).toBe(422)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
     })
 
     test("test with changeDate not a date", async () => {
@@ -430,7 +429,7 @@ describe("Patch product quantity API tests", () => {
         const response = await agent.patch(productsBaseURL + "/" + product.model).send(patch)
         expect(response.status).toBe(422)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
     })
 
     test("test with changeDate null", async () => {
@@ -444,7 +443,7 @@ describe("Patch product quantity API tests", () => {
         expect(response.status).toBe(200)
         expect(response.body).toEqual({ quantity: product.quantity + patch.quantity })
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, quantity: product.quantity + patch.quantity })
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, quantity: product.quantity + patch.quantity })
     })
 
     test("test with changeDate before product arrivalDate", async () => {
@@ -457,6 +456,235 @@ describe("Patch product quantity API tests", () => {
         const response = await agent.patch(productsBaseURL + "/" + product.model).send(patch)
         expect(response.status).toBe(400)
 
-        expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+    })
+})
+
+describe("Patch product sell API tests", () => {
+    test("test success", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 10)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: 5 }
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + `/${product.model}/sell`).send(patch)
+        expect(response.status).toBe(200)
+
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, quantity: product.quantity - patch.quantity })
+    })
+
+    test("test product quantity is 0", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 0)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: 5 }
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + `/${product.model}/sell`).send(patch)
+        expect(response.status).toBe(409)
+
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+    })
+
+    test("test product quantity less than requested quantity", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 5)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: 10 }
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + `/${product.model}/sell`).send(patch)
+        expect(response.status).toBe(409)
+
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+    })
+
+    test("test without login", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 10)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: 5 }
+        const response = await agent.patch(productsBaseURL + `/${product.model}/sell`).send(patch)
+        expect(response.status).toBe(401)
+
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+    })
+
+    test("test with customer login", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 10)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: 5 }
+        await login(customer.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + `/${product.model}/sell`).send(patch)
+        expect(response.status).toBe(401)
+
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+    })
+
+    test("test with admin login", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 10)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: 5 }
+        await login(admin.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + `/${product.model}/sell`).send(patch)
+        expect(response.status).toBe(200)
+
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, quantity: product.quantity - patch.quantity })
+    })
+
+    test("quantity not an integer", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 10)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: "notAnInteger" }
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + `/${product.model}/sell`).send(patch)
+        expect(response.status).toBe(422)
+
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+    })
+
+    test("quantity float", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 10)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: 1.5 }
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + `/${product.model}/sell`).send(patch)
+        expect(response.status).toBe(422)
+
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+    })
+
+    test("quantity missing", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 10)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = {}
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + `/${product.model}/sell`).send(patch)
+        expect(response.status).toBe(422)
+
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+    })
+
+    test("quantity 0", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 10)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: 0 }
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + `/${product.model}/sell`).send(patch)
+        expect(response.status).toBe(422)
+
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+    })
+
+    test("quantity negative", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 10)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: -1 }
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + `/${product.model}/sell`).send(patch)
+        expect(response.status).toBe(422)
+
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+    })
+
+    test("with selling date", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 10)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: 5, sellingDate: "2020-01-01" }
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + `/${product.model}/sell`).send(patch)
+        expect(response.status).toBe(200)
+
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, quantity: product.quantity - patch.quantity })
+    })
+
+    test("with selling date in the future", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 10)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: 5, sellingDate: "2050-01-01" }
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + `/${product.model}/sell`).send(patch)
+        expect(response.status).toBe(400)
+
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+    })
+
+    test("with selling date in wrong format", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 10)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: 5, sellingDate: "01-01-2020" }
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + `/${product.model}/sell`).send(patch)
+        expect(response.status).toBe(422)
+
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+    })
+
+    test("with selling date not a date", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 10)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: 5, sellingDate: "notADate" }
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + `/${product.model}/sell`).send(patch)
+        expect(response.status).toBe(422)
+
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+    })
+
+    test("with selling date null", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 10)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: 5, sellingDate: null as null }
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + `/${product.model}/sell`).send(patch)
+        expect(response.status).toBe(200)
+
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, quantity: product.quantity - patch.quantity })
+    })
+
+    test("with selling date before arrival date", async () => {
+        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2021-01-01", "details", 10)
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+
+        const patch = { quantity: 5, sellingDate: "2020-01-01" }
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + `/${product.model}/sell`).send(patch)
+        expect(response.status).toBe(400)
+
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+    })
+
+    test("product not found", async () => {
+        const patch = { quantity: 5 }
+        await login(manager.username, "password", agent)
+        const response = await agent.patch(productsBaseURL + "/notFound/sell").send(patch)
+        expect(response.status).toBe(404)
     })
 })
