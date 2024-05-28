@@ -144,9 +144,6 @@ class ProductController {
             await this.dao.getProduct(model);
         }
         catch (error) {
-            if (error instanceof ProductNotFoundError) {
-                return false;
-            }
             throw error;
         }
         return this.dao.deleteProduct(model);
