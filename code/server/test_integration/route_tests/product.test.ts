@@ -932,3 +932,44 @@ describe("Get available products API tests", () => {
         expect(response.status).toBe(404)
     })
 })
+
+describe("Delete product API tests", () => {
+    let product: Product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 5)
+    beforeEach(async () => {
+        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+    })
+
+    test("test success", async () => {
+        await login(manager.username, "password", agent)
+        const response = await agent.delete(productsBaseURL + "/" + product.model)
+        expect(response.status).toBe(200)
+
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+    })
+
+    test("test without login", async () => {
+        const response = await agent.delete(productsBaseURL + "/testProduct")
+        expect(response.status).toBe(401)
+    })
+
+    test("test with customer login", async () => {
+        await login(customer.username, "password", agent)
+        const response = await agent.delete(productsBaseURL + "/testProduct")
+        expect(response.status).toBe(401)
+    })
+
+    test("test with admin login", async () => {
+        await login(admin.username, "password", agent)
+        const response = await agent.delete(productsBaseURL + "/testProduct")
+        expect(response.status).toBe(200)
+
+        await expect(dbGet("SELECT * FROM product WHERE model = ?", ["testProduct"])).resolves.toBeUndefined()
+    })
+
+    test("test product not found", async () => {
+        await login(manager.username, "password", agent)
+        const response = await agent.delete(productsBaseURL + "/notFound")
+        expect(response.status).toBe(404)
+    })
+})
