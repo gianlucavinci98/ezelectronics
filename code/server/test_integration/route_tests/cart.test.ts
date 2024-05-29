@@ -392,3 +392,109 @@ describe("Patch checkout cart", () => {
         expect(paid).toBe(false)
     })
 })
+
+describe("Get cart history", () => {
+    let cart_id1: number
+    let cart_id2: number
+    let cart_id_open: number
+
+    beforeEach(async () => {
+        await dbRun(
+            "INSERT INTO cart (customer, total, paid, paymentDate) VALUES (?, ?, true, ?)",
+            [customer.username, products[0].sellingPrice, new Date().toISOString().split("T")[0]]
+        )
+        cart_id1 = (await dbGet("SELECT id FROM cart WHERE customer = ? AND paid = true", [customer.username]) as { id: number }).id
+
+        await dbRun(
+            "INSERT INTO cart (customer, total, paid, paymentDate) VALUES (?, ?, true, ?)",
+            [customer.username, products[1].sellingPrice + products[2].sellingPrice * 2, new Date().toISOString().split("T")[0]]
+        )
+        cart_id2 = (await dbGet("SELECT id FROM cart WHERE customer = ? AND paid = true AND id <> ?", [customer.username, cart_id1]) as { id: number }).id
+
+        await dbRun("INSERT INTO cart (customer, total) VALUES (?, ?)", [customer.username, products[0].sellingPrice])
+        cart_id_open = (await dbGet("SELECT id FROM cart WHERE customer = ? AND paid = false", [customer.username]) as { id: number }).id
+
+        await dbRun(
+            "INSERT INTO cart_items (cart, model, quantity, category, price) VALUES (?, ?, ?, ?, ?)",
+            [cart_id1, products[0].model, 1, products[0].category, products[0].sellingPrice]
+        )
+        await dbRun(
+            "INSERT INTO cart_items (cart, model, quantity, category, price) VALUES (?, ?, ?, ?, ?)",
+            [cart_id2, products[1].model, 1, products[1].category, products[1].sellingPrice]
+        )
+        await dbRun(
+            "INSERT INTO cart_items (cart, model, quantity, category, price) VALUES (?, ?, ?, ?, ?)",
+            [cart_id2, products[2].model, 2, products[2].category, products[2].sellingPrice]
+        )
+        await dbRun(
+            "INSERT INTO cart_items (cart, model, quantity, category, price) VALUES (?, ?, ?, ?, ?)",
+            [cart_id_open, products[0].model, 1, products[0].category, products[0].sellingPrice]
+        )
+    })
+
+    test("Get cart history successfully", async () => {
+        await login(customer.username, "password", agent)
+        const response = await agent.get(cartsBaseURL + "/history")
+        expect(response.status).toBe(200)
+        expect(response.body).toEqual(expect.arrayContaining([
+            {
+                customer: customer.username,
+                paid: true,
+                total: products[0].sellingPrice,
+                paymentDate: new Date().toISOString().split("T")[0],
+                products: [
+                    {
+                        model: products[0].model,
+                        quantity: 1,
+                        category: products[0].category,
+                        price: products[0].sellingPrice
+                    }
+                ]
+            },
+            {
+                customer: customer.username,
+                paid: true,
+                total: products[1].sellingPrice + products[2].sellingPrice * 2,
+                paymentDate: new Date().toISOString().split("T")[0],
+                products: expect.arrayContaining([
+                    {
+                        model: products[1].model,
+                        quantity: 1,
+                        category: products[1].category,
+                        price: products[1].sellingPrice
+                    },
+                    {
+                        model: products[2].model,
+                        quantity: 2,
+                        category: products[2].category,
+                        price: products[2].sellingPrice
+                    }
+                ])
+            }
+        ]))
+    })
+
+    test("test with no login", async () => {
+        const response = await agent.get(cartsBaseURL + "/history")
+        expect(response.status).toBe(401)
+    })
+
+    test("test with manager login", async () => {
+        await login(manager.username, "password", agent)
+        const response = await agent.get(cartsBaseURL + "/history")
+        expect(response.status).toBe(401)
+    })
+
+    test("test with admin login", async () => {
+        await login(admin.username, "password", agent)
+        const response = await agent.get(cartsBaseURL + "/history")
+        expect(response.status).toBe(401)
+    })
+
+    test("test with no cart history", async () => {
+        await login(customer2.username, "password", agent)
+        const response = await agent.get(cartsBaseURL + "/history")
+        expect(response.status).toBe(200)
+        expect(response.body).toEqual([])
+    })
+})
