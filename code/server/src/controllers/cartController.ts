@@ -1,5 +1,6 @@
 import { User } from "../components/user";
 import CartDAO from "../dao/cartDAO";
+import { Cart } from "../components/cart"; // Import the Cart type from the appropriate file
 
 /**
  * Represents a controller for managing shopping carts.
@@ -21,6 +22,29 @@ class CartController {
      * @returns A Promise that resolves to `true` if the product was successfully added.
      */
     async addToCart(user: User, product: string)/*: Promise<Boolean>*/ { }
+    // async addToCart(user: User, product: string)//: Promise<Boolean> {
+    //     try {
+    //         const cart = await this.getCart(user)
+    //         if (cart) {
+    //             const productInCart = cart.products.find(p => p.model === product)
+    //             if (productInCart) {
+    //                 productInCart.quantity++
+    //             } else {
+    //                 cart.products.push({ model: product, quantity: 1 })
+    //             }
+    //             return this.dao.updateCart(cart)
+    //         } else {
+    //             return this.dao.createCart(user, [{ model: product, quantity: 1 }])
+    //         }
+    //     } catch (error) {
+    //         throw error
+    //     }
+    //  }
+
+    // async addToCart(user: User, product: string): Promise<Boolean> {
+
+    //}
+
 
 
     /**
@@ -28,7 +52,9 @@ class CartController {
      * @param user - The user for whom to retrieve the cart.
      * @returns A Promise that resolves to the user's cart or an empty one if there is no current cart.
      */
-    async getCart(user: User)/*: Cart*/ { }
+    async getCart(user: User): Promise<Cart> { 
+        return this.dao.getCurrentCart(user)
+    }
 
     /**
      * Checks out the user's cart. We assume that payment is always successful, there is no need to implement anything related to payment.
