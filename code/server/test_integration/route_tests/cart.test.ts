@@ -498,3 +498,50 @@ describe("Get cart history", () => {
         expect(response.body).toEqual([])
     })
 })
+
+describe("Delete current cart", () => {
+    let cart_id_customer: number
+
+    beforeEach(async () => {
+        await dbRun("INSERT INTO cart (customer, total) VALUES (?, ?)", [customer.username, products[0].sellingPrice])
+        cart_id_customer = (await dbGet("SELECT id FROM cart WHERE customer = ? AND paid = false", [customer.username]) as { id: number }).id
+
+        await dbRun(
+            "INSERT INTO cart_items (cart, model, quantity, category, price) VALUES (?, ?, ?, ?, ?)",
+            [cart_id_customer, products[0].model, 1, products[0].category, products[0].sellingPrice]
+        )
+    })
+
+    test("Delete current cart successfully", async () => {
+        await login(customer.username, "password", agent)
+        const response = await agent.delete(cartsBaseURL)
+        expect(response.status).toBe(200)
+        const cart = await dbGet("SELECT * FROM cart WHERE id = ?", [cart_id_customer])
+        expect(cart).toEqual({ id: cart_id_customer, customer: customer.username, total: 0, paid: false, paymentDate: null })
+        const cart_items = await dbGet("SELECT COUNT(*) FROM cart_items WHERE cart = ?", [cart_id_customer])
+        expect(cart_items).toEqual({ "COUNT(*)": 0 })
+    })
+
+    test("test with no login", async () => {
+        const response = await agent.delete(cartsBaseURL)
+        expect(response.status).toBe(401)
+    })
+
+    test("test with manager login", async () => {
+        await login(manager.username, "password", agent)
+        const response = await agent.delete(cartsBaseURL)
+        expect(response.status).toBe(401)
+    })
+
+    test("test with admin login", async () => {
+        await login(admin.username, "password", agent)
+        const response = await agent.delete(cartsBaseURL)
+        expect(response.status).toBe(401)
+    })
+
+    test("test with no cart", async () => {
+        await login(customer2.username, "password", agent)
+        const response = await agent.delete(cartsBaseURL)
+        expect(response.status).toBe(404)
+    })
+})
