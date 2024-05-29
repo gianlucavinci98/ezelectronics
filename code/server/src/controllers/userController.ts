@@ -67,16 +67,20 @@ class UserController {
      * @returns A Promise that resolves to true if the user has been deleted.
      */
     async deleteUser(user: User, username: string): Promise<Boolean> {
-        if (user.role === Role.ADMIN) {
+        if (user.username === username) {
+            return this.dao.deleteUser(username)
+        } else if (user.role === Role.ADMIN) {
             // check if the target is an admin
             let target = await this.dao.getUserByUsername(username)
             if (target.role === Role.ADMIN) {
                 throw new UserIsAdminError()
+            } else {
+                return this.dao.deleteUser(username)
             }
-        } else if (user.username !== username) {
+        } else {
             throw new UserNotAdminError()
         }
-        return this.dao.deleteUser(username)
+
     }
 
     /**
