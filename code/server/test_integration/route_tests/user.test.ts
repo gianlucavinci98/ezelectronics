@@ -254,3 +254,305 @@ describe("GET /users/:username", () => {
         expect(response.status).toBe(404)
     })
 })
+
+describe("DELETE /users/:username", () => {
+    test("customer should delete itself", async () => {
+        const user = { username: "test", name: "test", surname: "test", role: Role.CUSTOMER, address: null as null, birthdate: null as null }
+        const userDAO = new UserDAO()
+        await userDAO.createUser(user.username, user.name, user.surname, "password", user.role)
+
+        await login(user.username, "password", agent)
+
+        const response = await agent.delete(usersBaseURL + "/" + user.username)
+        expect(response.status).toBe(200)
+        const sql = "SELECT username FROM users WHERE username = ?"
+        await get(sql, [user.username], (err: Error | null, row: any) => {
+            expect(err).toBeNull()
+            expect(row).toBeUndefined()
+        })
+    })
+
+    test("manager should delete itself", async () => {
+        const user = { username: "test", name: "test", surname: "test", role: Role.MANAGER, address: null as null, birthdate: null as null }
+        const userDAO = new UserDAO()
+        await userDAO.createUser(user.username, user.name, user.surname, "password", user.role)
+
+        await login(user.username, "password", agent)
+
+        const response = await agent.delete(usersBaseURL + "/" + user.username)
+        expect(response.status).toBe(200)
+        const sql = "SELECT username FROM users WHERE username = ?"
+        await get(sql, [user.username], (err: Error | null, row: any) => {
+            expect(err).toBeNull()
+            expect(row).toBeUndefined()
+        })
+    })
+
+    test("admin should delete itself", async () => {
+        const user = { username: "test", name: "test", surname: "test", role: Role.ADMIN, address: null as null, birthdate: null as null }
+        const userDAO = new UserDAO()
+        await userDAO.createUser(user.username, user.name, user.surname, "password", user.role)
+
+        await login(user.username, "password", agent)
+
+        const response = await agent.delete(usersBaseURL + "/" + user.username)
+        expect(response.status).toBe(200)
+        const sql = "SELECT username FROM users WHERE username = ?"
+        await get(sql, [user.username], (err: Error | null, row: any) => {
+            expect(err).toBeNull()
+            expect(row).toBeUndefined()
+        })
+    })
+
+    test("customer cannot delete another user", async () => {
+        const user = { username: "test", name: "test", surname: "test", role: Role.CUSTOMER, address: null as null, birthdate: null as null }
+        const other = { username: "other", name: "other", surname: "other", role: Role.CUSTOMER, address: null as null, birthdate: null as null }
+        const userDAO = new UserDAO()
+        await userDAO.createUser(user.username, user.name, user.surname, "password", user.role)
+        await userDAO.createUser(other.username, other.name, other.surname, "password", other.role)
+
+        await login(user.username, "password", agent)
+
+        const response = await agent.delete(usersBaseURL + "/" + other.username)
+        expect(response.status).toBe(401)
+    })
+
+    test("manager cannot delete another user", async () => {
+        const user = { username: "test", name: "test", surname: "test", role: Role.MANAGER, address: null as null, birthdate: null as null }
+        const other = { username: "other", name: "other", surname: "other", role: Role.CUSTOMER, address: null as null, birthdate: null as null }
+        const userDAO = new UserDAO()
+        await userDAO.createUser(user.username, user.name, user.surname, "password", user.role)
+        await userDAO.createUser(other.username, other.name, other.surname, "password", other.role)
+
+        await login(user.username, "password", agent)
+
+        const response = await agent.delete(usersBaseURL + "/" + other.username)
+        expect(response.status).toBe(401)
+    })
+
+    test("admin can delete another user", async () => {
+        const user = { username: "test", name: "test", surname: "test", role: Role.ADMIN, address: null as null, birthdate: null as null }
+        const other = { username: "other", name: "other", surname: "other", role: Role.CUSTOMER, address: null as null, birthdate: null as null }
+        const userDAO = new UserDAO()
+        await userDAO.createUser(user.username, user.name, user.surname, "password", user.role)
+        await userDAO.createUser(other.username, other.name, other.surname, "password", other.role)
+
+        await login(user.username, "password", agent)
+
+        const response = await agent.delete(usersBaseURL + "/" + other.username)
+        expect(response.status).toBe(200)
+        const sql = "SELECT username FROM users WHERE username = ?"
+        await get(sql, [other.username], (err: Error | null, row: any) => {
+            expect(err).toBeNull()
+            expect(row).toBeUndefined()
+        })
+    })
+
+    test("admin cannot delete another admin", async () => {
+        const user = { username: "test", name: "test", surname: "test", role: Role.ADMIN, address: null as null, birthdate: null as null }
+        const other = { username: "other", name: "other", surname: "other", role: Role.ADMIN, address: null as null, birthdate: null as null }
+        const userDAO = new UserDAO()
+        await userDAO.createUser(user.username, user.name, user.surname, "password", user.role)
+        await userDAO.createUser(other.username, other.name, other.surname, "password", other.role)
+
+        await login(user.username, "password", agent)
+
+        const response = await agent.delete(usersBaseURL + "/" + other.username)
+        expect(response.status).toBe(401)
+    })
+
+    test("should return 401 if the user is not logged in", async () => {
+        const response = await request(app).delete(usersBaseURL + "/test")
+        expect(response.status).toBe(401)
+    })
+})
+
+describe("DELETE /", () => {
+    test("should delete all non-admin users", async () => {
+        const user = { username: "test", name: "test", surname: "test", role: Role.CUSTOMER, address: null as null, birthdate: null as null }
+        const admin = { username: "admin", name: "admin", surname: "admin", role: Role.ADMIN, address: null as null, birthdate: null as null }
+        const userDAO = new UserDAO()
+        await userDAO.createUser(user.username, user.name, user.surname, "password", user.role)
+        await userDAO.createUser(admin.username, admin.name, admin.surname, "password", admin.role)
+
+        await login(admin.username, "password", agent)
+
+        const response = await agent.delete(usersBaseURL)
+        expect(response.status).toBe(200)
+        const sql = "SELECT username FROM users WHERE username = ?"
+        await get(sql, [user.username], (err: Error | null, row: any) => {
+            expect(err).toBeNull()
+            expect(row).toBeUndefined()
+        })
+        await get(sql, [admin.username], (err: Error | null, row: any) => {
+            expect(err).toBeNull()
+            expect(row).not.toBeUndefined()
+        })
+    })
+
+    test("should return 401 if the user is not an admin", async () => {
+        const user = { username: "test", name: "test", surname: "test", role: Role.CUSTOMER, address: null as null, birthdate: null as null }
+        const userDAO = new UserDAO()
+        await userDAO.createUser(user.username, user.name, user.surname, "password", user.role)
+
+        await login(user.username, "password", agent)
+
+        const response = await agent.delete(usersBaseURL)
+        expect(response.status).toBe(401)
+    })
+})
+
+describe("PATCH /users/:username", () => {
+    test("should update the user", async () => {
+        const user = { username: "test", name: "test", surname: "test", role: Role.CUSTOMER, address: null as null, birthdate: null as null }
+        const userDAO = new UserDAO()
+        await userDAO.createUser(user.username, user.name, user.surname, "password", user.role)
+
+        await login(user.username, "password", agent)
+
+        const response = await agent.patch(usersBaseURL + "/" + user.username).send({ name: "newName", surname: "newSurname", address: "newAddress", birthdate: "2021-01-01" })
+        expect(response.status).toBe(200)
+        const sql = "SELECT name, surname, address, birthdate FROM users WHERE username = ?"
+        await get(sql, [user.username], (err: Error | null, row: any) => {
+            expect(err).toBeNull()
+            expect(row).not.toBeUndefined()
+            expect(row.name).toBe("newName")
+            expect(row.surname).toBe("newSurname")
+            expect(row.address).toBe("newAddress")
+            expect(row.birthdate).toBe("2021-01-01")
+        })
+    })
+
+    test("not admin should not update another user", async () => {
+        const user = { username: "test", name: "test", surname: "test", role: Role.CUSTOMER, address: null as null, birthdate: null as null }
+        const other = { username: "other", name: "other", surname: "other", role: Role.CUSTOMER, address: null as null, birthdate: null as null }
+        const userDAO = new UserDAO()
+        await userDAO.createUser(user.username, user.name, user.surname, "password", user.role)
+        await userDAO.createUser(other.username, other.name, other.surname, "password", other.role)
+
+        await login(user.username, "password", agent)
+
+        const response = await agent.patch(usersBaseURL + "/" + other.username).send({ name: "newName", surname: "newSurname", address: "newAddress", birthdate: "2021-01-01" })
+        expect(response.status).toBe(401)
+    })
+
+    test("admin should update another user", async () => {
+        const user = { username: "test", name: "test", surname: "test", role: Role.ADMIN, address: null as null, birthdate: null as null }
+        const other = { username: "other", name: "other", surname: "other", role: Role.CUSTOMER, address: null as null, birthdate: null as null }
+        const userDAO = new UserDAO()
+        await userDAO.createUser(user.username, user.name, user.surname, "password", user.role)
+        await userDAO.createUser(other.username, other.name, other.surname, "password", other.role)
+
+        await login(user.username, "password", agent)
+
+        const response = await agent.patch(usersBaseURL + "/" + other.username).send({ name: "newName", surname: "newSurname", address: "newAddress", birthdate: "2021-01-01" })
+        expect(response.status).toBe(200)
+        const sql = "SELECT name, surname, address, birthdate FROM users WHERE username = ?"
+        await get(sql, [other.username], (err: Error | null, row: any) => {
+            expect(err).toBeNull()
+            expect(row).not.toBeUndefined()
+            expect(row.name).toBe("newName")
+            expect(row.surname).toBe("newSurname")
+            expect(row.address).toBe("newAddress")
+            expect(row.birthdate).toBe("2021-01-01")
+        })
+    })
+
+    test("admin should not update another admin", async () => {
+        const user = { username: "test", name: "test", surname: "test", role: Role.ADMIN, address: null as null, birthdate: null as null }
+        const other = { username: "other", name: "other", surname: "other", role: Role.ADMIN, address: null as null, birthdate: null as null }
+        const userDAO = new UserDAO()
+        await userDAO.createUser(user.username, user.name, user.surname, "password", user.role)
+        await userDAO.createUser(other.username, other.name, other.surname, "password", other.role)
+
+        await login(user.username, "password", agent)
+
+        const response = await agent.patch(usersBaseURL + "/" + other.username).send({ name: "newName", surname: "newSurname", address: "newAddress", birthdate: "2021-01-01" })
+        expect(response.status).toBe(401)
+    })
+
+    test("name must be set", async () => {
+        const user = { username: "test", name: "test", surname: "test", role: Role.CUSTOMER, address: null as null, birthdate: null as null }
+        const userDAO = new UserDAO()
+        await userDAO.createUser(user.username, user.name, user.surname, "password", user.role)
+
+        await login(user.username, "password", agent)
+
+        const response = await agent.patch(usersBaseURL + "/" + user.username).send({ surname: "newSurname", address: "newAddress", birthdate: "2021-01-01" })
+        expect(response.status).toBe(422)
+    })
+
+    test("surname must be set", async () => {
+        const user = { username: "test", name: "test", surname: "test", role: Role.CUSTOMER, address: null as null, birthdate: null as null }
+        const userDAO = new UserDAO()
+        await userDAO.createUser(user.username, user.name, user.surname, "password", user.role)
+
+        await login(user.username, "password", agent)
+
+        const response = await agent.patch(usersBaseURL + "/" + user.username).send({ name: "newName", address: "newAddress", birthdate: "2021-01-01" })
+        expect(response.status).toBe(422)
+    })
+
+    test("address must be set", async () => {
+        const user = { username: "test", name: "test", surname: "test", role: Role.CUSTOMER, address: null as null, birthdate: null as null }
+        const userDAO = new UserDAO()
+        await userDAO.createUser(user.username, user.name, user.surname, "password", user.role)
+
+        await login(user.username, "password", agent)
+
+        const response = await agent.patch(usersBaseURL + "/" + user.username).send({ name: "newName", surname: "newSurname", birthdate: "2021-01-01" })
+        expect(response.status).toBe(422)
+    })
+
+    test("birthdate must be set", async () => {
+        const user = { username: "test", name: "test", surname: "test", role: Role.CUSTOMER, address: null as null, birthdate: null as null }
+        const userDAO = new UserDAO()
+        await userDAO.createUser(user.username, user.name, user.surname, "password", user.role)
+
+        await login(user.username, "password", agent)
+
+        const response = await agent.patch(usersBaseURL + "/" + user.username).send({ name: "newName", surname: "newSurname", address: "newAddress" })
+        expect(response.status).toBe(422)
+    })
+
+    test("birthdate must be a valid date", async () => {
+        const user = { username: "test", name: "test", surname: "test", role: Role.CUSTOMER, address: null as null, birthdate: null as null }
+        const userDAO = new UserDAO()
+        await userDAO.createUser(user.username, user.name, user.surname, "password", user.role)
+
+        await login(user.username, "password", agent)
+
+        const response = await agent.patch(usersBaseURL + "/" + user.username).send({ name: "newName", surname: "newSurname", address: "newAddress", birthdate: "invalid" })
+        expect(response.status).toBe(422)
+    })
+
+    test("should return 400 if birthdate is in the future", async () => {
+        const user = { username: "test", name: "test", surname: "test", role: Role.CUSTOMER, address: null as null, birthdate: null as null }
+        // set new birthdate at one month in the future
+        let newBirthdate = new Date()
+        newBirthdate.setMonth(newBirthdate.getMonth() + 1)
+        const userDAO = new UserDAO()
+        await userDAO.createUser(user.username, user.name, user.surname, "password", user.role)
+
+        await login(user.username, "password", agent)
+
+        const response = await agent.patch(usersBaseURL + "/" + user.username).send({ name: "newName", surname: "newSurname", address: "newAddress", birthdate: newBirthdate.toISOString().split("T")[0] })
+        expect(response.status).toBe(400)
+    })
+
+    test("should return 404 if the target user does not exist", async () => {
+        const user = { username: "test", name: "test", surname: "test", role: Role.ADMIN, address: null as null, birthdate: null as null }
+        const userDAO = new UserDAO()
+        await userDAO.createUser(user.username, user.name, user.surname, "password", user.role)
+
+        await login(user.username, "password", agent)
+
+        const response = await agent.patch(usersBaseURL + "/other").send({ name: "newName", surname: "newSurname", address: "newAddress", birthdate: "2021-01-01" })
+        expect(response.status).toBe(404)
+    })
+
+    test("should return 401 if the user is not logged in", async () => {
+        const response = await request(app).patch(usersBaseURL + "/test").send({ name: "newName", surname: "newSurname", address: "newAddress", birthdate: "2021-01-01" })
+        expect(response.status).toBe(401)
+    })
+})
