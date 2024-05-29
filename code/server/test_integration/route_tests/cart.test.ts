@@ -670,3 +670,150 @@ describe("Delete all carts of all users", () => {
         expect(cart_items).toEqual({ "COUNT(*)": 0 })
     })
 })
+
+describe("Get all carts of all users", () => {
+    let cart_id_customer: number
+    let cart_id_customer2: number
+    let cart_id_closed: number
+
+    beforeEach(async () => {
+        await dbRun("INSERT INTO cart (customer, total) VALUES (?, ?)", [customer.username, products[0].sellingPrice])
+        cart_id_customer = (await dbGet("SELECT id FROM cart WHERE customer = ? AND paid = false", [customer.username]) as { id: number }).id
+
+        await dbRun(
+            "INSERT INTO cart (customer, total, paid, paymentDate) VALUES (?, ?, true, ?)",
+            [customer2.username, products[0].sellingPrice, new Date().toISOString().split("T")[0]]
+        )
+        cart_id_customer2 = (await dbGet("SELECT id FROM cart WHERE customer = ? AND paid = true", [customer2.username]) as { id: number }).id
+
+        await dbRun(
+            "INSERT INTO cart (customer, total, paid, paymentDate) VALUES (?, ?, true, ?)",
+            [customer.username, products[1].sellingPrice, new Date().toISOString().split("T")[0]]
+        )
+        cart_id_closed = (await dbGet("SELECT id FROM cart WHERE customer = ? AND paid = true", [customer.username]) as { id: number }).id
+
+        await dbRun(
+            "INSERT INTO cart_items (cart, model, quantity, category, price) VALUES (?, ?, ?, ?, ?)",
+            [cart_id_customer, products[0].model, 1, products[0].category, products[0].sellingPrice]
+        )
+        await dbRun(
+            "INSERT INTO cart_items (cart, model, quantity, category, price) VALUES (?, ?, ?, ?, ?)",
+            [cart_id_closed, products[1].model, 1, products[1].category, products[1].sellingPrice]
+        )
+        await dbRun(
+            "INSERT INTO cart_items (cart, model, quantity, category, price) VALUES (?, ?, ?, ?, ?)",
+            [cart_id_customer2, products[0].model, 1, products[0].category, products[0].sellingPrice]
+        )
+    })
+
+    test("Get all carts of all users successfully", async () => {
+        await login(manager.username, "password", agent)
+        const response = await agent.get(cartsBaseURL + "/all")
+        expect(response.status).toBe(200)
+        expect(response.body).toEqual(expect.arrayContaining([
+            {
+                customer: customer.username,
+                paid: false,
+                total: products[0].sellingPrice,
+                paymentDate: null,
+                products: [
+                    {
+                        model: products[0].model,
+                        quantity: 1,
+                        category: products[0].category,
+                        price: products[0].sellingPrice
+                    }
+                ]
+            },
+            {
+                customer: customer2.username,
+                paid: true,
+                total: products[0].sellingPrice,
+                paymentDate: new Date().toISOString().split("T")[0],
+                products: [
+                    {
+                        model: products[0].model,
+                        quantity: 1,
+                        category: products[0].category,
+                        price: products[0].sellingPrice
+                    }
+                ]
+            },
+            {
+                customer: customer.username,
+                paid: true,
+                total: products[1].sellingPrice,
+                paymentDate: new Date().toISOString().split("T")[0],
+                products: [
+                    {
+                        model: products[1].model,
+                        quantity: 1,
+                        category: products[1].category,
+                        price: products[1].sellingPrice
+                    }
+                ]
+            }
+        ]))
+    })
+
+    test("test with no login", async () => {
+        const response = await agent.get(cartsBaseURL + "/all")
+        expect(response.status).toBe(401)
+    })
+
+    test("test with customer login", async () => {
+        await login(customer.username, "password", agent)
+        const response = await agent.get(cartsBaseURL + "/all")
+        expect(response.status).toBe(401)
+    })
+
+    test("test with admin login", async () => {
+        await login(admin.username, "password", agent)
+        const response = await agent.get(cartsBaseURL + "/all")
+        expect(response.status).toBe(200)
+        expect(response.body).toEqual(expect.arrayContaining([
+            {
+                customer: customer.username,
+                paid: false,
+                total: products[0].sellingPrice,
+                paymentDate: null,
+                products: [
+                    {
+                        model: products[0].model,
+                        quantity: 1,
+                        category: products[0].category,
+                        price: products[0].sellingPrice
+                    }
+                ]
+            },
+            {
+                customer: customer2.username,
+                paid: true,
+                total: products[0].sellingPrice,
+                paymentDate: new Date().toISOString().split("T")[0],
+                products: [
+                    {
+                        model: products[0].model,
+                        quantity: 1,
+                        category: products[0].category,
+                        price: products[0].sellingPrice
+                    }
+                ]
+            },
+            {
+                customer: customer.username,
+                paid: true,
+                total: products[1].sellingPrice,
+                paymentDate: new Date().toISOString().split("T")[0],
+                products: [
+                    {
+                        model: products[1].model,
+                        quantity: 1,
+                        category: products[1].category,
+                        price: products[1].sellingPrice
+                    }
+                ]
+            }
+        ]))
+    })
+})
