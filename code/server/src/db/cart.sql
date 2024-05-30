@@ -10,7 +10,7 @@ CREATE TABLE cart (
 );
 CREATE TABLE cart_items (
     cart INTEGER NOT NULL,
-    model INTEGER NOT NULL,
+    model TEXT NOT NULL,
     quantity INTEGER NOT NULL,
     category TEXT NOT NULL CHECK (
         category IN ('Smartphone', 'Laptop', 'Appliance')

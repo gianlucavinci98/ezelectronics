@@ -131,6 +131,3 @@ dist
 
 # vscode
 .vscode/
-
-# SQLite databases
-*.db
