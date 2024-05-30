@@ -140,12 +140,7 @@ class ProductController {
      * @returns A Promise that resolves to `true` if the product has been successfully deleted.
      */
     async deleteProduct(model: string): Promise<Boolean> {
-        try {
-            await this.dao.getProduct(model);
-        }
-        catch (error) {
-            throw error;
-        }
+        await this.dao.getProduct(model);
         return this.dao.deleteProduct(model);
     }
 
