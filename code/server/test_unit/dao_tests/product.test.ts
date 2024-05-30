@@ -24,6 +24,11 @@ describe('test ProductDAO', () => {
         })
         await expect(productDAO.registerProduct(100, 'Model1', 'Category1', '2022-01-01', 'Details1', 10)).resolves.toBeUndefined()
         expect(mock_db_run).toHaveBeenCalledTimes(1)
+        expect(mock_db_run).toHaveBeenCalledWith(
+            expect.any(String),
+            [100, 'Model1', 'Category1', '2022-01-01', 'Details1', 10],
+            expect.any(Function)
+        )
     })
 
     test('changeProductQuantity', async () => {
@@ -33,6 +38,11 @@ describe('test ProductDAO', () => {
         })
         await expect(productDAO.changeProductQuantity('Model1', 5)).resolves.toBeUndefined()
         expect(mock_db_run).toHaveBeenCalledTimes(1)
+        expect(mock_db_run).toHaveBeenCalledWith(
+            expect.any(String),
+            [5, 'Model1'],
+            expect.any(Function)
+        )
     })
 
     test('getProduct success', async () => {
@@ -43,6 +53,11 @@ describe('test ProductDAO', () => {
         })
         await expect(productDAO.getProduct('Model1')).resolves.toEqual(product)
         expect(mock_db_get).toHaveBeenCalledTimes(1)
+        expect(mock_db_get).toHaveBeenCalledWith(
+            expect.any(String),
+            ['Model1'],
+            expect.any(Function)
+        )
     })
 
     test('getProduct not found', async () => {
@@ -52,6 +67,11 @@ describe('test ProductDAO', () => {
         })
         await expect(productDAO.getProduct('Model2')).rejects.toThrow(ProductNotFoundError)
         expect(mock_db_get).toHaveBeenCalledTimes(1)
+        expect(mock_db_get).toHaveBeenCalledWith(
+            expect.any(String),
+            ['Model2'],
+            expect.any(Function)
+        )
     })
 
     test('getProducts', async () => {
@@ -65,6 +85,11 @@ describe('test ProductDAO', () => {
         })
         await expect(productDAO.getProducts()).resolves.toEqual(products)
         expect(mock_db_all).toHaveBeenCalledTimes(1)
+        expect(mock_db_all).toHaveBeenCalledWith(
+            expect.any(String),
+            [],
+            expect.any(Function)
+        )
     })
 
     test('getProductsByCategory', async () => {
@@ -78,6 +103,11 @@ describe('test ProductDAO', () => {
         })
         await expect(productDAO.getProductsByCategory(Category.APPLIANCE)).resolves.toEqual([products[0]])
         expect(mock_db_all).toHaveBeenCalledTimes(1)
+        expect(mock_db_all).toHaveBeenCalledWith(
+            expect.any(String),
+            [Category.APPLIANCE],
+            expect.any(Function)
+        )
     })
 
     test('getAvailableProductsByCategory', async () => {
@@ -93,6 +123,11 @@ describe('test ProductDAO', () => {
         })
         expect(productDAO.getAvailableProductsByCategory(Category.APPLIANCE)).resolves.toEqual([products[0]])
         expect(mock_db_all).toHaveBeenCalledTimes(1)
+        expect(mock_db_all).toHaveBeenCalledWith(
+            expect.any(String),
+            [Category.APPLIANCE],
+            expect.any(Function)
+        )
     })
 
     test('getProductAvailable success', async () => {
@@ -103,6 +138,11 @@ describe('test ProductDAO', () => {
         })
         await expect(productDAO.getProductAvailable('Model1')).resolves.toEqual(product)
         expect(mock_db_get).toHaveBeenCalledTimes(1)
+        expect(mock_db_get).toHaveBeenCalledWith(
+            expect.any(String),
+            ['Model1'],
+            expect.any(Function)
+        )
     })
 
     test('getProductAvailable not found', async () => {
@@ -112,6 +152,11 @@ describe('test ProductDAO', () => {
         })
         await expect(productDAO.getProductAvailable('Model2')).rejects.toThrow(ProductNotFoundError)
         expect(mock_db_get).toHaveBeenCalledTimes(1)
+        expect(mock_db_get).toHaveBeenCalledWith(
+            expect.any(String),
+            ['Model2'],
+            expect.any(Function)
+        )
     })
 
     test('getAvailableProducts', async () => {
@@ -125,6 +170,11 @@ describe('test ProductDAO', () => {
         })
         await expect(productDAO.getAvailableProducts()).resolves.toEqual(products)
         expect(mock_db_all).toHaveBeenCalledTimes(1)
+        expect(mock_db_all).toHaveBeenCalledWith(
+            expect.any(String),
+            [],
+            expect.any(Function)
+        )
     })
 
     test('deleteAllProducts', async () => {
@@ -134,6 +184,11 @@ describe('test ProductDAO', () => {
         })
         await expect(productDAO.deleteAllProducts()).resolves.toBe(true)
         expect(mock_db_run).toHaveBeenCalledTimes(1)
+        expect(mock_db_run).toHaveBeenCalledWith(
+            expect.any(String),
+            [],
+            expect.any(Function)
+        )
     })
 
     test('deleteProduct', async () => {
@@ -143,5 +198,10 @@ describe('test ProductDAO', () => {
         })
         await expect(productDAO.deleteProduct('Model1')).resolves.toBe(true)
         expect(mock_db_run).toHaveBeenCalledTimes(1)
+        expect(mock_db_run).toHaveBeenCalledWith(
+            expect.any(String),
+            ['Model1'],
+            expect.any(Function)
+        )
     })
 })
