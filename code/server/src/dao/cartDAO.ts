@@ -1,5 +1,5 @@
 import { Cart, ProductInCart } from "../components/cart";
-import { User } from "../components/user"; 
+import { User } from "../components/user";
 import db from "../db/db"
 
 /**
@@ -15,17 +15,16 @@ class CartDAO {
     async getCurrentCart(user: User): Promise<Cart> {
         return new Promise<Cart>((resolve, reject) => {
             try {
-                let productsInCart : ProductInCart[] = []
+                let productsInCart: ProductInCart[] = []
                 // the valid cart is the one with latest id and that is the only one not paid
-                const sql = "SELECT * FROM cart WHERE customer = ? AND paid = FALSE ORDER BY id DESC LIMIT 1"   
+                const sql = "SELECT * FROM cart WHERE customer = ? AND paid = FALSE ORDER BY id DESC LIMIT 1"
                 db.get(sql, [user.username], async (err: Error | null, row: any) => {
                     if (err) reject(err)
-                    else if (!row){
+                    else if (!row) {
                         console.log("No cart found")
                         resolve(new Cart(null, user.username, false, null, 0, productsInCart))
                     }
                     else {
-                        console.log(row)
                         productsInCart = await this.getProductsByCartId(row.id)
                         resolve(new Cart(row.id, row.customer, row.paid, row.paymentDate, row.total, productsInCart))
                     }
@@ -45,9 +44,8 @@ class CartDAO {
                 db.all(sql, [cartId], (err: Error | null, rows: any[]) => {
                     if (err) reject(err)
                     else {
-                    console.log(rows)
-                    resolve(rows.map(row => new ProductInCart(row.model, row.quantity, row.category, row.price)))
-                    } 
+                        resolve(rows.map(row => new ProductInCart(row.model, row.quantity, row.category, row.price)))
+                    }
                 })
             } catch (error) {
                 reject(error)
@@ -60,10 +58,9 @@ class CartDAO {
         return new Promise<Boolean>((resolve, reject) => {
             try {
                 const sql = "UPDATE cart_items SET quantity = quantity + 1 WHERE cart = ? AND model = ?"
-                db.run(sql, [cartId, product], function(err: Error | null) {
+                db.run(sql, [cartId, product], function (err: Error | null) {
                     if (err) reject(err)
                     else {
-                        console.log(`Rows updated: ${this.changes}`)
                         resolve(true)
                     }
                 })
@@ -78,10 +75,9 @@ class CartDAO {
         return new Promise<Boolean>((resolve, reject) => {
             try {
                 const sql = "INSERT INTO cart_items (cart, model, quantity, category, price) VALUES (?, ?, ?, ?, ?)"
-                db.run(sql, [cartId, productInCart.model, productInCart.quantity, productInCart.category, productInCart.price], function(err: Error | null) {
+                db.run(sql, [cartId, productInCart.model, productInCart.quantity, productInCart.category, productInCart.price], function (err: Error | null) {
                     if (err) reject(err)
                     else {
-                        console.log(`Rows inserted: ${this.lastID}`)
                         resolve(true)
                     }
                 })
@@ -96,10 +92,9 @@ class CartDAO {
         return new Promise<number>((resolve, reject) => {
             try {
                 const sql = "INSERT INTO cart (customer, paid, paymentDate, total) VALUES (?, ?, ?, ?)"
-                db.run(sql, [cart.customer, cart.paid, cart.paymentDate, cart.total], function(err: Error | null) {
+                db.run(sql, [cart.customer, cart.paid, cart.paymentDate, cart.total], function (err: Error | null) {
                     if (err) reject(err)
                     else {
-                        console.log(`Rows inserted: ${this.lastID}`)
                         resolve(this.lastID)
                     }
                 })
@@ -114,10 +109,27 @@ class CartDAO {
         return new Promise<Boolean>((resolve, reject) => {
             try {
                 const sql = "UPDATE cart SET total = ? WHERE id = ?"
-                db.run(sql, [total, cartId], function(err: Error | null) {
+                db.run(sql, [total, cartId], function (err: Error | null) {
                     if (err) reject(err)
                     else {
-                        console.log(`Rows updated: ${this.changes}`)
+                        resolve(true)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    //checkout the cart updating the paid columnd and setting the payment date to today
+    checkoutCart(cart: Cart): Promise<Boolean> {
+        return new Promise<Boolean>((resolve, reject) => {
+            try {
+                const today = new Date()
+                const sql = "UPDATE cart SET paid = true, paymentDate = ? WHERE id = ?"
+                db.run(sql, [today.toISOString().split('T')[0], cart.id], function (err: Error | null) {
+                    if (err) reject(err)
+                    else {
                         resolve(true)
                     }
                 })

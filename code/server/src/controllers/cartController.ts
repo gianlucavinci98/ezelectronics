@@ -2,7 +2,7 @@ import { User } from "../components/user";
 import CartDAO from "../dao/cartDAO";
 import ProductDAO from "../dao/productDAO";
 import { Cart, ProductInCart } from "../components/cart"; // Import the Cart type from the appropriate file
-import { ProductNotAvailableError } from "../errors/cartError"; // Import the ProductNotAvailableError class from the appropriate file
+import { ProductNotAvailableError, CartNotFoundError, EmptyCartError } from "../errors/cartError"; // Import the ProductNotAvailableError class from the appropriate file
 import { ProductNotFoundError } from "../errors/productError";
 import e from "express";
 
@@ -98,7 +98,32 @@ class CartController {
      * @returns A Promise that resolves to `true` if the cart was successfully checked out.
      * 
      */
-    async checkoutCart(user: User) /**Promise<Boolean> */ { }
+    async checkoutCart(user: User): Promise<Boolean> {
+        try {
+            const cart: Cart = await this.getCart(user)
+            if (!cart.id) throw new CartNotFoundError()
+            if (cart.products.length === 0) throw new EmptyCartError()
+            let flag = await this.checkProductAvailabilityOfCart(cart)
+            if (!flag) throw new ProductNotAvailableError()
+
+            await this.dao.checkoutCart(cart)
+            return true
+        }
+        catch (error) {
+            throw error
+        }
+    }
+
+    async checkProductAvailabilityOfCart(cart: Cart): Promise<boolean> {
+        for (let product of cart.products) {
+            let qta = (await this.productDAO.getProduct(product.model)).quantity
+            if (product.quantity > qta) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     /**
      * Retrieves all paid carts for a specific customer.
