@@ -3,6 +3,7 @@ const PRODUCT_IN_CART = "Product already in cart"
 const PRODUCT_NOT_IN_CART = "Product not in cart"
 const WRONG_USER_CART = "Cart belongs to another user"
 const EMPTY_CART = "Cart is empty"
+const PRODUCT_NOT_AVAILABLE = "Product is not available"
 
 /**
  * Represents an error that occurs when a cart is not found.
@@ -28,6 +29,17 @@ class ProductInCartError extends Error {
     constructor() {
         super()
         this.customMessage = PRODUCT_IN_CART
+        this.customCode = 409
+    }
+}
+
+class ProductNotAvailableError extends Error {
+    customMessage: string
+    customCode: number
+
+    constructor() {
+        super()
+        this.customMessage = PRODUCT_NOT_AVAILABLE
         this.customCode = 409
     }
 }
@@ -71,4 +83,4 @@ class EmptyCartError extends Error {
     }
 }
 
-export { CartNotFoundError, ProductInCartError, ProductNotInCartError, WrongUserCartError, EmptyCartError }
+export { CartNotFoundError, ProductInCartError, ProductNotInCartError, WrongUserCartError, EmptyCartError, ProductNotAvailableError }

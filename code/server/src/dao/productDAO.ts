@@ -148,6 +148,21 @@ class ProductDAO {
             }
         })
     }
+
+    getProductAvailableGT0(model: string): Promise<Product> {
+        return new Promise<Product>((resolve, reject) => {
+            try {
+                const sql = "SELECT * FROM product WHERE model = ?"
+                db.get(sql, [model], (err: Error | null, row: any) => {
+                    if (err) reject(err)
+                    else if (!row) reject(new ProductNotFoundError())
+                    else resolve(new Product(row.sellingPrice, row.model, row.category, row.arrivalDate, row.details, row.quantity))
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
 }
 
 export default ProductDAO

@@ -22,12 +22,12 @@ class CartDAO {
                     if (err) reject(err)
                     else if (!row){
                         console.log("No cart found")
-                        resolve(new Cart(user.username, false, null, 0, productsInCart))
+                        resolve(new Cart(null, user.username, false, null, 0, productsInCart))
                     }
                     else {
                         console.log(row)
                         productsInCart = await this.getProductsByCartId(row.id)
-                        resolve(new Cart(row.customer, row.paid, row.paymentDate, row.total, productsInCart))
+                        resolve(new Cart(row.id, row.customer, row.paid, row.paymentDate, row.total, productsInCart))
                     }
                 })
             } catch (error) {
@@ -42,13 +42,84 @@ class CartDAO {
         return new Promise<ProductInCart[]>((resolve, reject) => {
             try {
                 const sql = "SELECT * FROM cart_items WHERE cart = ?"
-                console.log("Provo la query: " + sql + " con cartId: " + cartId)
                 db.all(sql, [cartId], (err: Error | null, rows: any[]) => {
                     if (err) reject(err)
                     else {
                     console.log(rows)
                     resolve(rows.map(row => new ProductInCart(row.model, row.quantity, row.category, row.price)))
                     } 
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    // increment by one the quantity of a product in the cart
+    incrementProductInCart(cartId: number, product: string): Promise<Boolean> {
+        return new Promise<Boolean>((resolve, reject) => {
+            try {
+                const sql = "UPDATE cart_items SET quantity = quantity + 1 WHERE cart = ? AND model = ?"
+                db.run(sql, [cartId, product], function(err: Error | null) {
+                    if (err) reject(err)
+                    else {
+                        console.log(`Rows updated: ${this.changes}`)
+                        resolve(true)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    // insert a new product in cart_items
+    insertProductInCart(cartId: number, productInCart: ProductInCart): Promise<Boolean> {
+        return new Promise<Boolean>((resolve, reject) => {
+            try {
+                const sql = "INSERT INTO cart_items (cart, model, quantity, category, price) VALUES (?, ?, ?, ?, ?)"
+                db.run(sql, [cartId, productInCart.model, productInCart.quantity, productInCart.category, productInCart.price], function(err: Error | null) {
+                    if (err) reject(err)
+                    else {
+                        console.log(`Rows inserted: ${this.lastID}`)
+                        resolve(true)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    //insert a new cart for a user and return the id of the new cart
+    createCart(cart: Cart): Promise<number> {
+        return new Promise<number>((resolve, reject) => {
+            try {
+                const sql = "INSERT INTO cart (customer, paid, paymentDate, total) VALUES (?, ?, ?, ?)"
+                db.run(sql, [cart.customer, cart.paid, cart.paymentDate, cart.total], function(err: Error | null) {
+                    if (err) reject(err)
+                    else {
+                        console.log(`Rows inserted: ${this.lastID}`)
+                        resolve(this.lastID)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    // update the total amount of a cart
+    updateCartTotal(cartId: number, total: number): Promise<Boolean> {
+        return new Promise<Boolean>((resolve, reject) => {
+            try {
+                const sql = "UPDATE cart SET total = ? WHERE id = ?"
+                db.run(sql, [total, cartId], function(err: Error | null) {
+                    if (err) reject(err)
+                    else {
+                        console.log(`Rows updated: ${this.changes}`)
+                        resolve(true)
+                    }
                 })
             } catch (error) {
                 reject(error)
