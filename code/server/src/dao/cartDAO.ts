@@ -35,8 +35,6 @@ class CartDAO {
         })
     }
 
-    // retrieves all products in a cart by cart id
-    // return an array of ProductInCart
     getProductsByCartId(cartId: number): Promise<ProductInCart[]> {
         return new Promise<ProductInCart[]>((resolve, reject) => {
             try {
@@ -53,12 +51,11 @@ class CartDAO {
         })
     }
 
-    // increment by one the quantity of a product in the cart
-    incrementProductInCart(cartId: number, product: string): Promise<Boolean> {
+    incrementProductInCart(cartId: number, product: string, n: number): Promise<Boolean> {
         return new Promise<Boolean>((resolve, reject) => {
             try {
-                const sql = "UPDATE cart_items SET quantity = quantity + 1 WHERE cart = ? AND model = ?"
-                db.run(sql, [cartId, product], function (err: Error | null) {
+                const sql = "UPDATE cart_items SET quantity = quantity + ? WHERE cart = ? AND model = ?"
+                db.run(sql, [n, cartId, product], function (err: Error | null) {
                     if (err) reject(err)
                     else {
                         resolve(true)
@@ -70,7 +67,7 @@ class CartDAO {
         })
     }
 
-    // insert a new product in cart_items
+
     insertProductInCart(cartId: number, productInCart: ProductInCart): Promise<Boolean> {
         return new Promise<Boolean>((resolve, reject) => {
             try {
@@ -87,7 +84,6 @@ class CartDAO {
         })
     }
 
-    //insert a new cart for a user and return the id of the new cart
     createCart(cart: Cart): Promise<number> {
         return new Promise<number>((resolve, reject) => {
             try {
@@ -104,7 +100,6 @@ class CartDAO {
         })
     }
 
-    // update the total amount of a cart
     updateCartTotal(cartId: number, total: number): Promise<Boolean> {
         return new Promise<Boolean>((resolve, reject) => {
             try {
@@ -121,7 +116,6 @@ class CartDAO {
         })
     }
 
-    //checkout the cart updating the paid columnd and setting the payment date to today
     checkoutCart(cart: Cart): Promise<Boolean> {
         return new Promise<Boolean>((resolve, reject) => {
             try {
@@ -131,6 +125,108 @@ class CartDAO {
                     if (err) reject(err)
                     else {
                         resolve(true)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    getCustomerCarts(user: User): Promise<Cart[]> {
+        return new Promise<Cart[]>((resolve, reject) => {
+            try {
+                let carts: Cart[] = []
+                const sql = "SELECT * FROM cart WHERE customer = ? AND paid = TRUE ORDER BY id"
+                db.all(sql, [user.username], async (err: Error | null, rows: any[]) => {
+                    if (err) reject(err)
+                    else {
+                        for (let row of rows) {
+                            let productsInCart: ProductInCart[] = await this.getProductsByCartId(row.id)
+                            carts.push(new Cart(row.id, row.customer, row.paid, row.paymentDate, row.total, productsInCart))
+                        }
+                        resolve(carts)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    deleteProductFromCart(cartId: number, product: string): Promise<Boolean> {
+        return new Promise<Boolean>((resolve, reject) => {
+            try {
+                const sql = "DELETE FROM cart_items WHERE cart = ? AND model = ?"
+                db.run(sql, [cartId, product], function (err: Error | null) {
+                    if (err) reject(err)
+                    else {
+                        resolve(true)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    clearCart(cartId: number): Promise<Boolean> {
+        return new Promise<Boolean>((resolve, reject) => {
+            try {
+                const sql = "DELETE FROM cart_items WHERE cart = ?"
+                db.run(sql, [cartId], function (err: Error | null) {
+                    if (err) reject(err)
+                    else {
+                        const sql2 = "UPDATE cart SET total = 0 WHERE id = ?"
+                        db.run(sql2, [cartId], function (err: Error | null) {
+                            if (err) reject(err)
+                            else {
+                                resolve(true)
+                            }
+                        })
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    deleteAllCarts(): Promise<Boolean> {
+        return new Promise<Boolean>((resolve, reject) => {
+            try {
+                const sql = "DELETE FROM cart_items"
+                db.run(sql, [], function (err: Error | null) {
+                    if (err) reject(err)
+                    else {
+                        const sql2 = "DELETE FROM cart"
+                        db.run(sql2, [], function (err: Error | null) {
+                            if (err) reject(err)
+                            else {
+                                resolve(true)
+                            }
+                        })
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    getAllCarts(): Promise<Cart[]> {
+        return new Promise<Cart[]>((resolve, reject) => {
+            try {
+                let carts: Cart[] = []
+                const sql = "SELECT * FROM cart ORDER BY id"
+                db.all(sql, [], async (err: Error | null, rows: any[]) => {
+                    if (err) reject(err)
+                    else {
+                        for (let row of rows) {
+                            let productsInCart: ProductInCart[] = await this.getProductsByCartId(row.id)
+                            carts.push(new Cart(row.id, row.customer, row.paid, row.paymentDate, row.total, productsInCart))
+                        }
+                        resolve(carts)
                     }
                 })
             } catch (error) {
