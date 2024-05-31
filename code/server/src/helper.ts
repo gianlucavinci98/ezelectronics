@@ -32,7 +32,7 @@ class ErrorHandler {
      */
     static registerErrorHandler(router: express.Application) {
         router.use((err: any, req: any, res: any, next: any) => {
-            return ErrorHandler.returnError(res, new EzError(err.customCode || 503, err.message || "Internal Server Error"))
+            return ErrorHandler.returnError(res, new EzError(err.customCode || 503, err.customMessage || "Internal Server Error"))
         })
     }
 
