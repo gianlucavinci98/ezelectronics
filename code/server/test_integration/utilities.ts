@@ -45,3 +45,11 @@ export function dbAll(sql: string, params: any[]) {
         })
     })
 }
+
+export async function cleanup() {
+    await dbRun("DELETE FROM review", [])
+    await dbRun("DELETE FROM cart_items", [])
+    await dbRun("DELETE FROM cart", [])
+    await dbRun("DELETE FROM product", [])
+    await dbRun("DELETE FROM users", [])
+}
