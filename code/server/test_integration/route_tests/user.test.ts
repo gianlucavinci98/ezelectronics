@@ -3,9 +3,8 @@ import request from 'supertest'
 import { app } from "../../index"
 import { Role, User } from "../../src/components/user"
 import db from "../../src/db/db"
-import { cleanup } from "../../src/db/cleanup"
 import UserDAO from "../../src/dao/userDAO"
-import { login } from "../utilities"
+import { login, cleanup } from "../utilities"
 import TestAgent from "supertest/lib/agent"
 
 const baseURL = "/ezelectronics"
@@ -28,15 +27,11 @@ async function get(query: string, params: string[], callback: (err: Error | null
 
 beforeEach(async () => {
     jest.restoreAllMocks()
-    await new Promise<void>((resolve) => {
-        cleanup(() => resolve())
-    })
+    await cleanup()
 })
 
 afterEach(async () => {
-    await new Promise<void>((resolve) => {
-        cleanup(() => resolve())
-    })
+    await cleanup()
 })
 
 describe("POST /users", () => {
