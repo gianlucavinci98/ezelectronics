@@ -110,6 +110,30 @@ describe("ProductController tests", () => {
         )
     })
 
+    test("register products throws an error if get products throws an unrecognized error", async () => {
+        const product = new Product(100, "model", Category.APPLIANCE, "2020-01-01", "details", 10);
+
+        const mock_getProduct = jest.spyOn(ProductDAO.prototype, "getProduct").mockRejectedValueOnce(new Error())
+
+        const mock_registerProduct = jest.spyOn(ProductDAO.prototype, "registerProduct")
+
+        await expect(
+            productController.registerProducts(
+                product.model,
+                product.category,
+                product.quantity,
+                product.details,
+                product.sellingPrice,
+                product.arrivalDate
+            )
+        ).rejects.toThrow(Error)
+
+        expect(mock_getProduct).toHaveBeenCalledTimes(1)
+        expect(mock_getProduct).toHaveBeenCalledWith(product.model)
+
+        expect(mock_registerProduct).toHaveBeenCalledTimes(0)
+    })
+
     test("changeProductQuantity correctly increases the quantity of a product", async () => {
         const product = new Product(100, "model", Category.APPLIANCE, "2020-01-01", "details", 10);
         const newQuantity = 5
