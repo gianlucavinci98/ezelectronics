@@ -53,7 +53,7 @@ class CartRoutes {
             this.authenticator.isLoggedIn,
             this.authenticator.isCustomer,
             (req: any, res: any, next: any) => this.controller.getCart(req.user)
-                .then((cart: any /**Cart */) => {
+                .then((cart: Cart) => {
                     res.status(200).json(cart)
                 })
                 .catch((err) => {
@@ -108,7 +108,7 @@ class CartRoutes {
             this.authenticator.isLoggedIn,
             this.authenticator.isCustomer,
             (req: any, res: any, next: any) => this.controller.getCustomerCarts(req.user)
-                .then((carts: any /**Cart[] */) => res.status(200).json(carts))
+                .then((carts: Cart[]) => res.status(200).json(carts))
                 .catch((err) => next(err))
         )
 
@@ -170,7 +170,7 @@ class CartRoutes {
             this.authenticator.isLoggedIn,
             this.authenticator.isAdminOrManager,
             (req: any, res: any, next: any) => this.controller.getAllCarts()
-                .then((carts: any/**Cart[] */) => res.status(200).json(carts))
+                .then((carts: Cart[]) => res.status(200).json(carts))
                 .catch((err: any) => next(err))
         )
     }
