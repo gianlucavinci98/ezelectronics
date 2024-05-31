@@ -60,8 +60,6 @@ class CartController {
             cart.total += productInDB.sellingPrice
             await this.dao.updateCartTotal(cart.id, cart.total)
 
-            await this.productDAO.changeProductQuantity(product, -1);
-
             return result
         }
         catch (error) {
@@ -115,6 +113,7 @@ class CartController {
             if (product.quantity > qta) {
                 return false;
             }
+            await this.productDAO.changeProductQuantity(product.model, -product.quantity);
         }
 
         return true;
