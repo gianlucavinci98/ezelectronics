@@ -19,7 +19,7 @@ class Cart {
      * @param total - The total amount of the cart. It corresponds to the sum of the prices of all the products in the cart, computed as price * quantity.
      * @param products - The products in the cart.
      */
-    constructor(id: number | null ,customer: string, paid: boolean, paymentDate: string, total: number, products: ProductInCart[]) {
+    constructor(customer: string, paid: boolean, paymentDate: string, total: number, products: ProductInCart[], id: number | null = null) {
         this.id = id
         this.customer = customer
         this.paid = paid

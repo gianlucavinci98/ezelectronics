@@ -54,7 +54,15 @@ class CartRoutes {
             this.authenticator.isCustomer,
             (req: any, res: any, next: any) => this.controller.getCart(req.user)
                 .then((cart: Cart) => {
-                    res.status(200).json(cart)
+                    res.status(200).json(
+                        {
+                            customer: cart.customer,
+                            paid: cart.paid,
+                            paymentDate: cart.paymentDate,
+                            total: cart.total,
+                            products: cart.products
+                        }
+                    )
                 })
                 .catch((err) => {
                     next(err)
@@ -108,7 +116,17 @@ class CartRoutes {
             this.authenticator.isLoggedIn,
             this.authenticator.isCustomer,
             (req: any, res: any, next: any) => this.controller.getCustomerCarts(req.user)
-                .then((carts: Cart[]) => res.status(200).json(carts))
+                .then((carts: Cart[]) => res.status(200).json(
+                    carts.map((cart) => {
+                        return {
+                            customer: cart.customer,
+                            paid: cart.paid,
+                            paymentDate: cart.paymentDate,
+                            total: cart.total,
+                            products: cart.products
+                        }
+                    })
+                ))
                 .catch((err) => next(err))
         )
 
@@ -170,7 +188,17 @@ class CartRoutes {
             this.authenticator.isLoggedIn,
             this.authenticator.isAdminOrManager,
             (req: any, res: any, next: any) => this.controller.getAllCarts()
-                .then((carts: Cart[]) => res.status(200).json(carts))
+                .then((carts: Cart[]) => res.status(200).json(
+                    carts.map((cart) => {
+                        return {
+                            customer: cart.customer,
+                            paid: cart.paid,
+                            paymentDate: cart.paymentDate,
+                            total: cart.total,
+                            products: cart.products
+                        }
+                    })
+                ))
                 .catch((err: any) => next(err))
         )
     }

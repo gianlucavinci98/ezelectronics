@@ -40,7 +40,7 @@ beforeAll(async () => {
     await userDAO.createUser(admin.username, admin.name, admin.surname, "password", admin.role)
     await Promise.all(products.map((product) => {
         dbRun(
-            "INSERT INTO products (model, sellingPrice, arrivalDate, details, quantity, category) VALUES (?, ?, ?, ?, ?, ?)",
+            "INSERT INTO product (model, sellingPrice, arrivalDate, details, quantity, category) VALUES (?, ?, ?, ?, ?, ?)",
             [product.model, product.sellingPrice, product.arrivalDate, product.details, product.quantity, product.category]
         )
     }))
@@ -399,7 +399,7 @@ describe("Patch checkout cart", () => {
     // Before each test, we setup the database with some initial data
     beforeEach(async () => {
         // Insert two carts for two different customers
-        await dbRun("INSERT INTO cart (customer, total) VALUES (?, ?)", [customer.username, products[0].sellingPrice, products[1].sellingPrice * 2])
+        await dbRun("INSERT INTO cart (customer, total) VALUES (?, ?)", [customer.username, products[0].sellingPrice + products[1].sellingPrice * 2])
         await dbRun("INSERT INTO cart (customer) VALUES (?)", [customer2.username])
 
         // Get the id of the cart of the first customer
@@ -430,7 +430,7 @@ describe("Patch checkout cart", () => {
         expect(cart).toEqual({
             id: cart_id_customer,
             customer: customer.username,
-            paid: true,
+            paid: 1,
             paymentDate: new Date().toISOString().split("T")[0],
             total: products[0].sellingPrice + products[1].sellingPrice * 2
         })
@@ -483,7 +483,7 @@ describe("Patch checkout cart", () => {
         // Fetch the paid status of the cart from the database
         const paid = (await dbGet("SELECT paid FROM cart WHERE id = ?", [cart_id_customer]) as { paid: boolean }).paid
         // Expect the cart to not be marked as paid
-        expect(paid).toBe(false)
+        expect(paid).toBe(0)
     })
 
     // Test case for checkout with missing cart
@@ -505,7 +505,7 @@ describe("Patch checkout cart", () => {
         // Insert a product with 0 quantity into the cart
         await dbRun(
             "INSERT INTO cart_items (cart, model, quantity, category, price) VALUES (?, ?, ?, ?, ?)",
-            [cart_id_customer, products[4].model, 1, products[4].category, products[4].sellingPrice]
+            [cart_id_customer, products[3].model, 1, products[3].category, products[3].sellingPrice]
         )
         // Send a patch request to checkout the cart
         const response = await agent.patch(cartsBaseURL)
@@ -514,7 +514,7 @@ describe("Patch checkout cart", () => {
         // Fetch the paid status of the cart from the database
         const paid = (await dbGet("SELECT paid FROM cart WHERE id = ?", [cart_id_customer]) as { paid: boolean }).paid
         // Expect the cart to not be marked as paid
-        expect(paid).toBe(false)
+        expect(paid).toBe(0)
     })
 
     // Test case for checkout with product with insufficient quantity
@@ -533,7 +533,7 @@ describe("Patch checkout cart", () => {
         // Fetch the paid status of the cart from the database
         const paid = (await dbGet("SELECT paid FROM cart WHERE id = ?", [cart_id_customer]) as { paid: boolean }).paid
         // Expect the cart to not be marked as paid
-        expect(paid).toBe(false)
+        expect(paid).toBe(0)
     })
 })
 
@@ -768,39 +768,39 @@ describe("Delete current cart", () => {
     // Test that a logged in customer can delete their current cart successfully
     test("Delete current cart successfully", async () => {
         await login(customer.username, "password", agent)
-        const response = await agent.delete(cartsBaseURL)
+        const response = await agent.delete(cartsBaseURL + "/current")
         expect(response.status).toBe(200)
         // Check that the cart has been emptied
         const cart = await dbGet("SELECT * FROM cart WHERE id = ?", [cart_id_customer])
-        expect(cart).toEqual({ id: cart_id_customer, customer: customer.username, total: 0, paid: false, paymentDate: null })
+        expect(cart).toEqual({ id: cart_id_customer, customer: customer.username, total: 0, paid: 0, paymentDate: null })
         const cart_items = await dbGet("SELECT COUNT(*) FROM cart_items WHERE cart = ?", [cart_id_customer])
         expect(cart_items).toEqual({ "COUNT(*)": 0 })
     })
 
     // Test that a user who is not logged in cannot delete a cart
     test("test with no login", async () => {
-        const response = await agent.delete(cartsBaseURL)
+        const response = await agent.delete(cartsBaseURL + "/current")
         expect(response.status).toBe(401)
     })
 
     // Test that a manager cannot delete a cart
     test("test with manager login", async () => {
         await login(manager.username, "password", agent)
-        const response = await agent.delete(cartsBaseURL)
+        const response = await agent.delete(cartsBaseURL + "/current")
         expect(response.status).toBe(401)
     })
 
     // Test that an admin cannot delete a cart
     test("test with admin login", async () => {
         await login(admin.username, "password", agent)
-        const response = await agent.delete(cartsBaseURL)
+        const response = await agent.delete(cartsBaseURL + "/current")
         expect(response.status).toBe(401)
     })
 
     // Test that a customer cannot delete a cart if they do not have one
     test("test with no cart", async () => {
         await login(customer2.username, "password", agent)
-        const response = await agent.delete(cartsBaseURL)
+        const response = await agent.delete(cartsBaseURL + "/current")
         expect(response.status).toBe(404)
     })
 })

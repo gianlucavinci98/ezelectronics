@@ -22,11 +22,11 @@ class CartDAO {
                     if (err) reject(err)
                     else if (!row) {
                         console.log("No cart found")
-                        resolve(new Cart(null, user.username, false, null, 0, productsInCart))
+                        resolve(new Cart(user.username, false, null, 0, productsInCart))
                     }
                     else {
                         productsInCart = await this.getProductsByCartId(row.id)
-                        resolve(new Cart(row.id, row.customer, row.paid, row.paymentDate, row.total, productsInCart))
+                        resolve(new Cart(row.customer, row.paid == 1, row.paymentDate, row.total, productsInCart, row.id))
                     }
                 })
             } catch (error) {
@@ -143,7 +143,7 @@ class CartDAO {
                     else {
                         for (let row of rows) {
                             let productsInCart: ProductInCart[] = await this.getProductsByCartId(row.id)
-                            carts.push(new Cart(row.id, row.customer, row.paid, row.paymentDate, row.total, productsInCart))
+                            carts.push(new Cart(row.customer, row.paid == 1, row.paymentDate, row.total, productsInCart, row.id))
                         }
                         resolve(carts)
                     }
@@ -224,7 +224,7 @@ class CartDAO {
                     else {
                         for (let row of rows) {
                             let productsInCart: ProductInCart[] = await this.getProductsByCartId(row.id)
-                            carts.push(new Cart(row.id, row.customer, row.paid, row.paymentDate, row.total, productsInCart))
+                            carts.push(new Cart(row.customer, row.paid == 1, row.paymentDate, row.total, productsInCart, row.id))
                         }
                         resolve(carts)
                     }
