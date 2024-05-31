@@ -17,7 +17,7 @@ describe('test ProductDAO', () => {
         productDAO = new ProductDAO()
     })
 
-    test('registerProduct', async () => {
+    test('registerProduct success', async () => {
         const mock_db_run = jest.spyOn(db, 'run').mockImplementation((sql, params, callback) => {
             callback(null)
             return {} as any
@@ -31,12 +31,66 @@ describe('test ProductDAO', () => {
         )
     })
 
-    test('changeProductQuantity', async () => {
+    test("registerProduct error", async () => {
+        const mock_db_run = jest.spyOn(db, 'run').mockImplementation((sql, params, callback) => {
+            callback(new Error())
+            return {} as any
+        })
+        await expect(productDAO.registerProduct(100, 'Model1', 'Category1', '2022-01-01', 'Details1', 10)).rejects.toThrow()
+        expect(mock_db_run).toHaveBeenCalledTimes(1)
+        expect(mock_db_run).toHaveBeenCalledWith(
+            expect.any(String),
+            [100, 'Model1', 'Category1', '2022-01-01', 'Details1', 10],
+            expect.any(Function)
+        )
+    })
+
+    test("registerProduct db error", async () => {
+        const mock_db_run = jest.spyOn(db, 'run').mockImplementation((sql, params, callback) => {
+            throw new Error()
+        })
+        await expect(productDAO.registerProduct(100, 'Model1', 'Category1', '2022-01-01', 'Details1', 10)).rejects.toThrow()
+        expect(mock_db_run).toHaveBeenCalledTimes(1)
+        expect(mock_db_run).toHaveBeenCalledWith(
+            expect.any(String),
+            [100, 'Model1', 'Category1', '2022-01-01', 'Details1', 10],
+            expect.any(Function)
+        )
+    })
+
+    test('changeProductQuantity success', async () => {
         const mock_db_run = jest.spyOn(db, 'run').mockImplementation((sql, params, callback) => {
             callback(null)
             return {} as any
         })
         await expect(productDAO.changeProductQuantity('Model1', 5)).resolves.toBeUndefined()
+        expect(mock_db_run).toHaveBeenCalledTimes(1)
+        expect(mock_db_run).toHaveBeenCalledWith(
+            expect.any(String),
+            [5, 'Model1'],
+            expect.any(Function)
+        )
+    })
+
+    test("changeProductQuantity error", async () => {
+        const mock_db_run = jest.spyOn(db, 'run').mockImplementation((sql, params, callback) => {
+            callback(new Error())
+            return {} as any
+        })
+        await expect(productDAO.changeProductQuantity('Model1', 5)).rejects.toThrow()
+        expect(mock_db_run).toHaveBeenCalledTimes(1)
+        expect(mock_db_run).toHaveBeenCalledWith(
+            expect.any(String),
+            [5, 'Model1'],
+            expect.any(Function)
+        )
+    })
+
+    test("changeProductQuantity db error", async () => {
+        const mock_db_run = jest.spyOn(db, 'run').mockImplementation((sql, params, callback) => {
+            throw new Error()
+        })
+        await expect(productDAO.changeProductQuantity('Model1', 5)).rejects.toThrow()
         expect(mock_db_run).toHaveBeenCalledTimes(1)
         expect(mock_db_run).toHaveBeenCalledWith(
             expect.any(String),
@@ -74,6 +128,33 @@ describe('test ProductDAO', () => {
         )
     })
 
+    test("getProduct error", async () => {
+        const mock_db_get = jest.spyOn(db, 'get').mockImplementation((sql, params, callback) => {
+            callback(new Error())
+            return {} as any
+        })
+        await expect(productDAO.getProduct('Model1')).rejects.toThrow()
+        expect(mock_db_get).toHaveBeenCalledTimes(1)
+        expect(mock_db_get).toHaveBeenCalledWith(
+            expect.any(String),
+            ['Model1'],
+            expect.any(Function)
+        )
+    })
+
+    test("getProduct db error", async () => {
+        const mock_db_get = jest.spyOn(db, 'get').mockImplementation((sql, params, callback) => {
+            throw new Error()
+        })
+        await expect(productDAO.getProduct('Model1')).rejects.toThrow()
+        expect(mock_db_get).toHaveBeenCalledTimes(1)
+        expect(mock_db_get).toHaveBeenCalledWith(
+            expect.any(String),
+            ['Model1'],
+            expect.any(Function)
+        )
+    })
+
     test('getProducts', async () => {
         const products = [
             { sellingPrice: 100, model: 'Model1', category: Category.APPLIANCE, arrivalDate: '2022-01-01', details: 'Details1', quantity: 10 },
@@ -84,6 +165,33 @@ describe('test ProductDAO', () => {
             return {} as any
         })
         await expect(productDAO.getProducts()).resolves.toEqual(products)
+        expect(mock_db_all).toHaveBeenCalledTimes(1)
+        expect(mock_db_all).toHaveBeenCalledWith(
+            expect.any(String),
+            [],
+            expect.any(Function)
+        )
+    })
+
+    test("getProducts error", async () => {
+        const mock_db_all = jest.spyOn(db, 'all').mockImplementation((sql, params, callback) => {
+            callback(new Error())
+            return {} as any
+        })
+        await expect(productDAO.getProducts()).rejects.toThrow()
+        expect(mock_db_all).toHaveBeenCalledTimes(1)
+        expect(mock_db_all).toHaveBeenCalledWith(
+            expect.any(String),
+            [],
+            expect.any(Function)
+        )
+    })
+
+    test("getProducts db error", async () => {
+        const mock_db_all = jest.spyOn(db, 'all').mockImplementation((sql, params, callback) => {
+            throw new Error()
+        })
+        await expect(productDAO.getProducts()).rejects.toThrow()
         expect(mock_db_all).toHaveBeenCalledTimes(1)
         expect(mock_db_all).toHaveBeenCalledWith(
             expect.any(String),
@@ -110,6 +218,33 @@ describe('test ProductDAO', () => {
         )
     })
 
+    test("getProductsByCategory error", async () => {
+        const mock_db_all = jest.spyOn(db, 'all').mockImplementation((sql, params, callback) => {
+            callback(new Error())
+            return {} as any
+        })
+        await expect(productDAO.getProductsByCategory(Category.APPLIANCE)).rejects.toThrow()
+        expect(mock_db_all).toHaveBeenCalledTimes(1)
+        expect(mock_db_all).toHaveBeenCalledWith(
+            expect.any(String),
+            [Category.APPLIANCE],
+            expect.any(Function)
+        )
+    })
+
+    test("getProductsByCategory db error", async () => {
+        const mock_db_all = jest.spyOn(db, 'all').mockImplementation((sql, params, callback) => {
+            throw new Error()
+        })
+        await expect(productDAO.getProductsByCategory(Category.APPLIANCE)).rejects.toThrow()
+        expect(mock_db_all).toHaveBeenCalledTimes(1)
+        expect(mock_db_all).toHaveBeenCalledWith(
+            expect.any(String),
+            [Category.APPLIANCE],
+            expect.any(Function)
+        )
+    })
+
     test('getAvailableProductsByCategory', async () => {
         const products = [
             { sellingPrice: 100, model: 'Model1', category: Category.APPLIANCE, arrivalDate: '2022-01-01', details: 'Details1', quantity: 10 },
@@ -122,6 +257,33 @@ describe('test ProductDAO', () => {
             return {} as any
         })
         expect(productDAO.getAvailableProductsByCategory(Category.APPLIANCE)).resolves.toEqual([products[0]])
+        expect(mock_db_all).toHaveBeenCalledTimes(1)
+        expect(mock_db_all).toHaveBeenCalledWith(
+            expect.any(String),
+            [Category.APPLIANCE],
+            expect.any(Function)
+        )
+    })
+
+    test("getAvailableProductsByCategory error", async () => {
+        const mock_db_all = jest.spyOn(db, 'all').mockImplementation((sql, params, callback) => {
+            callback(new Error())
+            return {} as any
+        })
+        await expect(productDAO.getAvailableProductsByCategory(Category.APPLIANCE)).rejects.toThrow()
+        expect(mock_db_all).toHaveBeenCalledTimes(1)
+        expect(mock_db_all).toHaveBeenCalledWith(
+            expect.any(String),
+            [Category.APPLIANCE],
+            expect.any(Function)
+        )
+    })
+
+    test("getAvailableProductsByCategory db error", async () => {
+        const mock_db_all = jest.spyOn(db, 'all').mockImplementation((sql, params, callback) => {
+            throw new Error()
+        })
+        await expect(productDAO.getAvailableProductsByCategory(Category.APPLIANCE)).rejects.toThrow()
         expect(mock_db_all).toHaveBeenCalledTimes(1)
         expect(mock_db_all).toHaveBeenCalledWith(
             expect.any(String),
@@ -159,6 +321,33 @@ describe('test ProductDAO', () => {
         )
     })
 
+    test("getProductAvailable error", async () => {
+        const mock_db_get = jest.spyOn(db, 'get').mockImplementation((sql, params, callback) => {
+            callback(new Error())
+            return {} as any
+        })
+        await expect(productDAO.getProductAvailable('Model1')).rejects.toThrow()
+        expect(mock_db_get).toHaveBeenCalledTimes(1)
+        expect(mock_db_get).toHaveBeenCalledWith(
+            expect.any(String),
+            ['Model1'],
+            expect.any(Function)
+        )
+    })
+
+    test("getProductAvailable db error", async () => {
+        const mock_db_get = jest.spyOn(db, 'get').mockImplementation((sql, params, callback) => {
+            throw new Error()
+        })
+        await expect(productDAO.getProductAvailable('Model1')).rejects.toThrow()
+        expect(mock_db_get).toHaveBeenCalledTimes(1)
+        expect(mock_db_get).toHaveBeenCalledWith(
+            expect.any(String),
+            ['Model1'],
+            expect.any(Function)
+        )
+    })
+
     test('getAvailableProducts', async () => {
         const products = [
             { sellingPrice: 100, model: 'Model1', category: Category.APPLIANCE, arrivalDate: '2022-01-01', details: 'Details1', quantity: 10 },
@@ -169,6 +358,33 @@ describe('test ProductDAO', () => {
             return {} as any
         })
         await expect(productDAO.getAvailableProducts()).resolves.toEqual(products)
+        expect(mock_db_all).toHaveBeenCalledTimes(1)
+        expect(mock_db_all).toHaveBeenCalledWith(
+            expect.any(String),
+            [],
+            expect.any(Function)
+        )
+    })
+
+    test("getAvailableProducts error", async () => {
+        const mock_db_all = jest.spyOn(db, 'all').mockImplementation((sql, params, callback) => {
+            callback(new Error())
+            return {} as any
+        })
+        await expect(productDAO.getAvailableProducts()).rejects.toThrow()
+        expect(mock_db_all).toHaveBeenCalledTimes(1)
+        expect(mock_db_all).toHaveBeenCalledWith(
+            expect.any(String),
+            [],
+            expect.any(Function)
+        )
+    })
+
+    test("getAvailableProducts db error", async () => {
+        const mock_db_all = jest.spyOn(db, 'all').mockImplementation((sql, params, callback) => {
+            throw new Error()
+        })
+        await expect(productDAO.getAvailableProducts()).rejects.toThrow()
         expect(mock_db_all).toHaveBeenCalledTimes(1)
         expect(mock_db_all).toHaveBeenCalledWith(
             expect.any(String),
@@ -191,12 +407,66 @@ describe('test ProductDAO', () => {
         )
     })
 
+    test("deleteAllProducts error", async () => {
+        const mock_db_run = jest.spyOn(db, 'run').mockImplementation((sql, params, callback) => {
+            callback(new Error())
+            return {} as any
+        })
+        await expect(productDAO.deleteAllProducts()).rejects.toThrow()
+        expect(mock_db_run).toHaveBeenCalledTimes(1)
+        expect(mock_db_run).toHaveBeenCalledWith(
+            expect.any(String),
+            [],
+            expect.any(Function)
+        )
+    })
+
+    test("deleteAllProducts db error", async () => {
+        const mock_db_run = jest.spyOn(db, 'run').mockImplementation((sql, params, callback) => {
+            throw new Error()
+        })
+        await expect(productDAO.deleteAllProducts()).rejects.toThrow()
+        expect(mock_db_run).toHaveBeenCalledTimes(1)
+        expect(mock_db_run).toHaveBeenCalledWith(
+            expect.any(String),
+            [],
+            expect.any(Function)
+        )
+    })
+
     test('deleteProduct', async () => {
         const mock_db_run = jest.spyOn(db, 'run').mockImplementation((sql, params, callback) => {
             callback(null)
             return {} as any
         })
         await expect(productDAO.deleteProduct('Model1')).resolves.toBe(true)
+        expect(mock_db_run).toHaveBeenCalledTimes(1)
+        expect(mock_db_run).toHaveBeenCalledWith(
+            expect.any(String),
+            ['Model1'],
+            expect.any(Function)
+        )
+    })
+
+    test("deleteProduct error", async () => {
+        const mock_db_run = jest.spyOn(db, 'run').mockImplementation((sql, params, callback) => {
+            callback(new Error())
+            return {} as any
+        })
+        await expect(productDAO.deleteProduct('Model1')).rejects.toThrow()
+        expect(mock_db_run).toHaveBeenCalledTimes(1)
+        expect(mock_db_run).toHaveBeenCalledWith(
+            expect.any(String),
+            ['Model1'],
+            expect.any(Function)
+        )
+    })
+
+    test("deleteProduct db error", async () => {
+        const mock_db_run = jest.spyOn(db, 'run').mockImplementation((sql, params, callback) => {
+            throw new Error()
+        })
+        await expect(productDAO.deleteProduct('Model1')).rejects.toThrow()
         expect(mock_db_run).toHaveBeenCalledTimes(1)
         expect(mock_db_run).toHaveBeenCalledWith(
             expect.any(String),
