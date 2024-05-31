@@ -1,8 +1,9 @@
 import { User } from '../components/user';
-import { ProductReview } from '../components/review'; 
+import { ProductReview } from '../components/review';
 import { ExistingReviewError } from '../errors/reviewError';
 import { ProductNotFoundError } from '../errors/productError';
 import db from "../db/db"
+
 /**
  * A class that implements the interaction with the database for all review-related operations.
  * You are free to implement any method you need here, as long as the requirements are satisfied.
@@ -33,7 +34,7 @@ class ReviewDAO {
     }
     addReview(model: string, user: User, score: number, date: string, comment: string): Promise<void> {
         return new Promise((resolve, reject) => {
-            db.run('INSERT INTO review (model, user, score, date, comment) VALUES (?, ?, ?, ?, ?)', [model, user.username, score, date,  comment], (err) => {
+            db.run('INSERT INTO review (model, user, score, date, comment) VALUES (?, ?, ?, ?, ?)', [model, user.username, score, date, comment], (err) => {
                 if (err) {
                     reject(err);
                 } else {
