@@ -6,8 +6,7 @@ import { app } from "../../index"
 import UserDAO from "../../src/dao/userDAO"
 import { User, Role } from "../../src/components/user"
 import { Product, Category } from "../../src/components/product"
-import { cleanup } from "../../src/db/cleanup"
-import { login, logout, dbGet, dbRun, dbAll } from "../utilities"
+import { login, logout, dbGet, dbRun, dbAll, cleanup } from "../utilities"
 
 
 const baseURL = "/ezelectronics"
@@ -32,7 +31,7 @@ async function cleanDB() {
 }
 
 beforeAll(async () => {
-    cleanup()
+    await cleanup()
     const userDAO = new UserDAO()
     await userDAO.createUser(manager.username, manager.name, manager.surname, "password", manager.role)
     await userDAO.createUser(customer.username, customer.name, customer.surname, "password", customer.role)
@@ -47,7 +46,7 @@ beforeAll(async () => {
 })
 
 afterAll(async () => {
-    cleanup()
+    await cleanup()
 })
 
 afterEach(async () => {

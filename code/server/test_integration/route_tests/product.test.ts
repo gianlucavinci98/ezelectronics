@@ -4,8 +4,7 @@ import { app } from "../../index"
 import UserDAO from "../../src/dao/userDAO"
 import { User, Role } from "../../src/components/user"
 import { Product, Category } from "../../src/components/product"
-import { cleanup } from "../../src/db/cleanup"
-import { login, logout, dbGet, dbRun } from "../utilities"
+import { login, logout, dbGet, dbRun, cleanup } from "../utilities"
 import TestAgent from "supertest/lib/agent"
 
 const baseURL = "/ezelectronics"
@@ -22,9 +21,8 @@ async function cleanProducts() {
     await dbRun("DELETE FROM product", [])
 }
 
-
 beforeAll(async () => {
-    cleanup()
+    await cleanup()
     const userDAO = new UserDAO()
     await userDAO.createUser(manager.username, manager.name, manager.surname, "password", manager.role)
     await userDAO.createUser(customer.username, customer.name, customer.surname, "password", customer.role)
@@ -32,7 +30,7 @@ beforeAll(async () => {
 })
 
 afterAll(async () => {
-    cleanup()
+    await cleanup()
 })
 
 afterEach(async () => {

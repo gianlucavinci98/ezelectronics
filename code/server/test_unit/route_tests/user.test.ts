@@ -1,7 +1,7 @@
 import { test, describe, expect, jest, beforeEach } from "@jest/globals"
 import request from 'supertest'
 import { app } from "../../index"
-import { mockAdmin, mockIsLoggedIn } from "../utilities"
+import { User } from "../../src/components/user"
 
 import UserController from "../../src/controllers/userController"
 import { Role } from "../../src/components/user"
@@ -12,16 +12,25 @@ const usersBaseURL = baseURL + "/users"
 jest.mock("../../src/controllers/userController")
 jest.mock("../../src/routers/auth")
 
-//Example of a unit test for the POST ezelectronics/users route
-//The test checks if the route returns a 200 success code
-//The test also expects the createUser method of the controller to be called once with the correct parameters
+function mockIsLoggedIn(user: User | null = null) {
+    jest.spyOn(Authenticator.prototype, 'isLoggedIn').mockImplementation((req, res, next) => {
+        req.user = user || {}
+        next()
+    })
+}
 
-
+function mockAdmin(user: User | null = null) {
+    mockIsLoggedIn(user)
+    jest.spyOn(Authenticator.prototype, 'isAdmin').mockImplementation((req, res, next) => next())
+}
 
 beforeEach(() => {
     jest.restoreAllMocks()
 })
 
+//Example of a unit test for the POST ezelectronics/users route
+//The test checks if the route returns a 200 success code
+//The test also expects the createUser method of the controller to be called once with the correct parameters
 test("POST / shoud return the user", async () => {
     const testUser = { //Define a test user object sent to the route
         username: "test",
