@@ -1,6 +1,6 @@
 import express, { Router } from "express"
 import ErrorHandler from "../helper"
-import { body, param, query } from "express-validator"
+import { body, param } from "express-validator"
 import ReviewController from "../controllers/reviewController"
 import Authenticator from "./auth"
 import { ProductReview } from "../components/review"
