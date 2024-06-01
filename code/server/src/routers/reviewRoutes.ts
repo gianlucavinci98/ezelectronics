@@ -62,7 +62,7 @@ class ReviewRoutes {
             param("model").isString().notEmpty(),
             this.errorHandler.validateRequest,
             (req: any, res: any, next: any) => this.controller.getProductReviews(req.params.model)
-                .then((reviews: any/*ProductReview[]*/) => res.status(200).json(reviews))
+                .then((reviews: ProductReview[]) => res.status(200).json(reviews))
                 .catch((err: Error) => next(err))
         )
 
