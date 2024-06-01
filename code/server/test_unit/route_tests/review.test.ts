@@ -213,4 +213,13 @@ describe("DELETE /reviews", () => {
 
         expect(mock_deleteAllReviews).toHaveBeenCalledTimes(1)
     })
+
+    test("error", async () => {
+        const mock_deleteAllReviews = jest.spyOn(ReviewController.prototype, "deleteAllReviews").mockRejectedValueOnce(new Error)
+
+        const response = await agent.delete(baseURL)
+        expect(response.status).toBe(503)
+
+        expect(mock_deleteAllReviews).toHaveBeenCalledTimes(1)
+    })
 })
