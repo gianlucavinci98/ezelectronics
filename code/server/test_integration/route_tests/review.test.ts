@@ -1,4 +1,4 @@
-import { test, describe, expect, jest, beforeAll, beforeEach, afterEach, afterAll } from "@jest/globals"
+import { test, describe, expect, beforeAll, beforeEach, afterEach, afterAll } from "@jest/globals"
 import TestAgent from "supertest/lib/agent"
 import { Category, Product } from "../../src/components/product"
 import { Role, User } from "../../src/components/user"
