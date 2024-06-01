@@ -4,7 +4,7 @@ import { app } from "../../index"
 import { Role, User } from "../../src/components/user"
 import db from "../../src/db/db"
 import UserDAO from "../../src/dao/userDAO"
-import { login, cleanup } from "../utilities"
+import { login, cleanup, logout } from "../utilities"
 import TestAgent from "supertest/lib/agent"
 
 const baseURL = "/ezelectronics"
@@ -31,6 +31,7 @@ beforeEach(async () => {
 })
 
 afterEach(async () => {
+    await logout(agent);
     await cleanup()
 })
 
