@@ -92,6 +92,30 @@ describe("POST /reviews/:model", () => {
         const response = await agent.post(reviewsBaseURL + "/" + products[0].model).send({ score: 5, comment: "comment" })
         expect(response.status).toBe(409)
     })
+
+    test("should return 422 if the score is not a number", async () => {
+        await login(customer.username, "password", agent)
+        const response = await agent.post(reviewsBaseURL + "/" + products[0].model).send({ score: "five", comment: "comment" })
+        expect(response.status).toBe(422)
+    })
+
+    test("should return 422 if the score is not an integer", async () => {
+        await login(customer.username, "password", agent)
+        const response = await agent.post(reviewsBaseURL + "/" + products[0].model).send({ score: 5.5, comment: "comment" })
+        expect(response.status).toBe(422)
+    })
+
+    test("should return 422 if the score is less than 1", async () => {
+        await login(customer.username, "password", agent)
+        const response = await agent.post(reviewsBaseURL + "/" + products[0].model).send({ score: 0, comment: "comment" })
+        expect(response.status).toBe(422)
+    })
+
+    test("should return 422 if the score is greater than 5", async () => {
+        await login(customer.username, "password", agent)
+        const response = await agent.post(reviewsBaseURL + "/" + products[0].model).send({ score: 6, comment: "comment" })
+        expect(response.status).toBe(422)
+    })
 })
 
 describe("GET /reviews/:model", () => {
