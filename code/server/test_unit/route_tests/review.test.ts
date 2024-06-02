@@ -125,6 +125,109 @@ describe("POST /reviews/:model", () => {
             data.comment
         )
     })
+
+    test("empty comment error", async () => {
+        const data = {
+            score: 5,
+            comment: ""
+        }
+        const mock_addReview = jest.spyOn(ReviewController.prototype, "addReview").mockResolvedValueOnce()
+
+        const response = await agent.post(baseURL + "/model").send(data)
+        expect(response.status).toBe(422)
+
+        expect(mock_addReview).toHaveBeenCalledTimes(0)
+    })
+
+    test("negative score error", async () => {
+        const data = {
+            score: -1,
+            comment: "Great product"
+        }
+        const mock_addReview = jest.spyOn(ReviewController.prototype, "addReview").mockResolvedValueOnce()
+
+        const response = await agent.post(baseURL + "/model").send(data)
+        expect(response.status).toBe(422)
+
+        expect(mock_addReview).toHaveBeenCalledTimes(0)
+    })
+
+    test("score greater than 5 error", async () => {
+        const data = {
+            score: 6,
+            comment: "Great product"
+        }
+        const mock_addReview = jest.spyOn(ReviewController.prototype, "addReview").mockResolvedValueOnce()
+
+        const response = await agent.post(baseURL + "/model").send(data)
+        expect(response.status).toBe(422)
+
+        expect(mock_addReview).toHaveBeenCalledTimes(0)
+    })
+
+    test("score not an integer error", async () => {
+        const data = {
+            score: 2.5,
+            comment: "Great product"
+        }
+        const mock_addReview = jest.spyOn(ReviewController.prototype, "addReview").mockResolvedValueOnce()
+
+        const response = await agent.post(baseURL + "/model").send(data)
+        expect(response.status).toBe(422)
+
+        expect(mock_addReview).toHaveBeenCalledTimes(0)
+    })
+
+    test("zero score error", async () => {
+        const data = {
+            score: 0,
+            comment: "Great product"
+        }
+        const mock_addReview = jest.spyOn(ReviewController.prototype, "addReview").mockResolvedValueOnce()
+
+        const response = await agent.post(baseURL + "/model").send(data)
+        expect(response.status).toBe(422)
+
+        expect(mock_addReview).toHaveBeenCalledTimes(0)
+    })
+
+    test("boundary: score 1", async () => {
+        const data = {
+            score: 1,
+            comment: "Great product"
+        }
+        const mock_addReview = jest.spyOn(ReviewController.prototype, "addReview").mockResolvedValueOnce()
+
+        const response = await agent.post(baseURL + "/model").send(data)
+        expect(response.status).toBe(200)
+
+        expect(mock_addReview).toHaveBeenCalledTimes(1)
+        expect(mock_addReview).toHaveBeenCalledWith(
+            "model",
+            testUser,
+            data.score,
+            data.comment
+        )
+    })
+
+    test("boundary: score 5", async () => {
+        const data = {
+            score: 5,
+            comment: "Great product"
+        }
+        const mock_addReview = jest.spyOn(ReviewController.prototype, "addReview").mockResolvedValueOnce()
+
+        const response = await agent.post(baseURL + "/model").send(data)
+        expect(response.status).toBe(200)
+
+        expect(mock_addReview).toHaveBeenCalledTimes(1)
+        expect(mock_addReview).toHaveBeenCalledWith(
+            "model",
+            testUser,
+            data.score,
+            data.comment
+        )
+    })
 })
 
 describe("GET /reviews/:model", () => {
