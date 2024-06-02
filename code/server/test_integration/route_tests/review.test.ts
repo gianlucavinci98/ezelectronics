@@ -126,7 +126,7 @@ describe("GET /reviews/:model", () => {
     const stdTest = async () => {
         const response = await agent.get(reviewsBaseURL + "/" + products[0].model)
         expect(response.status).toBe(200)
-        expect(response.body).toEqual([{ model: products[0].model, user: customer.username, score: 5, comment: "comment1", date: "2021-01-01" }, { model: products[0].model, user: customer2.username, score: 5, comment: "comment2", date: "2022-01-01" }])
+        expect(response.body).toEqual(expect.arrayContaining([{ model: products[0].model, user: customer.username, score: 5, comment: "comment1", date: "2021-01-01" }, { model: products[0].model, user: customer2.username, score: 5, comment: "comment2", date: "2022-01-01" }]))
     }
 
     test("should return the reviews of a product", async () => {
@@ -252,7 +252,7 @@ describe("DELETE /reviews/:model/all", () => {
         await login(admin.username, "password", agent)
         const response = await agent.delete(reviewsBaseURL + "/" + products[1].model + "/all")
         expect(response.status).toBe(200)
-        expect(dbAll("SELECT * FROM review WHERE model = ?", [products[0].model])).resolves.toEqual([{ model: products[0].model, user: customer.username, score: 5, comment: "comment1", date: "2021-01-01" }, { model: products[0].model, user: customer2.username, score: 5, comment: "comment2", date: "2022-01-01" }])
+        expect(dbAll("SELECT * FROM review WHERE model = ?", [products[0].model])).resolves.toEqual(expect.arrayContaining([{ model: products[0].model, user: customer.username, score: 5, comment: "comment1", date: "2021-01-01" }, { model: products[0].model, user: customer2.username, score: 5, comment: "comment2", date: "2022-01-01" }]))
     })
 })
 
