@@ -151,8 +151,6 @@ class CartController {
             cart.total -= productInCart.price
             await this.dao.updateCartTotal(cart.id, cart.total)
 
-            await this.productDAO.changeProductQuantity(product, 1);
-
             return true
         }
         catch (error) {
