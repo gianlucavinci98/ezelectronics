@@ -103,6 +103,8 @@ class CartController {
             if (product.quantity > qta) {
                 return false;
             }
+        }
+        for (let product of cart.products) {
             await this.productDAO.changeProductQuantity(product.model, -product.quantity);
         }
 
