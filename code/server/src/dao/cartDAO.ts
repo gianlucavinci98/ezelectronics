@@ -16,7 +16,6 @@ class CartDAO {
         return new Promise<Cart>((resolve, reject) => {
             try {
                 let productsInCart: ProductInCart[] = []
-                // the valid cart is the one with latest id and that is the only one not paid
                 const sql = "SELECT * FROM cart WHERE customer = ? AND paid = FALSE ORDER BY id DESC LIMIT 1"
                 db.get(sql, [user.username], async (err: Error | null, row: any) => {
                     if (err) reject(err)

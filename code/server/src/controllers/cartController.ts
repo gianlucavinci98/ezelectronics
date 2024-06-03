@@ -1,8 +1,8 @@
 import { User } from "../components/user";
 import CartDAO from "../dao/cartDAO";
 import ProductDAO from "../dao/productDAO";
-import { Cart, ProductInCart } from "../components/cart"; // Import the Cart type from the appropriate file
-import { ProductNotAvailableError, CartNotFoundError, EmptyCartError, ProductNotInCartError } from "../errors/cartError"; // Import the ProductNotAvailableError class from the appropriate file
+import { Cart, ProductInCart } from "../components/cart";
+import { ProductNotAvailableError, CartNotFoundError, EmptyCartError, ProductNotInCartError } from "../errors/cartError";
 import { ProductNotFoundError } from "../errors/productError";
 
 /**
@@ -36,7 +36,6 @@ class CartController {
             }
 
             const cart: Cart = await this.getCart(user);
-            console.log("cart prelevato:\n" + JSON.stringify(cart, null, 2))
 
             let productInCart: ProductInCart = cart.products.find(p => p.model === product)
             if (productInCart) {
@@ -52,7 +51,6 @@ class CartController {
                 }
                 else {
                     cart.id = await this.dao.createCart(cart)
-                    console.log("Ho creato un carrello: " + JSON.stringify(cart, null, 2))
                     result = await this.dao.insertProductInCart(cart.id, productInCart)
                 }
             }
@@ -63,14 +61,6 @@ class CartController {
             return result
         }
         catch (error) {
-            if (error instanceof ProductNotAvailableError) {
-                console.log(error.customMessage)
-                throw error as ProductNotAvailableError
-            }
-            if (error instanceof ProductNotFoundError) {
-                console.log(error.customMessage)
-                throw error as ProductNotFoundError
-            }
             throw error
         }
     }
@@ -149,7 +139,6 @@ class CartController {
 
             if (productInCart.quantity > 1) {
                 productInCart.quantity--
-                console.log("Decremento la quantità del prodotto: " + productInCart.model)
                 await this.dao.incrementProductInCart(cart.id, product, -1)
             }
             else {
