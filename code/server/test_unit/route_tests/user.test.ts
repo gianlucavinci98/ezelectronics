@@ -214,6 +214,29 @@ describe("test user routes", () => {
         )
     })
 
+    test("PATCH /:username should return error if date in the future", async () => {
+        const username = "uid"
+        const testUserUpdated = { //Define a test user object sent to the route
+            username: username,
+            name: "test",
+            surname: "test",
+            address: "test",
+            birthdate: "3000-01-01",
+            role: Role.MANAGER
+        }
+        const testUserLogged = { //Define a test user object
+            username: username,
+            name: "test",
+            surname: "test",
+            address: "updated",
+            birthdate: "2000-01-01",
+            role: Role.MANAGER
+        }
+        mockIsLoggedIn(testUserLogged)
+        const response = await request(app).patch(usersBaseURL + "/" + username).send(testUserUpdated) //Send a PATCH request to the route
+        expect(response.status).toBe(400) //Check if the response status is 400
+    })
+
     test("PATCH /:username propagates error from controller", async () => {
         const username = "uid"
         const testUserUpdated = { //Define a test user object sent to the route
