@@ -5,6 +5,7 @@ import crypto from "crypto"
 import db from "../../src/db/db"
 import { Database } from "sqlite3"
 import { Role, User } from "../../src/components/user"
+import { UserAlreadyExistsError, UserNotFoundError } from "../../src/errors/userError"
 
 jest.mock("crypto")
 jest.mock("../../src/db/db.ts")
@@ -167,6 +168,16 @@ test("createUser propagates db error", async () => {
     mockDBRun.mockRestore()
 })
 
+test("createUser rejects when user already exists", async () => {
+    const userDAO = new UserDAO()
+    const mockDBRun = jest.spyOn(db, "run").mockImplementation((sql, params, callback) => {
+        callback(new Error("UNIQUE constraint failed: users.username"))
+        return {} as Database
+    });
+    await expect(userDAO.createUser("username", "name", "surname", "password", "role")).rejects.toThrow(UserAlreadyExistsError)
+    mockDBRun.mockRestore()
+})
+
 test("getUserByUsername propagates db error", async () => {
     const userDAO = new UserDAO()
     const mockDBGet = jest.spyOn(db, "get").mockImplementation((sql, params, callback) => {
@@ -186,6 +197,16 @@ test("getUserByUsername rejects when error in callback", async () => {
     mockDBGet.mockRestore()
 })
 
+test("getUserByUsername rejects when user not found", async () => {
+    const userDAO = new UserDAO()
+    const mockDBGet = jest.spyOn(db, "get").mockImplementation((sql, params, callback) => {
+        callback(null, undefined)
+        return {} as Database
+    });
+    await expect(userDAO.getUserByUsername("username")).rejects.toThrow(UserNotFoundError)
+    mockDBGet.mockRestore()
+})
+
 test("getUsers propagates db error", async () => {
     const userDAO = new UserDAO()
     const mockDBAll = jest.spyOn(db, "all").mockImplementation((sql, params, callback) => {
@@ -202,6 +223,20 @@ test("getUsers rejects when error in callback", async () => {
         return {} as Database
     });
     await expect(userDAO.getUsers()).rejects.toThrow(new Error())
+    mockDBAll.mockRestore()
+})
+
+test("getUsers filters by role", async () => {
+    const userDAO = new UserDAO()
+    const mockDBAll = jest.spyOn(db, "all").mockImplementation((sql, params, callback) => {
+        callback(null, [])
+        return {} as Database
+    });
+    const result = await userDAO.getUsers(Role.MANAGER)
+    expect(result).toEqual([])
+
+    expect(mockDBAll).toBeCalledWith("SELECT * FROM users WHERE role = ?", [Role.MANAGER], expect.any(Function))
+
     mockDBAll.mockRestore()
 })
 
