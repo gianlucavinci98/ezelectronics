@@ -3,7 +3,7 @@ CREATE TABLE review (
     model TEXT NOT NULL,
     user TEXT NOT NULL,
     score INT NOT NULL CHECK (
-        score >= 0
+        score >= 1
         AND score <= 5
     ),
     date DATE NOT NULL,
