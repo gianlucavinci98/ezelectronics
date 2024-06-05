@@ -4,7 +4,7 @@ import { body, param } from "express-validator"
 import { Role, User } from "../components/user"
 import ErrorHandler from "../helper"
 import UserController from "../controllers/userController"
-import { EzError } from "../errors/genericError"
+import { DateError } from "../utilities"
 
 /**
  * Represents a class that defines the routes for handling users.
@@ -166,7 +166,7 @@ class UserRoutes {
             body("address").isString().isLength({ min: 1 }),
             body("birthdate").notEmpty().isDate({ format: "YYYY-MM-DD" }),
             this.errorHandler.validateRequest,
-            (req: any, res: any, next: any) => (new Date(req.body.birthdate) > new Date()) ? ErrorHandler.returnError(res, new EzError(400, "Birthday is after current date")) : next(),
+            (req: any, res: any, next: any) => (new Date(req.body.birthdate) > new Date()) ? ErrorHandler.returnError(res, new DateError()) : next(),
             (req: any, res: any, next: any) => this.controller.updateUserInfo(req.user, req.body.name, req.body.surname, req.body.address, req.body.birthdate, req.params.username)
                 .then((user: User) => res.status(200).json(user))
                 .catch((err: any) => next(err))

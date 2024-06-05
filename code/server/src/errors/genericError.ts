@@ -1,5 +1,3 @@
-const BAD_REQUEST = 'Bad Request'
-
 class EzError extends Error {
     customMessage: string
     customCode: number
