@@ -2,8 +2,8 @@ import { User } from "../components/user";
 import CartDAO from "../dao/cartDAO";
 import ProductDAO from "../dao/productDAO";
 import { Cart, ProductInCart } from "../components/cart";
-import { ProductNotAvailableError, CartNotFoundError, EmptyCartError, ProductNotInCartError } from "../errors/cartError";
-import { ProductNotFoundError } from "../errors/productError";
+import { CartNotFoundError, EmptyCartError, ProductNotInCartError } from "../errors/cartError"
+import { EmptyProductStockError, LowProductStockError } from "../errors/productError"
 
 /**
  * Represents a controller for managing shopping carts.
@@ -27,42 +27,37 @@ class CartController {
      * @returns A Promise that resolves to `true` if the product was successfully added.
      */
     async addToCart(user: User, product: string): Promise<Boolean> {
-        try {
-            let result: Boolean = false
+        let result: Boolean = false
 
-            const productInDB = await this.productDAO.getProduct(product)
-            if (productInDB.quantity === 0) {
-                throw new ProductNotAvailableError()
-            }
+        const productInDB = await this.productDAO.getProduct(product)
+        if (productInDB.quantity === 0) {
+            throw new EmptyProductStockError()
+        }
 
-            const cart: Cart = await this.getCart(user);
+        const cart: Cart = await this.getCart(user);
 
-            let productInCart: ProductInCart = cart.products.find(p => p.model === product)
-            if (productInCart) {
-                productInCart.quantity++
-                result = await this.dao.incrementProductInCart(cart.id, productInCart.model, 1)
+        let productInCart: ProductInCart = cart.products.find(p => p.model === product)
+        if (productInCart) {
+            productInCart.quantity++
+            result = await this.dao.incrementProductInCart(cart.id, productInCart.model, 1)
+        }
+        else {
+            productInCart = new ProductInCart(productInDB.model, 1, productInDB.category, productInDB.sellingPrice)
+            cart.products.push(productInCart)
+
+            if (cart.id) {
+                result = await this.dao.insertProductInCart(cart.id, productInCart)
             }
             else {
-                productInCart = new ProductInCart(productInDB.model, 1, productInDB.category, productInDB.sellingPrice)
-                cart.products.push(productInCart)
-
-                if (cart.id) {
-                    result = await this.dao.insertProductInCart(cart.id, productInCart)
-                }
-                else {
-                    cart.id = await this.dao.createCart(cart)
-                    result = await this.dao.insertProductInCart(cart.id, productInCart)
-                }
+                cart.id = await this.dao.createCart(cart)
+                result = await this.dao.insertProductInCart(cart.id, productInCart)
             }
-
-            cart.total += productInDB.sellingPrice
-            await this.dao.updateCartTotal(cart.id, cart.total)
-
-            return result
         }
-        catch (error) {
-            throw error
-        }
+
+        cart.total += productInDB.sellingPrice
+        await this.dao.updateCartTotal(cart.id, cart.total)
+
+        return result
     }
 
 
@@ -82,19 +77,18 @@ class CartController {
      * 
      */
     async checkoutCart(user: User): Promise<Boolean> {
-        try {
-            const cart: Cart = await this.getCart(user)
-            if (!cart.id) throw new CartNotFoundError()
-            if (cart.products.length === 0) throw new EmptyCartError()
-            let flag = await this.checkProductAvailabilityOfCart(cart)
-            if (!flag) throw new ProductNotAvailableError()
+        const cart: Cart = await this.getCart(user)
+        if (!cart.id) throw new CartNotFoundError()
+        if (cart.products.length === 0) throw new EmptyCartError()
+        let flag = await this.checkProductAvailabilityOfCart(cart)
+        if (!flag) throw new LowProductStockError()
 
-            await this.dao.checkoutCart(cart)
-            return true
+        for (let product of cart.products) {
+            await this.productDAO.changeProductQuantity(product.model, -product.quantity)
         }
-        catch (error) {
-            throw error
-        }
+
+        await this.dao.checkoutCart(cart)
+        return true
     }
 
     async checkProductAvailabilityOfCart(cart: Cart): Promise<boolean> {
@@ -104,10 +98,6 @@ class CartController {
                 return false;
             }
         }
-        for (let product of cart.products) {
-            await this.productDAO.changeProductQuantity(product.model, -product.quantity);
-        }
-
         return true;
     }
 
@@ -128,34 +118,29 @@ class CartController {
      * @returns A Promise that resolves to `true` if the product was successfully removed.
      */
     async removeProductFromCart(user: User, product: string): Promise<Boolean> {
-        try {
-            const productInDB = await this.productDAO.getProduct(product)
+        const productInDB = await this.productDAO.getProduct(product)
 
-            const cart: Cart = await this.getCart(user)
-            if (!cart.id) throw new CartNotFoundError()
-            if (cart.products.length === 0) throw new CartNotFoundError()
+        const cart: Cart = await this.getCart(user)
+        if (!cart.id) throw new CartNotFoundError()
+        if (cart.products.length === 0) throw new CartNotFoundError()
 
 
-            let productInCart: ProductInCart = cart.products.find(p => p.model === product)
-            if (!productInCart) throw new ProductNotInCartError()
+        let productInCart: ProductInCart = cart.products.find(p => p.model === product)
+        if (!productInCart) throw new ProductNotInCartError()
 
-            if (productInCart.quantity > 1) {
-                productInCart.quantity--
-                await this.dao.incrementProductInCart(cart.id, product, -1)
-            }
-            else {
-                cart.products = cart.products.filter(p => p.model !== product)
-                await this.dao.deleteProductFromCart(cart.id, product)
-            }
-
-            cart.total -= productInCart.price
-            await this.dao.updateCartTotal(cart.id, cart.total)
-
-            return true
+        if (productInCart.quantity > 1) {
+            productInCart.quantity--
+            await this.dao.incrementProductInCart(cart.id, product, -1)
         }
-        catch (error) {
-            throw error
+        else {
+            cart.products = cart.products.filter(p => p.model !== product)
+            await this.dao.deleteProductFromCart(cart.id, product)
         }
+
+        cart.total -= productInCart.price
+        await this.dao.updateCartTotal(cart.id, cart.total)
+
+        return true
     }
 
 
@@ -165,18 +150,13 @@ class CartController {
      * @returns A Promise that resolves to `true` if the cart was successfully cleared.
      */
     async clearCart(user: User): Promise<Boolean> {
-        try {
-            const cart: Cart = await this.getCart(user)
-            if (!cart.id) throw new CartNotFoundError()
-            if (cart.products.length === 0) throw new EmptyCartError()
+        const cart: Cart = await this.getCart(user)
+        if (!cart.id) throw new CartNotFoundError()
+        if (cart.products.length === 0) throw new EmptyCartError()
 
-            cart.total = 0
-            await this.dao.clearCart(cart.id)
-            return true
-        }
-        catch (error) {
-            throw error
-        }
+        cart.total = 0
+        await this.dao.clearCart(cart.id)
+        return true
     }
 
     /**

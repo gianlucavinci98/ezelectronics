@@ -117,4 +117,147 @@ test("It should resolve", async () => {
     mockDBRun.mockRestore()
 })
 
+test("getIsUserAuthenticated resolves false with missing user", async () => {
+    const userDAO = new UserDAO()
+    const mockDBGet = jest.spyOn(db, "get").mockImplementation((sql, params, callback) => {
+        callback(null, undefined)
+        return {} as Database
+    });
+    const result = await userDAO.getIsUserAuthenticated("username", "password")
+    expect(result).toBe(false)
+    mockDBGet.mockRestore()
+})
 
+test("getIsUserAuthenticated propagates db error", async () => {
+    const userDAO = new UserDAO()
+    const mockDBGet = jest.spyOn(db, "get").mockImplementation((sql, params, callback) => {
+        throw new Error()
+    });
+    await expect(userDAO.getIsUserAuthenticated("username", "password")).rejects.toThrow(new Error())
+    mockDBGet.mockRestore()
+})
+
+test("getIsUserAuthenticated rejects when error in callback", async () => {
+    const userDAO = new UserDAO()
+    const mockDBGet = jest.spyOn(db, "get").mockImplementation((sql, params, callback) => {
+        callback(new Error())
+        return {} as Database
+    });
+    await expect(userDAO.getIsUserAuthenticated("username", "password")).rejects.toThrow(new Error())
+    mockDBGet.mockRestore()
+})
+
+test("getIsUserAuthenticated resolves false with wrong password", async () => {
+    const userDAO = new UserDAO()
+    const mockDBGet = jest.spyOn(db, "get").mockImplementation((sql, params, callback) => {
+        callback(null, { username: "username", name: "name", surname: "surname", role: Role.CUSTOMER, password: "password", salt: "salt", address: "", birthdate: "" })
+        return {} as Database
+    });
+    const result = await userDAO.getIsUserAuthenticated("username", "wrongPassword")
+    expect(result).toBe(false)
+    mockDBGet.mockRestore()
+})
+
+test("createUser propagates db error", async () => {
+    const userDAO = new UserDAO()
+    const mockDBRun = jest.spyOn(db, "run").mockImplementation((sql, params, callback) => {
+        throw new Error()
+    });
+    await expect(userDAO.createUser("username", "name", "surname", "password", "role")).rejects.toThrow(new Error())
+    mockDBRun.mockRestore()
+})
+
+test("getUserByUsername propagates db error", async () => {
+    const userDAO = new UserDAO()
+    const mockDBGet = jest.spyOn(db, "get").mockImplementation((sql, params, callback) => {
+        throw new Error()
+    });
+    await expect(userDAO.getUserByUsername("username")).rejects.toThrow(new Error())
+    mockDBGet.mockRestore()
+})
+
+test("getUserByUsername rejects when error in callback", async () => {
+    const userDAO = new UserDAO()
+    const mockDBGet = jest.spyOn(db, "get").mockImplementation((sql, params, callback) => {
+        callback(new Error())
+        return {} as Database
+    });
+    await expect(userDAO.getUserByUsername("username")).rejects.toThrow(new Error())
+    mockDBGet.mockRestore()
+})
+
+test("getUsers propagates db error", async () => {
+    const userDAO = new UserDAO()
+    const mockDBAll = jest.spyOn(db, "all").mockImplementation((sql, params, callback) => {
+        throw new Error()
+    });
+    await expect(userDAO.getUsers()).rejects.toThrow(new Error())
+    mockDBAll.mockRestore()
+})
+
+test("getUsers rejects when error in callback", async () => {
+    const userDAO = new UserDAO()
+    const mockDBAll = jest.spyOn(db, "all").mockImplementation((sql, params, callback) => {
+        callback(new Error())
+        return {} as Database
+    });
+    await expect(userDAO.getUsers()).rejects.toThrow(new Error())
+    mockDBAll.mockRestore()
+})
+
+test("deleteUser propagates db error", async () => {
+    const userDAO = new UserDAO()
+    const mockDBRun = jest.spyOn(db, "run").mockImplementation((sql, params, callback) => {
+        throw new Error()
+    });
+    await expect(userDAO.deleteUser("username")).rejects.toThrow(new Error())
+    mockDBRun.mockRestore()
+})
+
+test("deleteUser rejects when error in callback", async () => {
+    const userDAO = new UserDAO()
+    const mockDBRun = jest.spyOn(db, "run").mockImplementation((sql, params, callback) => {
+        callback(new Error())
+        return {} as Database
+    });
+    await expect(userDAO.deleteUser("username")).rejects.toThrow(new Error())
+    mockDBRun.mockRestore()
+})
+
+test("deleteAll propagates db error", async () => {
+    const userDAO = new UserDAO()
+    const mockDBRun = jest.spyOn(db, "run").mockImplementation((sql, params, callback) => {
+        throw new Error()
+    });
+    await expect(userDAO.deleteAll()).rejects.toThrow(new Error())
+    mockDBRun.mockRestore()
+})
+
+test("deleteAll rejects when error in callback", async () => {
+    const userDAO = new UserDAO()
+    const mockDBRun = jest.spyOn(db, "run").mockImplementation((sql, params, callback) => {
+        callback(new Error())
+        return {} as Database
+    });
+    await expect(userDAO.deleteAll()).rejects.toThrow(new Error())
+    mockDBRun.mockRestore()
+})
+
+test("updateUser propagates db error", async () => {
+    const userDAO = new UserDAO()
+    const mockDBRun = jest.spyOn(db, "run").mockImplementation((sql, params, callback) => {
+        throw new Error()
+    });
+    await expect(userDAO.updateUser("username", "name", "surname", "address", "birthdate")).rejects.toThrow(new Error())
+    mockDBRun.mockRestore()
+})
+
+test("updateUser rejects when error in callback", async () => {
+    const userDAO = new UserDAO()
+    const mockDBRun = jest.spyOn(db, "run").mockImplementation((sql, params, callback) => {
+        callback(new Error())
+        return {} as Database
+    });
+    await expect(userDAO.updateUser("username", "name", "surname", "address", "birthdate")).rejects.toThrow(new Error())
+    mockDBRun.mockRestore()
+})

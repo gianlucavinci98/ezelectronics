@@ -6,8 +6,8 @@ import { Cart, ProductInCart } from "../../src/components/cart"
 import CartDAO from "../../src/dao/cartDAO"
 import ProductDAO from "../../src/dao/productDAO"
 import CartController from "../../src/controllers/cartController"
-import { CartNotFoundError, EmptyCartError, ProductNotAvailableError, ProductNotInCartError } from "../../src/errors/cartError"
-import { ProductNotFoundError } from "../../src/errors/productError"
+import { CartNotFoundError, EmptyCartError, ProductNotInCartError } from "../../src/errors/cartError"
+import { EmptyProductStockError, LowProductStockError, ProductNotFoundError } from "../../src/errors/productError"
 
 jest.mock('../../src/dao/cartDAO')
 jest.mock('../../src/dao/productDAO')
@@ -128,7 +128,7 @@ describe('addToCart', () => {
         const mock_insertProductInCart = jest.spyOn(CartDAO.prototype, "insertProductInCart")
         const mock_updatecarttotal = jest.spyOn(CartDAO.prototype, "updateCartTotal")
 
-        await expect(controller.addToCart(user, model)).rejects.toThrow(new ProductNotAvailableError())
+        await expect(controller.addToCart(user, model)).rejects.toThrow(new EmptyProductStockError())
 
         expect(mock_getproduct).toHaveBeenCalledTimes(1)
         expect(mock_getproduct).toHaveBeenCalledWith(model)
@@ -244,7 +244,7 @@ describe('checkoutCart', () => {
 
         const mock_checkproductavailability = jest.spyOn(CartController.prototype, "checkProductAvailabilityOfCart").mockResolvedValueOnce(false)
 
-        await expect(controller.checkoutCart(user)).rejects.toThrow(new ProductNotAvailableError())
+        await expect(controller.checkoutCart(user)).rejects.toThrow(new LowProductStockError())
         expect(CartDAO.prototype.getCurrentCart).toHaveBeenCalledTimes(1)
         expect(CartDAO.prototype.getCurrentCart).toHaveBeenCalledWith(user)
         expect(mock_checkproductavailability).toHaveBeenCalledTimes(1)
