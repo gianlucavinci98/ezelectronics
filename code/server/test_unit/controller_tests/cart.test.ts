@@ -158,6 +158,26 @@ describe('addToCart', () => {
         expect(mock_insertProductInCart).not.toHaveBeenCalled()
         expect(mock_updatecarttotal).not.toHaveBeenCalled()
     })
+
+    test("error in dao is propagated", async () => {
+        const model = "product"
+
+        const mock_getproduct = jest.spyOn(ProductDAO.prototype, "getProduct").mockRejectedValueOnce(new Error())
+        const mock_getCurrentCart = jest.spyOn(CartDAO.prototype, "getCurrentCart")
+        const mock_createCart = jest.spyOn(CartDAO.prototype, "createCart")
+        const mock_insertProductInCart = jest.spyOn(CartDAO.prototype, "insertProductInCart")
+        const mock_updatecarttotal = jest.spyOn(CartDAO.prototype, "updateCartTotal")
+
+        await expect(controller.addToCart(user, model)).rejects.toThrow(new Error())
+
+        expect(mock_getproduct).toHaveBeenCalledTimes(1)
+        expect(mock_getproduct).toHaveBeenCalledWith(model)
+
+        expect(mock_getCurrentCart).not.toHaveBeenCalled()
+        expect(mock_createCart).not.toHaveBeenCalled()
+        expect(mock_insertProductInCart).not.toHaveBeenCalled()
+        expect(mock_updatecarttotal).not.toHaveBeenCalled()
+    })
 })
 
 describe('getCart', () => {
@@ -166,6 +186,13 @@ describe('getCart', () => {
 
         jest.spyOn(CartDAO.prototype, "getCurrentCart").mockResolvedValueOnce(cart)
         await expect(controller.getCart(user)).resolves.toEqual(cart)
+        expect(CartDAO.prototype.getCurrentCart).toHaveBeenCalledTimes(1)
+        expect(CartDAO.prototype.getCurrentCart).toHaveBeenCalledWith(user)
+    })
+
+    test("error in dao is propagated", async () => {
+        jest.spyOn(CartDAO.prototype, "getCurrentCart").mockRejectedValueOnce(new Error())
+        await expect(controller.getCart(user)).rejects.toThrow(new Error())
         expect(CartDAO.prototype.getCurrentCart).toHaveBeenCalledTimes(1)
         expect(CartDAO.prototype.getCurrentCart).toHaveBeenCalledWith(user)
     })
@@ -224,6 +251,37 @@ describe('checkoutCart', () => {
         expect(mock_checkproductavailability).toHaveBeenCalledWith(cart)
         expect(CartDAO.prototype.checkoutCart).not.toHaveBeenCalled()
     })
+
+    test("error in dao is propagated 1", async () => {
+        jest.spyOn(CartDAO.prototype, "getCurrentCart").mockRejectedValueOnce(new Error())
+        jest.spyOn(CartDAO.prototype, "checkoutCart").mockResolvedValueOnce(true)
+
+        const mock_checkproductavailability = jest.spyOn(CartController.prototype, "checkProductAvailabilityOfCart")
+
+        await expect(controller.checkoutCart(user)).rejects.toThrow(new Error())
+        expect(CartDAO.prototype.getCurrentCart).toHaveBeenCalledTimes(1)
+        expect(CartDAO.prototype.getCurrentCart).toHaveBeenCalledWith(user)
+        expect(mock_checkproductavailability).not.toHaveBeenCalled()
+        expect(CartDAO.prototype.checkoutCart).not.toHaveBeenCalled()
+    })
+
+    test("error in dao is propagated 2", async () => {
+        const cart = new Cart("customer", false, "", 0, [new ProductInCart("product", 1, Category.SMARTPHONE, 20)], 1)
+
+        jest.spyOn(CartDAO.prototype, "getCurrentCart").mockResolvedValueOnce(cart)
+        jest.spyOn(CartDAO.prototype, "checkoutCart").mockRestore()
+        jest.spyOn(CartDAO.prototype, "checkoutCart").mockRejectedValue(new Error())
+
+        const mock_checkproductavailability = jest.spyOn(CartController.prototype, "checkProductAvailabilityOfCart").mockResolvedValueOnce(true)
+
+        await expect(controller.checkoutCart(user)).rejects.toThrow(new Error())
+        expect(CartDAO.prototype.getCurrentCart).toHaveBeenCalledTimes(1)
+        expect(CartDAO.prototype.getCurrentCart).toHaveBeenCalledWith(user)
+        expect(mock_checkproductavailability).toHaveBeenCalledTimes(1)
+        expect(mock_checkproductavailability).toHaveBeenCalledWith(cart)
+        expect(CartDAO.prototype.checkoutCart).toHaveBeenCalledTimes(1)
+        expect(CartDAO.prototype.checkoutCart).toHaveBeenCalledWith(cart)
+    })
 })
 
 describe('checkProductAvailabilityOfCart', () => {
@@ -252,12 +310,32 @@ describe('checkProductAvailabilityOfCart', () => {
         expect(ProductDAO.prototype.getProduct).toHaveBeenCalledWith(product.model)
         expect(ProductDAO.prototype.changeProductQuantity).not.toHaveBeenCalled()
     })
+
+    test("error in dao is propagated", async () => {
+        const product = new Product(10, "product", Category.SMARTPHONE, "2020-01-01", "details", 20)
+        const cart = new Cart("customer", false, "", 0, [new ProductInCart(product.model, 1, Category.SMARTPHONE, product.sellingPrice)], 1)
+
+        jest.spyOn(ProductDAO.prototype, "getProduct").mockRejectedValueOnce(new Error())
+        jest.spyOn(ProductDAO.prototype, "changeProductQuantity")
+
+        await expect(controller.checkProductAvailabilityOfCart(cart)).rejects.toThrow(new Error())
+        expect(ProductDAO.prototype.getProduct).toHaveBeenCalledTimes(1)
+        expect(ProductDAO.prototype.getProduct).toHaveBeenCalledWith(product.model)
+        expect(ProductDAO.prototype.changeProductQuantity).not.toHaveBeenCalled()
+    })
 })
 
 describe('getCustomerCarts', () => {
     test("success", async () => {
         jest.spyOn(CartDAO.prototype, "getCustomerCarts").mockResolvedValueOnce([])
         await expect(controller.getCustomerCarts(user)).resolves.toEqual([])
+        expect(CartDAO.prototype.getCustomerCarts).toHaveBeenCalledTimes(1)
+        expect(CartDAO.prototype.getCustomerCarts).toHaveBeenCalledWith(user)
+    })
+
+    test("error in dao is propagated", async () => {
+        jest.spyOn(CartDAO.prototype, "getCustomerCarts").mockRejectedValueOnce(new Error())
+        await expect(controller.getCustomerCarts(user)).rejects.toThrow(new Error())
         expect(CartDAO.prototype.getCustomerCarts).toHaveBeenCalledTimes(1)
         expect(CartDAO.prototype.getCustomerCarts).toHaveBeenCalledWith(user)
     })
@@ -439,6 +517,32 @@ describe('removeProductFromCart', () => {
         expect(mock_updateCartTotal).not.toHaveBeenCalled()
         expect(mock_changeProductQuantity).not.toHaveBeenCalled()
     })
+
+    test("error in dao is propagated", async () => {
+        const product = new Product(10, "product", Category.SMARTPHONE, "2020-01-01", "details", 20)
+        const cart = new Cart(
+            "customer",
+            false,
+            "",
+            product.sellingPrice,
+            [new ProductInCart(product.model, 1, Category.SMARTPHONE, product.sellingPrice)],
+            1
+        )
+
+        jest.spyOn(ProductDAO.prototype, "getProduct").mockResolvedValueOnce(product)
+        jest.spyOn(CartDAO.prototype, "getCurrentCart").mockResolvedValueOnce(cart)
+        jest.spyOn(CartDAO.prototype, "deleteProductFromCart").mockRejectedValueOnce(new Error())
+
+        const mock_incrementProductInCart = jest.spyOn(CartDAO.prototype, "incrementProductInCart")
+        const mock_updateCartTotal = jest.spyOn(CartDAO.prototype, "updateCartTotal")
+        const mock_changeProductQuantity = jest.spyOn(ProductDAO.prototype, "changeProductQuantity")
+
+        await expect(controller.removeProductFromCart(user, product.model)).rejects.toThrow(new Error())
+
+        expect(mock_incrementProductInCart).not.toHaveBeenCalled()
+        expect(mock_updateCartTotal).not.toHaveBeenCalled()
+        expect(mock_changeProductQuantity).not.toHaveBeenCalled()
+    })
 })
 
 describe('clearCart', () => {
@@ -475,12 +579,42 @@ describe('clearCart', () => {
         expect(CartDAO.prototype.getCurrentCart).toHaveBeenCalledWith(user)
         expect(CartDAO.prototype.clearCart).not.toHaveBeenCalled()
     })
+
+    test('error in dao is propagated 1', async () => {
+        jest.spyOn(CartDAO.prototype, "getCurrentCart").mockRejectedValueOnce(new Error())
+        jest.spyOn(CartDAO.prototype, "clearCart").mockResolvedValueOnce(true)
+
+        await expect(controller.clearCart(user)).rejects.toThrow(new Error())
+        expect(CartDAO.prototype.getCurrentCart).toHaveBeenCalledTimes(1)
+        expect(CartDAO.prototype.getCurrentCart).toHaveBeenCalledWith(user)
+        expect(CartDAO.prototype.clearCart).not.toHaveBeenCalled()
+    })
+
+    test('error in dao is propagated 2', async () => {
+        const cart = new Cart("customer", false, "", 0, [new ProductInCart("product", 1, Category.SMARTPHONE, 20)], 1)
+
+        jest.spyOn(CartDAO.prototype, "getCurrentCart").mockResolvedValueOnce(cart)
+        jest.spyOn(CartDAO.prototype, "clearCart").mockRestore()
+        jest.spyOn(CartDAO.prototype, "clearCart").mockRejectedValueOnce(new Error())
+
+        await expect(controller.clearCart(user)).rejects.toThrow(new Error())
+        expect(CartDAO.prototype.getCurrentCart).toHaveBeenCalledTimes(1)
+        expect(CartDAO.prototype.getCurrentCart).toHaveBeenCalledWith(user)
+        expect(CartDAO.prototype.clearCart).toHaveBeenCalledTimes(1)
+        expect(CartDAO.prototype.clearCart).toHaveBeenCalledWith(cart.id)
+    })
 })
 
 describe('deleteAllCarts', () => {
     test('success', async () => {
         jest.spyOn(CartDAO.prototype, "deleteAllCarts").mockResolvedValueOnce(true)
         await expect(controller.deleteAllCarts()).resolves.toBe(true)
+        expect(CartDAO.prototype.deleteAllCarts).toHaveBeenCalledTimes(1)
+    })
+
+    test('error in dao is propagated', async () => {
+        jest.spyOn(CartDAO.prototype, "deleteAllCarts").mockRejectedValueOnce(new Error())
+        await expect(controller.deleteAllCarts()).rejects.toThrow(new Error())
         expect(CartDAO.prototype.deleteAllCarts).toHaveBeenCalledTimes(1)
     })
 })
@@ -491,6 +625,12 @@ describe('getAllCarts', () => {
 
         jest.spyOn(CartDAO.prototype, "getAllCarts").mockResolvedValueOnce(carts)
         await expect(controller.getAllCarts()).resolves.toEqual(carts)
+        expect(CartDAO.prototype.getAllCarts).toHaveBeenCalledTimes(1)
+    })
+
+    test('error in dao is propagated', async () => {
+        jest.spyOn(CartDAO.prototype, "getAllCarts").mockRejectedValueOnce(new Error())
+        await expect(controller.getAllCarts()).rejects.toThrow(new Error())
         expect(CartDAO.prototype.getAllCarts).toHaveBeenCalledTimes(1)
     })
 })
