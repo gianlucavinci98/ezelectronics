@@ -29,7 +29,7 @@ describe("getCurrentCart", () => {
         })
         const mock_getproductsbycartid = jest.spyOn(CartDAO.prototype, "getProductsByCartId").mockResolvedValue([])
 
-        expect(cartDAO.getCurrentCart(user)).resolves.toEqual(cart)
+        await expect(cartDAO.getCurrentCart(user)).resolves.toEqual(cart)
         expect(mock_db_get).toHaveBeenCalledTimes(1)
         expect(mock_db_get).toHaveBeenCalledWith(expect.any(String), [user.username], expect.any(Function))
         expect(mock_getproductsbycartid).toHaveBeenCalledTimes(1)
@@ -43,7 +43,7 @@ describe("getCurrentCart", () => {
         })
         const mock_getproductsbycartid = jest.spyOn(CartDAO.prototype, "getProductsByCartId")
 
-        expect(cartDAO.getCurrentCart(user)).resolves.toEqual({ customer: user.username, paid: false, paymentDate: null, total: 0, products: [] })
+        await expect(cartDAO.getCurrentCart(user)).resolves.toEqual({ customer: user.username, paid: false, paymentDate: null, total: 0, products: [], id: null })
         expect(mock_db_get).toHaveBeenCalledTimes(1)
         expect(mock_db_get).toHaveBeenCalledWith(expect.any(String), [user.username], expect.any(Function))
         expect(mock_getproductsbycartid).not.toHaveBeenCalled()
@@ -56,7 +56,7 @@ describe("getCurrentCart", () => {
         })
         const mock_getproductsbycartid = jest.spyOn(CartDAO.prototype, "getProductsByCartId")
 
-        expect(cartDAO.getCurrentCart(user)).rejects.toThrow(new Error())
+        await expect(cartDAO.getCurrentCart(user)).rejects.toThrow(new Error())
         expect(mock_db_get).toHaveBeenCalledTimes(1)
         expect(mock_db_get).toHaveBeenCalledWith(expect.any(String), [user.username], expect.any(Function))
         expect(mock_getproductsbycartid).not.toHaveBeenCalled()
@@ -68,7 +68,7 @@ describe("getCurrentCart", () => {
         })
         const mock_getproductsbycartid = jest.spyOn(CartDAO.prototype, "getProductsByCartId")
 
-        expect(cartDAO.getCurrentCart(user)).rejects.toThrow(new Error())
+        await expect(cartDAO.getCurrentCart(user)).rejects.toThrow(new Error())
         expect(mock_db_get).toHaveBeenCalledTimes(1)
         expect(mock_db_get).toHaveBeenCalledWith(expect.any(String), [user.username], expect.any(Function))
         expect(mock_getproductsbycartid).not.toHaveBeenCalled()
@@ -83,7 +83,7 @@ describe("getProductsByCartId", () => {
             return {} as Database
         })
 
-        expect(cartDAO.getProductsByCartId(1)).resolves.toEqual(products)
+        await expect(cartDAO.getProductsByCartId(1)).resolves.toEqual(products)
         expect(mock_db_all).toHaveBeenCalledTimes(1)
         expect(mock_db_all).toHaveBeenCalledWith(expect.any(String), [1], expect.any(Function))
     })
@@ -94,7 +94,7 @@ describe("getProductsByCartId", () => {
             return {} as Database
         })
 
-        expect(cartDAO.getProductsByCartId(1)).rejects.toThrow(new Error())
+        await expect(cartDAO.getProductsByCartId(1)).rejects.toThrow(new Error())
         expect(mock_db_all).toHaveBeenCalledTimes(1)
         expect(mock_db_all).toHaveBeenCalledWith(expect.any(String), [1], expect.any(Function))
     })
@@ -104,7 +104,7 @@ describe("getProductsByCartId", () => {
             throw new Error()
         })
 
-        expect(cartDAO.getProductsByCartId(1)).rejects.toThrow(new Error())
+        await expect(cartDAO.getProductsByCartId(1)).rejects.toThrow(new Error())
         expect(mock_db_all).toHaveBeenCalledTimes(1)
         expect(mock_db_all).toHaveBeenCalledWith(expect.any(String), [1], expect.any(Function))
     })
@@ -117,7 +117,7 @@ describe("incrementProductInCart", () => {
             return {} as Database
         })
 
-        expect(cartDAO.incrementProductInCart(1, "model", 1)).resolves.toBe(true)
+        await expect(cartDAO.incrementProductInCart(1, "model", 1)).resolves.toBe(true)
         expect(mock_db_run).toHaveBeenCalledTimes(1)
         expect(mock_db_run).toHaveBeenCalledWith(expect.any(String), [1, 1, "model"], expect.any(Function))
     })
@@ -128,7 +128,7 @@ describe("incrementProductInCart", () => {
             return {} as Database
         })
 
-        expect(cartDAO.incrementProductInCart(1, "model", 1)).rejects.toThrow(new Error())
+        await expect(cartDAO.incrementProductInCart(1, "model", 1)).rejects.toThrow(new Error())
         expect(mock_db_run).toHaveBeenCalledTimes(1)
         expect(mock_db_run).toHaveBeenCalledWith(expect.any(String), [1, 1, "model"], expect.any(Function))
     })
@@ -138,7 +138,7 @@ describe("incrementProductInCart", () => {
             throw new Error()
         })
 
-        expect(cartDAO.incrementProductInCart(1, "model", 1)).rejects.toThrow(new Error())
+        await expect(cartDAO.incrementProductInCart(1, "model", 1)).rejects.toThrow(new Error())
         expect(mock_db_run).toHaveBeenCalledTimes(1)
         expect(mock_db_run).toHaveBeenCalledWith(expect.any(String), [1, 1, "model"], expect.any(Function))
     })
@@ -151,7 +151,7 @@ describe("insertProductInCart", () => {
             return {} as Database
         })
 
-        expect(cartDAO.insertProductInCart(1, { model: "model", quantity: 1, category: Category.SMARTPHONE, price: 1 })).resolves.toBe(true)
+        await expect(cartDAO.insertProductInCart(1, { model: "model", quantity: 1, category: Category.SMARTPHONE, price: 1 })).resolves.toBe(true)
         expect(mock_db_run).toHaveBeenCalledTimes(1)
         expect(mock_db_run).toHaveBeenCalledWith(expect.any(String), [1, "model", 1, Category.SMARTPHONE, 1], expect.any(Function))
     })
@@ -162,7 +162,7 @@ describe("insertProductInCart", () => {
             return {} as Database
         })
 
-        expect(cartDAO.insertProductInCart(1, { model: "model", quantity: 1, category: Category.SMARTPHONE, price: 1 })).rejects.toThrow(new Error())
+        await expect(cartDAO.insertProductInCart(1, { model: "model", quantity: 1, category: Category.SMARTPHONE, price: 1 })).rejects.toThrow(new Error())
         expect(mock_db_run).toHaveBeenCalledTimes(1)
         expect(mock_db_run).toHaveBeenCalledWith(expect.any(String), [1, "model", 1, Category.SMARTPHONE, 1], expect.any(Function))
     })
@@ -172,7 +172,7 @@ describe("insertProductInCart", () => {
             throw new Error()
         })
 
-        expect(cartDAO.insertProductInCart(1, { model: "model", quantity: 1, category: Category.SMARTPHONE, price: 1 })).rejects.toThrow(new Error())
+        await expect(cartDAO.insertProductInCart(1, { model: "model", quantity: 1, category: Category.SMARTPHONE, price: 1 })).rejects.toThrow(new Error())
         expect(mock_db_run).toHaveBeenCalledTimes(1)
         expect(mock_db_run).toHaveBeenCalledWith(expect.any(String), [1, "model", 1, Category.SMARTPHONE, 1], expect.any(Function))
     })
@@ -180,12 +180,12 @@ describe("insertProductInCart", () => {
 
 describe("createCart", () => {
     test("success", async () => {
-        const mock_db_run = jest.spyOn(db, "run").mockImplementation((sql, params, callback) => {
-            callback(null)
+        const mock_db_run = jest.spyOn(db, "run").mockImplementation(function (sql, params, callback) {
+            callback.call({ lastID: 1 }, null)
             return {} as Database
         })
 
-        expect(cartDAO.createCart(new Cart(user.username, false, "", 0, [], 1))).resolves.toBe(1)
+        await expect(cartDAO.createCart(new Cart(user.username, false, "", 0, []))).resolves.toBe(1)
         expect(mock_db_run).toHaveBeenCalledTimes(1)
         expect(mock_db_run).toHaveBeenCalledWith(expect.any(String), [user.username, false, "", 0], expect.any(Function))
     })
@@ -196,7 +196,7 @@ describe("createCart", () => {
             return {} as Database
         })
 
-        expect(cartDAO.createCart(new Cart(user.username, false, "", 0, [], 1))).rejects.toThrow(new Error())
+        await expect(cartDAO.createCart(new Cart(user.username, false, "", 0, []))).rejects.toThrow(new Error())
         expect(mock_db_run).toHaveBeenCalledTimes(1)
         expect(mock_db_run).toHaveBeenCalledWith(expect.any(String), [user.username, false, "", 0], expect.any(Function))
     })
@@ -206,7 +206,7 @@ describe("createCart", () => {
             throw new Error()
         })
 
-        expect(cartDAO.createCart(new Cart(user.username, false, "", 0, [], 1))).rejects.toThrow(new Error())
+        await expect(cartDAO.createCart(new Cart(user.username, false, "", 0, []))).rejects.toThrow(new Error())
         expect(mock_db_run).toHaveBeenCalledTimes(1)
         expect(mock_db_run).toHaveBeenCalledWith(expect.any(String), [user.username, false, "", 0], expect.any(Function))
     })
@@ -219,7 +219,7 @@ describe("updateCartTotal", () => {
             return {} as Database
         })
 
-        expect(cartDAO.updateCartTotal(1, 1)).resolves.toBe(true)
+        await expect(cartDAO.updateCartTotal(1, 1)).resolves.toBe(true)
         expect(mock_db_run).toHaveBeenCalledTimes(1)
         expect(mock_db_run).toHaveBeenCalledWith(expect.any(String), [1, 1], expect.any(Function))
     })
@@ -230,7 +230,7 @@ describe("updateCartTotal", () => {
             return {} as Database
         })
 
-        expect(cartDAO.updateCartTotal(1, 1)).rejects.toThrow(new Error())
+        await expect(cartDAO.updateCartTotal(1, 1)).rejects.toThrow(new Error())
         expect(mock_db_run).toHaveBeenCalledTimes(1)
         expect(mock_db_run).toHaveBeenCalledWith(expect.any(String), [1, 1], expect.any(Function))
     })
@@ -240,7 +240,7 @@ describe("updateCartTotal", () => {
             throw new Error()
         })
 
-        expect(cartDAO.updateCartTotal(1, 1)).rejects.toThrow(new Error())
+        await expect(cartDAO.updateCartTotal(1, 1)).rejects.toThrow(new Error())
         expect(mock_db_run).toHaveBeenCalledTimes(1)
         expect(mock_db_run).toHaveBeenCalledWith(expect.any(String), [1, 1], expect.any(Function))
     })
@@ -253,7 +253,7 @@ describe("checkoutCart", () => {
             return {} as Database
         })
 
-        expect(cartDAO.checkoutCart(new Cart(user.username, false, "", 0, [], 1))).resolves.toBe(true)
+        await expect(cartDAO.checkoutCart(new Cart(user.username, false, "", 0, [], 1))).resolves.toBe(true)
         expect(mock_db_run).toHaveBeenCalledTimes(1)
         expect(mock_db_run).toHaveBeenCalledWith(expect.any(String), [expect.any(String), 1], expect.any(Function))
     })
@@ -264,7 +264,7 @@ describe("checkoutCart", () => {
             return {} as Database
         })
 
-        expect(cartDAO.checkoutCart(new Cart(user.username, false, "", 0, [], 1))).rejects.toThrow(new Error())
+        await expect(cartDAO.checkoutCart(new Cart(user.username, false, "", 0, [], 1))).rejects.toThrow(new Error())
         expect(mock_db_run).toHaveBeenCalledTimes(1)
         expect(mock_db_run).toHaveBeenCalledWith(expect.any(String), [expect.any(String), 1], expect.any(Function))
     })
@@ -274,7 +274,7 @@ describe("checkoutCart", () => {
             throw new Error()
         })
 
-        expect(cartDAO.checkoutCart(new Cart(user.username, false, "", 0, [], 1))).rejects.toThrow(new Error())
+        await expect(cartDAO.checkoutCart(new Cart(user.username, false, "", 0, [], 1))).rejects.toThrow(new Error())
         expect(mock_db_run).toHaveBeenCalledTimes(1)
         expect(mock_db_run).toHaveBeenCalledWith(expect.any(String), [expect.any(String), 1], expect.any(Function))
     })
@@ -289,7 +289,7 @@ describe("getCustomerCarts", () => {
         })
         const mock_getproductsbycartid = jest.spyOn(CartDAO.prototype, "getProductsByCartId").mockResolvedValue([])
 
-        expect(cartDAO.getCustomerCarts(user)).resolves.toEqual(carts)
+        await expect(cartDAO.getCustomerCarts(user)).resolves.toEqual(carts)
         expect(mock_db_all).toHaveBeenCalledTimes(1)
         expect(mock_db_all).toHaveBeenCalledWith(expect.any(String), [user.username], expect.any(Function))
         expect(mock_getproductsbycartid).toHaveBeenCalledTimes(1)
@@ -303,7 +303,7 @@ describe("getCustomerCarts", () => {
         })
         const mock_getproductsbycartid = jest.spyOn(CartDAO.prototype, "getProductsByCartId")
 
-        expect(cartDAO.getCustomerCarts(user)).rejects.toThrow(new Error())
+        await expect(cartDAO.getCustomerCarts(user)).rejects.toThrow(new Error())
         expect(mock_db_all).toHaveBeenCalledTimes(1)
         expect(mock_db_all).toHaveBeenCalledWith(expect.any(String), [user.username], expect.any(Function))
         expect(mock_getproductsbycartid).not.toHaveBeenCalled()
@@ -315,7 +315,7 @@ describe("getCustomerCarts", () => {
         })
         const mock_getproductsbycartid = jest.spyOn(CartDAO.prototype, "getProductsByCartId")
 
-        expect(cartDAO.getCustomerCarts(user)).rejects.toThrow(new Error())
+        await expect(cartDAO.getCustomerCarts(user)).rejects.toThrow(new Error())
         expect(mock_db_all).toHaveBeenCalledTimes(1)
         expect(mock_db_all).toHaveBeenCalledWith(expect.any(String), [user.username], expect.any(Function))
         expect(mock_getproductsbycartid).not.toHaveBeenCalled()
@@ -329,7 +329,7 @@ describe("deleteProductFromCart", () => {
             return {} as Database
         })
 
-        expect(cartDAO.deleteProductFromCart(1, "model")).resolves.toBe(true)
+        await expect(cartDAO.deleteProductFromCart(1, "model")).resolves.toBe(true)
         expect(mock_db_run).toHaveBeenCalledTimes(1)
         expect(mock_db_run).toHaveBeenCalledWith(expect.any(String), [1, "model"], expect.any(Function))
     })
@@ -340,7 +340,7 @@ describe("deleteProductFromCart", () => {
             return {} as Database
         })
 
-        expect(cartDAO.deleteProductFromCart(1, "model")).rejects.toThrow(new Error())
+        await expect(cartDAO.deleteProductFromCart(1, "model")).rejects.toThrow(new Error())
         expect(mock_db_run).toHaveBeenCalledTimes(1)
         expect(mock_db_run).toHaveBeenCalledWith(expect.any(String), [1, "model"], expect.any(Function))
     })
@@ -350,7 +350,7 @@ describe("deleteProductFromCart", () => {
             throw new Error()
         })
 
-        expect(cartDAO.deleteProductFromCart(1, "model")).rejects.toThrow(new Error())
+        await expect(cartDAO.deleteProductFromCart(1, "model")).rejects.toThrow(new Error())
         expect(mock_db_run).toHaveBeenCalledTimes(1)
         expect(mock_db_run).toHaveBeenCalledWith(expect.any(String), [1, "model"], expect.any(Function))
     })
@@ -363,7 +363,7 @@ describe("clearCart", () => {
             return {} as Database
         })
 
-        expect(cartDAO.clearCart(1)).resolves.toBe(true)
+        await expect(cartDAO.clearCart(1)).resolves.toBe(true)
         expect(mock_db_run).toHaveBeenCalledTimes(2)
         expect(mock_db_run).toHaveBeenNthCalledWith(1, expect.any(String), [1], expect.any(Function))
         expect(mock_db_run).toHaveBeenNthCalledWith(2, expect.any(String), [1], expect.any(Function))
@@ -375,7 +375,7 @@ describe("clearCart", () => {
             return {} as Database
         })
 
-        expect(cartDAO.clearCart(1)).rejects.toThrow(new Error())
+        await expect(cartDAO.clearCart(1)).rejects.toThrow(new Error())
         expect(mock_db_run).toHaveBeenCalledTimes(1)
         expect(mock_db_run).toHaveBeenNthCalledWith(1, expect.any(String), [1], expect.any(Function))
     })
@@ -389,7 +389,7 @@ describe("clearCart", () => {
             return {} as Database
         })
 
-        expect(cartDAO.clearCart(1)).rejects.toThrow(new Error())
+        await expect(cartDAO.clearCart(1)).rejects.toThrow(new Error())
         expect(mock_db_run).toHaveBeenCalledTimes(2)
         expect(mock_db_run).toHaveBeenNthCalledWith(1, expect.any(String), [1], expect.any(Function))
         expect(mock_db_run).toHaveBeenNthCalledWith(2, expect.any(String), [1], expect.any(Function))
@@ -401,7 +401,7 @@ describe("clearCart", () => {
             throw new Error()
         })
 
-        expect(cartDAO.clearCart(1)).rejects.toThrow(new Error())
+        await expect(cartDAO.clearCart(1)).rejects.toThrow(new Error())
         expect(mock_db_run).toHaveBeenCalledTimes(1)
         expect(mock_db_run).toHaveBeenNthCalledWith(1, expect.any(String), [1], expect.any(Function))
     })
@@ -414,7 +414,7 @@ describe("deleteAllCarts", () => {
             return {} as Database
         })
 
-        expect(cartDAO.deleteAllCarts()).resolves.toBe(true)
+        await expect(cartDAO.deleteAllCarts()).resolves.toBe(true)
         expect(mock_db_run).toHaveBeenCalledTimes(2)
         expect(mock_db_run).toHaveBeenNthCalledWith(1, expect.any(String), [], expect.any(Function))
         expect(mock_db_run).toHaveBeenNthCalledWith(2, expect.any(String), [], expect.any(Function))
@@ -426,7 +426,7 @@ describe("deleteAllCarts", () => {
             return {} as Database
         })
 
-        expect(cartDAO.deleteAllCarts()).rejects.toThrow(new Error())
+        await expect(cartDAO.deleteAllCarts()).rejects.toThrow(new Error())
         expect(mock_db_run).toHaveBeenCalledTimes(1)
         expect(mock_db_run).toHaveBeenNthCalledWith(1, expect.any(String), [], expect.any(Function))
     })
@@ -440,7 +440,7 @@ describe("deleteAllCarts", () => {
             return {} as Database
         })
 
-        expect(cartDAO.deleteAllCarts()).rejects.toThrow(new Error())
+        await expect(cartDAO.deleteAllCarts()).rejects.toThrow(new Error())
         expect(mock_db_run).toHaveBeenCalledTimes(2)
         expect(mock_db_run).toHaveBeenNthCalledWith(1, expect.any(String), [], expect.any(Function))
         expect(mock_db_run).toHaveBeenNthCalledWith(2, expect.any(String), [], expect.any(Function))
@@ -452,7 +452,7 @@ describe("deleteAllCarts", () => {
             throw new Error()
         })
 
-        expect(cartDAO.deleteAllCarts()).rejects.toThrow(new Error())
+        await expect(cartDAO.deleteAllCarts()).rejects.toThrow(new Error())
         expect(mock_db_run).toHaveBeenCalledTimes(1)
         expect(mock_db_run).toHaveBeenNthCalledWith(1, expect.any(String), [], expect.any(Function))
     })
@@ -467,7 +467,7 @@ describe("getAllCarts", () => {
         })
         const mock_getproductsbycartid = jest.spyOn(CartDAO.prototype, "getProductsByCartId").mockResolvedValue([])
 
-        expect(cartDAO.getAllCarts()).resolves.toEqual(carts)
+        await expect(cartDAO.getAllCarts()).resolves.toEqual(carts)
         expect(mock_db_all).toHaveBeenCalledTimes(1)
         expect(mock_db_all).toHaveBeenCalledWith(expect.any(String), [], expect.any(Function))
         expect(mock_getproductsbycartid).toHaveBeenCalledTimes(1)
@@ -481,7 +481,7 @@ describe("getAllCarts", () => {
         })
         const mock_getproductsbycartid = jest.spyOn(CartDAO.prototype, "getProductsByCartId")
 
-        expect(cartDAO.getAllCarts()).rejects.toThrow(new Error())
+        await expect(cartDAO.getAllCarts()).rejects.toThrow(new Error())
         expect(mock_db_all).toHaveBeenCalledTimes(1)
         expect(mock_db_all).toHaveBeenCalledWith(expect.any(String), [], expect.any(Function))
         expect(mock_getproductsbycartid).not.toHaveBeenCalled()
@@ -493,7 +493,7 @@ describe("getAllCarts", () => {
         })
         const mock_getproductsbycartid = jest.spyOn(CartDAO.prototype, "getProductsByCartId")
 
-        expect(cartDAO.getAllCarts()).rejects.toThrow(new Error())
+        await expect(cartDAO.getAllCarts()).rejects.toThrow(new Error())
         expect(mock_db_all).toHaveBeenCalledTimes(1)
         expect(mock_db_all).toHaveBeenCalledWith(expect.any(String), [], expect.any(Function))
         expect(mock_getproductsbycartid).not.toHaveBeenCalled()
