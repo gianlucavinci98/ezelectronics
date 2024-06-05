@@ -5,7 +5,8 @@ import { app } from "../../index"
 import { Cart } from "../../src/components/cart"
 import CartController from "../../src/controllers/cartController"
 import Authenticator from "../../src/routers/auth"
-import { ProductNotAvailableError, ProductNotInCartError } from "../../src/errors/cartError"
+import { ProductNotInCartError } from "../../src/errors/cartError"
+import { EmptyProductStockError } from "../../src/errors/productError"
 
 const baseURL = "/ezelectronics/carts"
 
@@ -87,7 +88,7 @@ describe('POST /ezelectronics/carts', () => {
     })
 
     test("error", async () => {
-        jest.spyOn(CartController.prototype, "addToCart").mockRejectedValueOnce(new ProductNotAvailableError())
+        jest.spyOn(CartController.prototype, "addToCart").mockRejectedValueOnce(new EmptyProductStockError())
 
         const response = await agent.post(baseURL).send({ model: "model" })
 

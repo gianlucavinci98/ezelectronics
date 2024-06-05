@@ -20,7 +20,6 @@ class CartDAO {
                 db.get(sql, [user.username], async (err: Error | null, row: any) => {
                     if (err) reject(err)
                     else if (!row) {
-                        console.log("No cart found")
                         resolve(new Cart(user.username, false, null, 0, productsInCart))
                     }
                     else {

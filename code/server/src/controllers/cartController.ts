@@ -2,8 +2,8 @@ import { User } from "../components/user";
 import CartDAO from "../dao/cartDAO";
 import ProductDAO from "../dao/productDAO";
 import { Cart, ProductInCart } from "../components/cart";
-import { ProductNotAvailableError, CartNotFoundError, EmptyCartError, ProductNotInCartError } from "../errors/cartError";
-import { ProductNotFoundError } from "../errors/productError";
+import { CartNotFoundError, EmptyCartError, ProductNotInCartError } from "../errors/cartError"
+import { EmptyProductStockError, LowProductStockError } from "../errors/productError"
 
 /**
  * Represents a controller for managing shopping carts.
@@ -32,7 +32,7 @@ class CartController {
 
             const productInDB = await this.productDAO.getProduct(product)
             if (productInDB.quantity === 0) {
-                throw new ProductNotAvailableError()
+                throw new EmptyProductStockError()
             }
 
             const cart: Cart = await this.getCart(user);
@@ -87,7 +87,11 @@ class CartController {
             if (!cart.id) throw new CartNotFoundError()
             if (cart.products.length === 0) throw new EmptyCartError()
             let flag = await this.checkProductAvailabilityOfCart(cart)
-            if (!flag) throw new ProductNotAvailableError()
+            if (!flag) throw new LowProductStockError()
+
+            for (let product of cart.products) {
+                await this.productDAO.changeProductQuantity(product.model, -product.quantity)
+            }
 
             await this.dao.checkoutCart(cart)
             return true
@@ -104,10 +108,6 @@ class CartController {
                 return false;
             }
         }
-        for (let product of cart.products) {
-            await this.productDAO.changeProductQuantity(product.model, -product.quantity);
-        }
-
         return true;
     }
 
