@@ -4,6 +4,7 @@ import { body, param, query } from "express-validator"
 import ProductController from "../controllers/productController"
 import Authenticator from "./auth"
 import { Product, Category } from "../components/product"
+import { DateError } from "../utilities"
 
 /**
  * Represents a class that defines the routes for handling proposals.
@@ -69,7 +70,7 @@ class ProductRoutes {
             this.errorHandler.validateRequest,
             (req: any, res: any, next: any) => {
                 if (req.body.arrivalDate !== undefined && new Date(req.body.arrivalDate) > new Date()) {
-                    return res.status(400).json({ error: "Arrival date is after current date" })
+                    return next(new DateError())
                 }
                 return next()
             },
@@ -97,7 +98,7 @@ class ProductRoutes {
             this.errorHandler.validateRequest,
             (req: any, res: any, next: any) => {
                 if (req.body.changeDate !== undefined && new Date(req.body.changeDate) > new Date()) {
-                    return res.status(400).json({ error: "Change date is after current date" })
+                    return next(new DateError())
                 }
                 return next()
             },
@@ -125,7 +126,7 @@ class ProductRoutes {
             this.errorHandler.validateRequest,
             (req: any, res: any, next: any) => {
                 if (req.body.sellingDate !== undefined && new Date(req.body.sellingDate) > new Date()) {
-                    return res.status(400).json({ error: "Selling date is after current date" })
+                    return next(new DateError())
                 }
                 return next()
             },
