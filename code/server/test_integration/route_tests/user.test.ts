@@ -9,6 +9,7 @@ import TestAgent from "supertest/lib/agent"
 
 const baseURL = "/ezelectronics"
 const usersBaseURL = baseURL + "/users"
+const sessionsBaseURL = baseURL + "/sessions"
 
 const agent: TestAgent = request.agent(app)
 
@@ -549,6 +550,72 @@ describe("PATCH /users/:username", () => {
 
     test("should return 401 if the user is not logged in", async () => {
         const response = await request(app).patch(usersBaseURL + "/test").send({ name: "newName", surname: "newSurname", address: "newAddress", birthdate: "2021-01-01" })
+        expect(response.status).toBe(401)
+    })
+})
+
+describe("POST /sessions", () => {
+    test("should login the user", async () => {
+        const user = { username: "test", name: "test", surname: "test", role: Role.CUSTOMER, address: null as null, birthdate: null as null }
+        const userDAO = new UserDAO()
+        await userDAO.createUser(user.username, user.name, user.surname, "password", user.role)
+
+        const response = await request(app).post(sessionsBaseURL).send({ username: user.username, password: "password" })
+        expect(response.status).toBe(200)
+        expect(response.headers['set-cookie'].length).toBe(1);
+        expect(response.headers['set-cookie'][0]).toContain("connect.sid=")
+        expect(response.body).toEqual(user)
+    })
+
+    test("should return 401 if the username does not exist", async () => {
+        const response = await request(app).post(sessionsBaseURL).send({ username: "test", password: "password" })
+        expect(response.status).toBe(401)
+    })
+
+    test("should return 401 if the password is incorrect", async () => {
+        const user = { username: "test", name: "test", surname: "test", role: Role.CUSTOMER, address: null as null, birthdate: null as null }
+        const userDAO = new UserDAO()
+        await userDAO.createUser(user.username, user.name, user.surname, "password", user.role)
+
+        const response = await request(app).post(sessionsBaseURL).send({ username: user.username, password: "wrong" })
+        expect(response.status).toBe(401)
+        expect(response.headers['set-cookie']).toBeUndefined()
+    })
+})
+
+describe("DELETE /sessions/current", () => {
+    test("should logout the user", async () => {
+        const user = { username: "test", name: "test", surname: "test", role: Role.CUSTOMER, address: null as null, birthdate: null as null }
+        const userDAO = new UserDAO()
+        await userDAO.createUser(user.username, user.name, user.surname, "password", user.role)
+
+        await login(user.username, "password", agent)
+
+        const response = await agent.delete(sessionsBaseURL + "/current")
+        expect(response.status).toBe(200)
+    })
+
+    test("should return 401 if the user is not logged in", async () => {
+        const response = await request(app).delete(sessionsBaseURL + "/current")
+        expect(response.status).toBe(401)
+    })
+})
+
+describe("GET /sessions/current", () => {
+    test("should return the current user", async () => {
+        const user = { username: "test", name: "test", surname: "test", role: Role.CUSTOMER, address: null as null, birthdate: null as null }
+        const userDAO = new UserDAO()
+        await userDAO.createUser(user.username, user.name, user.surname, "password", user.role)
+
+        await login(user.username, "password", agent)
+
+        const response = await agent.get(sessionsBaseURL + "/current")
+        expect(response.status).toBe(200)
+        expect(response.body).toEqual(user)
+    })
+
+    test("should return 401 if the user is not logged in", async () => {
+        const response = await request(app).get(sessionsBaseURL + "/current")
         expect(response.status).toBe(401)
     })
 })
