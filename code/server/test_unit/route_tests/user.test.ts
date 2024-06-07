@@ -173,104 +173,105 @@ describe("test user routes", () => {
         expect(UserController.prototype.getUserByUsername).toHaveBeenCalledWith(testUser, username)
     })
 
-    //Unit test for the PATCH ezelectronics/users/:username route
-    //The test checks if the route returns a 200 success code
-    //The test also expects the updateUser method of the controller to be called once with the correct parameters
+    describe("PATCH /:username", () => {
+        //Unit test for the PATCH ezelectronics/users/:username route
+        //The test checks if the route returns a 200 success code
+        //The test also expects the updateUser method of the controller to be called once with the correct parameters
 
-    test("PATCH /:username should update the current user", async () => {
-        const username = "uid"
+        test("PATCH /:username should update the current user", async () => {
+            const username = "uid"
 
-        const testUserUpdated = { //Define a test user object sent to the route
-            username: username,
-            name: "test",
-            surname: "test",
-            address: "test",
-            birthdate: "2000-01-01",
-            role: Role.MANAGER
-        }
+            const testUserUpdated = { //Define a test user object sent to the route
+                username: username,
+                name: "test",
+                surname: "test",
+                address: "test",
+                birthdate: "2000-01-01",
+                role: Role.MANAGER
+            }
 
-        const testUserLogged = { //Define a test user object
-            username: username,
-            name: "test",
-            surname: "test",
-            address: "updated",
-            birthdate: "2000-01-01",
-            role: Role.MANAGER
-        }
+            const testUserLogged = { //Define a test user object
+                username: username,
+                name: "test",
+                surname: "test",
+                address: "updated",
+                birthdate: "2000-01-01",
+                role: Role.MANAGER
+            }
 
-        mockIsLoggedIn(testUserLogged)
-        jest.spyOn(UserController.prototype, "updateUserInfo").mockResolvedValueOnce(testUserUpdated) //Mock the updateUserInfo method of the controller
-        const response = await request(app).patch(usersBaseURL + "/" + username).send(testUserUpdated) //Send a PATCH request to the route
-        expect(response.status).toBe(200) //Check if the response status is 200
-        expect(UserController.prototype.updateUserInfo).toHaveBeenCalledTimes(1) //Check if the updateUserInfo method has been called once
-        //Check if the updateUserInfo method has been called with the correct parameters
-        expect(UserController.prototype.updateUserInfo).toHaveBeenCalledWith(
-            testUserLogged,
-            testUserUpdated.name,
-            testUserUpdated.surname,
-            testUserUpdated.address,
-            testUserUpdated.birthdate,
-            testUserUpdated.username
-        )
+            mockIsLoggedIn(testUserLogged)
+            jest.spyOn(UserController.prototype, "updateUserInfo").mockResolvedValueOnce(testUserUpdated) //Mock the updateUserInfo method of the controller
+            const response = await request(app).patch(usersBaseURL + "/" + username).send(testUserUpdated) //Send a PATCH request to the route
+            expect(response.status).toBe(200) //Check if the response status is 200
+            expect(UserController.prototype.updateUserInfo).toHaveBeenCalledTimes(1) //Check if the updateUserInfo method has been called once
+            //Check if the updateUserInfo method has been called with the correct parameters
+            expect(UserController.prototype.updateUserInfo).toHaveBeenCalledWith(
+                testUserLogged,
+                testUserUpdated.name,
+                testUserUpdated.surname,
+                testUserUpdated.address,
+                testUserUpdated.birthdate,
+                testUserUpdated.username
+            )
+        })
+
+        test("PATCH /:username should return error if date in the future", async () => {
+            const username = "uid"
+            const testUserUpdated = { //Define a test user object sent to the route
+                username: username,
+                name: "test",
+                surname: "test",
+                address: "test",
+                birthdate: "3000-01-01",
+                role: Role.MANAGER
+            }
+            const testUserLogged = { //Define a test user object
+                username: username,
+                name: "test",
+                surname: "test",
+                address: "updated",
+                birthdate: "2000-01-01",
+                role: Role.MANAGER
+            }
+            mockIsLoggedIn(testUserLogged)
+            const response = await request(app).patch(usersBaseURL + "/" + username).send(testUserUpdated) //Send a PATCH request to the route
+            expect(response.status).toBe(400) //Check if the response status is 400
+        })
+
+        test("PATCH /:username propagates error from controller", async () => {
+            const username = "uid"
+            const testUserUpdated = { //Define a test user object sent to the route
+                username: username,
+                name: "test",
+                surname: "test",
+                address: "test",
+                birthdate: "2000-01-01",
+                role: Role.MANAGER
+            }
+            const testUserLogged = { //Define a test user object
+                username: username,
+                name: "test",
+                surname: "test",
+                address: "updated",
+                birthdate: "2000-01-01",
+                role: Role.MANAGER
+            }
+            mockIsLoggedIn(testUserLogged)
+            jest.spyOn(UserController.prototype, "updateUserInfo").mockRejectedValueOnce(new Error()) //Mock the updateUserInfo method of the controller
+            const response = await request(app).patch(usersBaseURL + "/" + username).send(testUserUpdated) //Send a PATCH request to the route
+            expect(response.status).toBe(503) //Check if the response status is 500
+            expect(UserController.prototype.updateUserInfo).toHaveBeenCalledTimes(1) //Check if the updateUserInfo method has been called once
+            //Check if the updateUserInfo method has been called with the correct parameters
+            expect(UserController.prototype.updateUserInfo).toHaveBeenCalledWith(
+                testUserLogged,
+                testUserUpdated.name,
+                testUserUpdated.surname,
+                testUserUpdated.address,
+                testUserUpdated.birthdate,
+                testUserUpdated.username
+            )
+        })
     })
-
-    test("PATCH /:username should return error if date in the future", async () => {
-        const username = "uid"
-        const testUserUpdated = { //Define a test user object sent to the route
-            username: username,
-            name: "test",
-            surname: "test",
-            address: "test",
-            birthdate: "3000-01-01",
-            role: Role.MANAGER
-        }
-        const testUserLogged = { //Define a test user object
-            username: username,
-            name: "test",
-            surname: "test",
-            address: "updated",
-            birthdate: "2000-01-01",
-            role: Role.MANAGER
-        }
-        mockIsLoggedIn(testUserLogged)
-        const response = await request(app).patch(usersBaseURL + "/" + username).send(testUserUpdated) //Send a PATCH request to the route
-        expect(response.status).toBe(400) //Check if the response status is 400
-    })
-
-    test("PATCH /:username propagates error from controller", async () => {
-        const username = "uid"
-        const testUserUpdated = { //Define a test user object sent to the route
-            username: username,
-            name: "test",
-            surname: "test",
-            address: "test",
-            birthdate: "2000-01-01",
-            role: Role.MANAGER
-        }
-        const testUserLogged = { //Define a test user object
-            username: username,
-            name: "test",
-            surname: "test",
-            address: "updated",
-            birthdate: "2000-01-01",
-            role: Role.MANAGER
-        }
-        mockIsLoggedIn(testUserLogged)
-        jest.spyOn(UserController.prototype, "updateUserInfo").mockRejectedValueOnce(new Error()) //Mock the updateUserInfo method of the controller
-        const response = await request(app).patch(usersBaseURL + "/" + username).send(testUserUpdated) //Send a PATCH request to the route
-        expect(response.status).toBe(503) //Check if the response status is 500
-        expect(UserController.prototype.updateUserInfo).toHaveBeenCalledTimes(1) //Check if the updateUserInfo method has been called once
-        //Check if the updateUserInfo method has been called with the correct parameters
-        expect(UserController.prototype.updateUserInfo).toHaveBeenCalledWith(
-            testUserLogged,
-            testUserUpdated.name,
-            testUserUpdated.surname,
-            testUserUpdated.address,
-            testUserUpdated.birthdate,
-            testUserUpdated.username
-        )
-    })
-
     // This test suite is for the DELETE /:username endpoint
     describe('DELETE /:username', () => {
         // This test checks if a user can delete itself
