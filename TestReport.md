@@ -1,6 +1,14 @@
 # Test Report
 
-<The goal of this document is to explain how the application was tested, detailing how the test cases were defined and what they cover>
+Authors:
+[Matteo Ghia](mailto:s331347@studenti.polito.it),
+[Giacomo Olivero](mailto:s323349@studenti.polito.it),
+[Luca Tirone](mailto:s292901@studenti.polito.it),
+[Gianluca Vinci](mailto:s331364@studenti.polito.it)
+
+Date: June 15th, 2024
+
+Version: V2 - tests of the Official Requirements of EZElectronics (V2)
 
 ## Contents
 
