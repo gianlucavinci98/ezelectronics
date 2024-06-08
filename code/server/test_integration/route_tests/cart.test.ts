@@ -743,6 +743,15 @@ describe("Delete product from cart", () => {
         // Expect the response status to be 404 (Not Found)
         expect(response.status).toBe(404)
     })
+
+    // Test that a customer cannot delete a product from a cart that does not exist
+    test("test with non-existing cart", async () => {
+        await login(customer.username, "password", agent)
+        await dbRun("DELETE FROM cart WHERE id = ?", [cart_id_customer])
+        const response = await agent.delete(cartsBaseURL + "/products/" + products[0].model)
+        // Expect the response status to be 404 (Not Found)
+        expect(response.status).toBe(404)
+    })
 })
 
 // This is a test suite for the "DELETE /ezelectronics/carts" endpoint

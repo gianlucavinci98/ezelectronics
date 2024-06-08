@@ -99,264 +99,266 @@ describe("Products registration API tests", () => {
         await expect(dbGet(sql, [product.model])).resolves.toEqual(product)
     })
 
-    // Test case for attempting to register a product with an empty model field
-    test("test with empty model", async () => {
-        // Create a new product instance with an empty model field
-        const product = { model: "", category: Category.SMARTPHONE, arrivalDate: "2020-01-01", details: "details", quantity: 5, sellingPrice: 10 }
-        // Log in as manager
-        await login(manager.username, "password", agent)
-        // Send a POST request to add the product
-        const response = await agent.post(productsBaseURL).send(product)
-        // Check if the response status is 422 (Unprocessable Entity)
-        expect(response.status).toBe(422)
+    describe("wrong input parameters", () => {
+        // Test case for attempting to register a product with an empty model field
+        test("test with empty model", async () => {
+            // Create a new product instance with an empty model field
+            const product = { model: "", category: Category.SMARTPHONE, arrivalDate: "2020-01-01", details: "details", quantity: 5, sellingPrice: 10 }
+            // Log in as manager
+            await login(manager.username, "password", agent)
+            // Send a POST request to add the product
+            const response = await agent.post(productsBaseURL).send(product)
+            // Check if the response status is 422 (Unprocessable Entity)
+            expect(response.status).toBe(422)
 
-        // Verify the product was not added to the database
-        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
-    })
+            // Verify the product was not added to the database
+            await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        })
 
-    // Test case for attempting to register a product with a missing model field
-    test("test with missing model", async () => {
-        // Create a new product instance without a model field
-        const product = { category: Category.SMARTPHONE, arrivalDate: "2020-01-01", details: "details", quantity: 5, sellingPrice: 10 }
-        // Log in as manager
-        await login(manager.username, "password", agent)
-        // Send a POST request to add the product
-        const response = await agent.post(productsBaseURL).send(product)
-        // Check if the response status is 422 (Unprocessable Entity)
-        expect(response.status).toBe(422)
-    })
+        // Test case for attempting to register a product with a missing model field
+        test("test with missing model", async () => {
+            // Create a new product instance without a model field
+            const product = { category: Category.SMARTPHONE, arrivalDate: "2020-01-01", details: "details", quantity: 5, sellingPrice: 10 }
+            // Log in as manager
+            await login(manager.username, "password", agent)
+            // Send a POST request to add the product
+            const response = await agent.post(productsBaseURL).send(product)
+            // Check if the response status is 422 (Unprocessable Entity)
+            expect(response.status).toBe(422)
+        })
 
-    // Test case for attempting to register a product with an invalid category
-    test("test with wrong category", async () => {
-        // Create a new product instance with an invalid category field
-        const product = { model: "testProduct", category: "wrong", arrivalDate: "2020-01-01", details: "details", quantity: 5, sellingPrice: 10 }
-        // Log in as manager
-        await login(manager.username, "password", agent)
-        // Send a POST request to add the product
-        const response = await agent.post(productsBaseURL).send(product)
-        // Check if the response status is 422 (Unprocessable Entity)
-        expect(response.status).toBe(422)
+        // Test case for attempting to register a product with an invalid category
+        test("test with wrong category", async () => {
+            // Create a new product instance with an invalid category field
+            const product = { model: "testProduct", category: "wrong", arrivalDate: "2020-01-01", details: "details", quantity: 5, sellingPrice: 10 }
+            // Log in as manager
+            await login(manager.username, "password", agent)
+            // Send a POST request to add the product
+            const response = await agent.post(productsBaseURL).send(product)
+            // Check if the response status is 422 (Unprocessable Entity)
+            expect(response.status).toBe(422)
 
-        // Verify the product was not added to the database
-        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
-    })
+            // Verify the product was not added to the database
+            await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        })
 
-    // Test case for attempting to register a product with a missing category field
-    test("test with missing category", async () => {
-        // Create a new product instance without a category field
-        const product = { model: "testProduct", arrivalDate: "2020-01-01", details: "details", quantity: 5, sellingPrice: 10 }
-        // Log in as manager
-        await login(manager.username, "password", agent)
-        // Send a POST request to add the product
-        const response = await agent.post(productsBaseURL).send(product)
-        // Check if the response status is 422 (Unprocessable Entity)
-        expect(response.status).toBe(422)
+        // Test case for attempting to register a product with a missing category field
+        test("test with missing category", async () => {
+            // Create a new product instance without a category field
+            const product = { model: "testProduct", arrivalDate: "2020-01-01", details: "details", quantity: 5, sellingPrice: 10 }
+            // Log in as manager
+            await login(manager.username, "password", agent)
+            // Send a POST request to add the product
+            const response = await agent.post(productsBaseURL).send(product)
+            // Check if the response status is 422 (Unprocessable Entity)
+            expect(response.status).toBe(422)
 
-        // Verify the product was not added to the database
-        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
-    })
+            // Verify the product was not added to the database
+            await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        })
 
-    // Test case for attempting to register a product with a quantity less than 1
-    test("quantity less than 1", async () => {
-        // Create a new product instance with a quantity less than 1
-        const product = { model: "testProduct", category: Category.SMARTPHONE, arrivalDate: "2020-01-01", details: "details", quantity: 0, sellingPrice: 10 }
-        // Log in as manager
-        await login(manager.username, "password", agent)
-        // Send a POST request to add the product
-        const response = await agent.post(productsBaseURL).send(product)
-        // Check if the response status is 422 (Unprocessable Entity)
-        expect(response.status).toBe(422)
+        // Test case for attempting to register a product with a quantity less than 1
+        test("quantity less than 1", async () => {
+            // Create a new product instance with a quantity less than 1
+            const product = { model: "testProduct", category: Category.SMARTPHONE, arrivalDate: "2020-01-01", details: "details", quantity: 0, sellingPrice: 10 }
+            // Log in as manager
+            await login(manager.username, "password", agent)
+            // Send a POST request to add the product
+            const response = await agent.post(productsBaseURL).send(product)
+            // Check if the response status is 422 (Unprocessable Entity)
+            expect(response.status).toBe(422)
 
-        // Verify the product was not added to the database
-        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
-    })
+            // Verify the product was not added to the database
+            await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        })
 
-    // Test case for attempting to register a product with a quantity that is not an integer
-    test("quantity not an integer", async () => {
-        // Create a new product instance with a non-integer quantity
-        const product = { model: "testProduct", category: Category.SMARTPHONE, arrivalDate: "2020-01-01", details: "details", quantity: "notAnInteger", sellingPrice: 10 }
-        // Log in as manager
-        await login(manager.username, "password", agent)
-        // Send a POST request to add the product
-        const response = await agent.post(productsBaseURL).send(product)
-        // Check if the response status is 422 (Unprocessable Entity)
-        expect(response.status).toBe(422)
+        // Test case for attempting to register a product with a quantity that is not an integer
+        test("quantity not an integer", async () => {
+            // Create a new product instance with a non-integer quantity
+            const product = { model: "testProduct", category: Category.SMARTPHONE, arrivalDate: "2020-01-01", details: "details", quantity: "notAnInteger", sellingPrice: 10 }
+            // Log in as manager
+            await login(manager.username, "password", agent)
+            // Send a POST request to add the product
+            const response = await agent.post(productsBaseURL).send(product)
+            // Check if the response status is 422 (Unprocessable Entity)
+            expect(response.status).toBe(422)
 
-        // Verify the product was not added to the database
-        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
-    })
+            // Verify the product was not added to the database
+            await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        })
 
-    // Test case for attempting to register a product with a quantity that is a float
-    test("quantity float", async () => {
-        // Create a new product instance with a float quantity
-        const product = { model: "testProduct", category: Category.SMARTPHONE, arrivalDate: "2020-01-01", details: "details", quantity: 1.5, sellingPrice: 10 }
-        // Log in as manager
-        await login(manager.username, "password", agent)
-        // Send a POST request to add the product
-        const response = await agent.post(productsBaseURL).send(product)
-        // Check if the response status is 422 (Unprocessable Entity)
-        expect(response.status).toBe(422)
+        // Test case for attempting to register a product with a quantity that is a float
+        test("quantity float", async () => {
+            // Create a new product instance with a float quantity
+            const product = { model: "testProduct", category: Category.SMARTPHONE, arrivalDate: "2020-01-01", details: "details", quantity: 1.5, sellingPrice: 10 }
+            // Log in as manager
+            await login(manager.username, "password", agent)
+            // Send a POST request to add the product
+            const response = await agent.post(productsBaseURL).send(product)
+            // Check if the response status is 422 (Unprocessable Entity)
+            expect(response.status).toBe(422)
 
-        // Verify the product was not added to the database
-        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
-    })
+            // Verify the product was not added to the database
+            await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        })
 
-    // Test case for attempting to register a product with a missing quantity field
-    test("quantity missing", async () => {
-        // Create a new product instance without a quantity field
-        const product = { model: "testProduct", category: Category.SMARTPHONE, arrivalDate: "2020-01-01", details: "details", sellingPrice: 10 }
-        // Log in as manager
-        await login(manager.username, "password", agent)
-        // Send a POST request to add the product
-        const response = await agent.post(productsBaseURL).send(product)
-        // Check if the response status is 422 (Unprocessable Entity)
-        expect(response.status).toBe(422)
+        // Test case for attempting to register a product with a missing quantity field
+        test("quantity missing", async () => {
+            // Create a new product instance without a quantity field
+            const product = { model: "testProduct", category: Category.SMARTPHONE, arrivalDate: "2020-01-01", details: "details", sellingPrice: 10 }
+            // Log in as manager
+            await login(manager.username, "password", agent)
+            // Send a POST request to add the product
+            const response = await agent.post(productsBaseURL).send(product)
+            // Check if the response status is 422 (Unprocessable Entity)
+            expect(response.status).toBe(422)
 
-        // Verify the product was not added to the database
-        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
-    })
+            // Verify the product was not added to the database
+            await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        })
 
-    // Test case for product registration with missing details
-    test("details missing", async () => {
-        // Create a product with missing details and login as manager
-        const product = { model: "testProduct", category: Category.SMARTPHONE, arrivalDate: "2020-01-01", quantity: 5, sellingPrice: 10 }
-        await login(manager.username, "password", agent)
-        // Send a POST request to register the product
-        const response = await agent.post(productsBaseURL).send(product)
-        // Expect the response status to be 422 (Unprocessable Entity)
-        expect(response.status).toBe(422)
+        // Test case for product registration with missing details
+        test("details missing", async () => {
+            // Create a product with missing details and login as manager
+            const product = { model: "testProduct", category: Category.SMARTPHONE, arrivalDate: "2020-01-01", quantity: 5, sellingPrice: 10 }
+            await login(manager.username, "password", agent)
+            // Send a POST request to register the product
+            const response = await agent.post(productsBaseURL).send(product)
+            // Expect the response status to be 422 (Unprocessable Entity)
+            expect(response.status).toBe(422)
 
-        // Expect the product not to be in the database
-        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
-    })
+            // Expect the product not to be in the database
+            await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        })
 
-    // Test case for product registration with empty details
-    test("details empty", async () => {
-        // Create a product with empty details and login as manager
-        const product = { model: "testProduct", category: Category.SMARTPHONE, arrivalDate: "2020-01-01", details: "", quantity: 5, sellingPrice: 10 }
-        await login(manager.username, "password", agent)
-        // Send a POST request to register the product
-        const response = await agent.post(productsBaseURL).send(product)
-        // Expect the response status to be 200 (OK)
-        expect(response.status).toBe(200)
+        // Test case for product registration with empty details
+        test("details empty", async () => {
+            // Create a product with empty details and login as manager
+            const product = { model: "testProduct", category: Category.SMARTPHONE, arrivalDate: "2020-01-01", details: "", quantity: 5, sellingPrice: 10 }
+            await login(manager.username, "password", agent)
+            // Send a POST request to register the product
+            const response = await agent.post(productsBaseURL).send(product)
+            // Expect the response status to be 200 (OK)
+            expect(response.status).toBe(200)
 
-        // Expect the product to be in the database
-        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
-    })
+            // Expect the product to be in the database
+            await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+        })
 
-    // Test case for product registration with missing selling price
-    test("sellingPrice missing", async () => {
-        // Create a product with missing selling price and login as manager
-        const product = { model: "testProduct", category: Category.SMARTPHONE, arrivalDate: "2020-01-01", details: "details", quantity: 5 }
-        await login(manager.username, "password", agent)
-        // Send a POST request to register the product
-        const response = await agent.post(productsBaseURL).send(product)
-        // Expect the response status to be 422 (Unprocessable Entity)
-        expect(response.status).toBe(422)
+        // Test case for product registration with missing selling price
+        test("sellingPrice missing", async () => {
+            // Create a product with missing selling price and login as manager
+            const product = { model: "testProduct", category: Category.SMARTPHONE, arrivalDate: "2020-01-01", details: "details", quantity: 5 }
+            await login(manager.username, "password", agent)
+            // Send a POST request to register the product
+            const response = await agent.post(productsBaseURL).send(product)
+            // Expect the response status to be 422 (Unprocessable Entity)
+            expect(response.status).toBe(422)
 
-        // Expect the product not to be in the database
-        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
-    })
+            // Expect the product not to be in the database
+            await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        })
 
-    // Test case for product registration with selling price less than 0
-    test("sellingPrice less than 0", async () => {
-        // Create a product with selling price less than 0 and login as manager
-        const product = { model: "testProduct", category: Category.SMARTPHONE, arrivalDate: "2020-01-01", details: "details", quantity: 5, sellingPrice: -1 }
-        await login(manager.username, "password", agent)
-        // Send a POST request to register the product
-        const response = await agent.post(productsBaseURL).send(product)
-        // Expect the response status to be 422 (Unprocessable Entity)
-        expect(response.status).toBe(422)
-    })
+        // Test case for product registration with selling price less than 0
+        test("sellingPrice less than 0", async () => {
+            // Create a product with selling price less than 0 and login as manager
+            const product = { model: "testProduct", category: Category.SMARTPHONE, arrivalDate: "2020-01-01", details: "details", quantity: 5, sellingPrice: -1 }
+            await login(manager.username, "password", agent)
+            // Send a POST request to register the product
+            const response = await agent.post(productsBaseURL).send(product)
+            // Expect the response status to be 422 (Unprocessable Entity)
+            expect(response.status).toBe(422)
+        })
 
-    // Test case for attempting to register a product with a non-numeric selling price
-    test("sellingPrice not a number", async () => {
-        // Create a new product instance with a non-numeric selling price
-        const product = { model: "testProduct", category: Category.SMARTPHONE, arrivalDate: "2020-01-01", details: "details", quantity: 5, sellingPrice: "notANumber" }
-        // Log in as manager
-        await login(manager.username, "password", agent)
-        // Send a POST request to add the product
-        const response = await agent.post(productsBaseURL).send(product)
-        // Check if the response status is 422 (Unprocessable Entity)
-        expect(response.status).toBe(422)
+        // Test case for attempting to register a product with a non-numeric selling price
+        test("sellingPrice not a number", async () => {
+            // Create a new product instance with a non-numeric selling price
+            const product = { model: "testProduct", category: Category.SMARTPHONE, arrivalDate: "2020-01-01", details: "details", quantity: 5, sellingPrice: "notANumber" }
+            // Log in as manager
+            await login(manager.username, "password", agent)
+            // Send a POST request to add the product
+            const response = await agent.post(productsBaseURL).send(product)
+            // Check if the response status is 422 (Unprocessable Entity)
+            expect(response.status).toBe(422)
 
-        // Verify the product was not added to the database
-        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
-    })
+            // Verify the product was not added to the database
+            await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        })
 
-    // Test case for attempting to register a product with a missing arrivalDate field
-    test("arrivalDate missing", async () => {
-        // Create a new product instance without an arrivalDate field
-        const product = { model: "testProduct", category: Category.SMARTPHONE, details: "details", quantity: 5, sellingPrice: 10 }
-        // Log in as manager
-        await login(manager.username, "password", agent)
-        // Send a POST request to add the product
-        const response = await agent.post(productsBaseURL).send(product)
-        // Check if the response status is 200 (OK)
-        expect(response.status).toBe(200)
+        // Test case for attempting to register a product with a missing arrivalDate field
+        test("arrivalDate missing", async () => {
+            // Create a new product instance without an arrivalDate field
+            const product = { model: "testProduct", category: Category.SMARTPHONE, details: "details", quantity: 5, sellingPrice: 10 }
+            // Log in as manager
+            await login(manager.username, "password", agent)
+            // Send a POST request to add the product
+            const response = await agent.post(productsBaseURL).send(product)
+            // Check if the response status is 200 (OK)
+            expect(response.status).toBe(200)
 
-        // Verify the product was added to the database with the current date as arrivalDate
-        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, arrivalDate: new Date().toISOString().split('T')[0] })
-    })
+            // Verify the product was added to the database with the current date as arrivalDate
+            await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, arrivalDate: new Date().toISOString().split('T')[0] })
+        })
 
-    // Test case for attempting to register a product with a null arrivalDate field
-    test("arrivalDate null", async () => {
-        // Create a new product instance with a null arrivalDate field
-        const product = { model: "testProduct", category: Category.SMARTPHONE, arrivalDate: null as null, details: "details", quantity: 5, sellingPrice: 10 }
-        // Log in as manager
-        await login(manager.username, "password", agent)
-        // Send a POST request to add the product
-        const response = await agent.post(productsBaseURL).send(product)
-        // Check if the response status is 200 (OK)
-        expect(response.status).toBe(200)
+        // Test case for attempting to register a product with a null arrivalDate field
+        test("arrivalDate null", async () => {
+            // Create a new product instance with a null arrivalDate field
+            const product = { model: "testProduct", category: Category.SMARTPHONE, arrivalDate: null as null, details: "details", quantity: 5, sellingPrice: 10 }
+            // Log in as manager
+            await login(manager.username, "password", agent)
+            // Send a POST request to add the product
+            const response = await agent.post(productsBaseURL).send(product)
+            // Check if the response status is 200 (OK)
+            expect(response.status).toBe(200)
 
-        // Verify the product was added to the database with the current date as arrivalDate
-        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, arrivalDate: new Date().toISOString().split('T')[0] })
-    })
+            // Verify the product was added to the database with the current date as arrivalDate
+            await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, arrivalDate: new Date().toISOString().split('T')[0] })
+        })
 
-    // Test case for attempting to register a product with an invalid arrivalDate field
-    test("arrivalDate not a date", async () => {
-        // Create a new product instance with an invalid arrivalDate field
-        const product = { model: "testProduct", category: Category.SMARTPHONE, arrivalDate: "notADate", details: "details", quantity: 5, sellingPrice: 10 }
-        // Log in as manager
-        await login(manager.username, "password", agent)
-        // Send a POST request to add the product
-        const response = await agent.post(productsBaseURL).send(product)
-        // Check if the response status is 422 (Unprocessable Entity)
-        expect(response.status).toBe(422)
+        // Test case for attempting to register a product with an invalid arrivalDate field
+        test("arrivalDate not a date", async () => {
+            // Create a new product instance with an invalid arrivalDate field
+            const product = { model: "testProduct", category: Category.SMARTPHONE, arrivalDate: "notADate", details: "details", quantity: 5, sellingPrice: 10 }
+            // Log in as manager
+            await login(manager.username, "password", agent)
+            // Send a POST request to add the product
+            const response = await agent.post(productsBaseURL).send(product)
+            // Check if the response status is 422 (Unprocessable Entity)
+            expect(response.status).toBe(422)
 
-        // Verify the product was not added to the database
-        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
-    })
+            // Verify the product was not added to the database
+            await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        })
 
-    // Test case for attempting to register a product with an arrival date in the future
-    test("arrivalDate in the future", async () => {
-        // Create a new product instance with a future arrivalDate field
-        const product = { model: "testProduct", category: Category.SMARTPHONE, arrivalDate: "2050-01-01", details: "details", quantity: 5, sellingPrice: 10 }
-        // Log in as manager
-        await login(manager.username, "password", agent)
-        // Send a POST request to add the product
-        const response = await agent.post(productsBaseURL).send(product)
-        // Check if the response status is 400 (Bad Request)
-        expect(response.status).toBe(400)
+        // Test case for attempting to register a product with an arrival date in the future
+        test("arrivalDate in the future", async () => {
+            // Create a new product instance with a future arrivalDate field
+            const product = { model: "testProduct", category: Category.SMARTPHONE, arrivalDate: "2050-01-01", details: "details", quantity: 5, sellingPrice: 10 }
+            // Log in as manager
+            await login(manager.username, "password", agent)
+            // Send a POST request to add the product
+            const response = await agent.post(productsBaseURL).send(product)
+            // Check if the response status is 400 (Bad Request)
+            expect(response.status).toBe(400)
 
-        // Verify the product was not added to the database
-        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
-    })
+            // Verify the product was not added to the database
+            await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        })
 
-    // Test case for attempting to register a product with an arrival date in the wrong format
-    test("arrivalDate in wrong format", async () => {
-        // Create a new product instance with an invalid arrivalDate format
-        const product = { model: "testProduct", category: Category.SMARTPHONE, arrivalDate: "01-01-2020", details: "details", quantity: 5, sellingPrice: 10 }
-        // Log in as manager
-        await login(manager.username, "password", agent)
-        // Send a POST request to add the product
-        const response = await agent.post(productsBaseURL).send(product)
-        // Check if the response status is 422 (Unprocessable Entity)
-        expect(response.status).toBe(422)
+        // Test case for attempting to register a product with an arrival date in the wrong format
+        test("arrivalDate in wrong format", async () => {
+            // Create a new product instance with an invalid arrivalDate format
+            const product = { model: "testProduct", category: Category.SMARTPHONE, arrivalDate: "01-01-2020", details: "details", quantity: 5, sellingPrice: 10 }
+            // Log in as manager
+            await login(manager.username, "password", agent)
+            // Send a POST request to add the product
+            const response = await agent.post(productsBaseURL).send(product)
+            // Check if the response status is 422 (Unprocessable Entity)
+            expect(response.status).toBe(422)
 
-        // Verify the product was not added to the database
-        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+            // Verify the product was not added to the database
+            await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toBeUndefined()
+        })
     })
 
     // Test case for attempting to register a product with a model that already exists in the database
@@ -743,46 +745,48 @@ describe("Patch product sell API tests", () => {
         await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual({ ...product, quantity: product.quantity - patch.quantity })
     })
 
-    // Test for selling a product with quantity 0
-    test("test product quantity is 0", async () => {
-        // Create a product instance with quantity 0
-        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 0)
-        // Insert the product into the database
-        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
-        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+    describe("unavailable", () => {
+        // Test for selling a product with quantity 0
+        test("test product quantity is 0", async () => {
+            // Create a product instance with quantity 0
+            const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 0)
+            // Insert the product into the database
+            const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+            await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
 
-        // Define the quantity to be sold
-        const patch = { quantity: 5 }
-        // Log in as a manager
-        await login(manager.username, "password", agent)
-        // Attempt to sell the product
-        const response = await agent.patch(productsBaseURL + `/${product.model}/sell`).send(patch)
-        // Expect the response status to be 409 (Conflict)
-        expect(response.status).toBe(409)
+            // Define the quantity to be sold
+            const patch = { quantity: 5 }
+            // Log in as a manager
+            await login(manager.username, "password", agent)
+            // Attempt to sell the product
+            const response = await agent.patch(productsBaseURL + `/${product.model}/sell`).send(patch)
+            // Expect the response status to be 409 (Conflict)
+            expect(response.status).toBe(409)
 
-        // Expect the database entry to remain unchanged
-        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
-    })
+            // Expect the database entry to remain unchanged
+            await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+        })
 
-    // Test for selling a product with quantity less than requested quantity
-    test("test product quantity less than requested quantity", async () => {
-        // Create a product instance with quantity 5
-        const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 5)
-        // Insert the product into the database
-        const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
-        await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
+        // Test for selling a product with quantity less than requested quantity
+        test("test product quantity less than requested quantity", async () => {
+            // Create a product instance with quantity 5
+            const product = new Product(10, "testProduct", Category.SMARTPHONE, "2020-01-01", "details", 5)
+            // Insert the product into the database
+            const sql = "INSERT INTO product(model, category, arrivalDate, details, quantity, sellingPrice) VALUES (?, ?, ?, ?, ?, ?)"
+            await dbRun(sql, [product.model, product.category, product.arrivalDate, product.details, product.quantity, product.sellingPrice])
 
-        // Define the quantity to be sold (more than available)
-        const patch = { quantity: 10 }
-        // Log in as a manager
-        await login(manager.username, "password", agent)
-        // Attempt to sell the product
-        const response = await agent.patch(productsBaseURL + `/${product.model}/sell`).send(patch)
-        // Expect the response status to be 409 (Conflict)
-        expect(response.status).toBe(409)
+            // Define the quantity to be sold (more than available)
+            const patch = { quantity: 10 }
+            // Log in as a manager
+            await login(manager.username, "password", agent)
+            // Attempt to sell the product
+            const response = await agent.patch(productsBaseURL + `/${product.model}/sell`).send(patch)
+            // Expect the response status to be 409 (Conflict)
+            expect(response.status).toBe(409)
 
-        // Expect the database entry to remain unchanged
-        await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+            // Expect the database entry to remain unchanged
+            await expect(dbGet("SELECT * FROM product WHERE model = ?", [product.model])).resolves.toEqual(product)
+        })
     })
 
     // Test for attempting to sell a product without logging in
@@ -1154,40 +1158,80 @@ describe("Get all products API tests", () => {
         expect(response.body).toStrictEqual(expect.arrayContaining(products))
     })
 
-    // Test for retrieving products successfully with grouping by category
-    test("test success with grouping by category", async () => {
-        // Log in as a manager
-        await login(manager.username, "password", agent)
-        // Send a GET request to retrieve products grouped by category
-        const response = await agent.get(productsBaseURL + `?grouping=category&category=${Category.SMARTPHONE}`)
-        // Expect the response status to be 200 (OK)
-        expect(response.status).toBe(200)
+    describe("grouping by category", () => {
+        // Test for retrieving products successfully with grouping by category
+        test("test success with grouping by category", async () => {
+            // Log in as a manager
+            await login(manager.username, "password", agent)
+            // Send a GET request to retrieve products grouped by category
+            const response = await agent.get(productsBaseURL + `?grouping=category&category=${Category.SMARTPHONE}`)
+            // Expect the response status to be 200 (OK)
+            expect(response.status).toBe(200)
 
-        // Filter expected products by category
-        const expected = products.filter(product => product.category === Category.SMARTPHONE)
+            // Filter expected products by category
+            const expected = products.filter(product => product.category === Category.SMARTPHONE)
 
-        // Expect the response body to contain products of the specified category
-        expect(response.body).toStrictEqual(expect.arrayContaining(expected))
+            // Expect the response body to contain products of the specified category
+            expect(response.body).toStrictEqual(expect.arrayContaining(expected))
+        })
+
+        // Test for retrieving products with an invalid category
+        test("test with category invalid", async () => {
+            // Log in as a manager
+            await login(manager.username, "password", agent)
+            // Send a GET request to retrieve products with an invalid category
+            const response = await agent.get(productsBaseURL + `?grouping=category&category=invalid`)
+            // Expect the response status to be 422 (Unprocessable Entity)
+            expect(response.status).toBe(422)
+        })
+
+        // Test for retrieving products with missing category
+        test("test with missing category", async () => {
+            // Log in as a manager
+            await login(manager.username, "password", agent)
+            // Send a GET request to retrieve products with missing category
+            const response = await agent.get(productsBaseURL + `?grouping=category`)
+            // Expect the response status to be 422 (Unprocessable Entity)
+            expect(response.status).toBe(422)
+        })
     })
 
-    // Test for retrieving products with an invalid category
-    test("test with category invalid", async () => {
-        // Log in as a manager
-        await login(manager.username, "password", agent)
-        // Send a GET request to retrieve products with an invalid category
-        const response = await agent.get(productsBaseURL + `?grouping=category&category=invalid`)
-        // Expect the response status to be 422 (Unprocessable Entity)
-        expect(response.status).toBe(422)
-    })
+    describe("grouping by model", () => {
+        // Test for retrieving products successfully with grouping by model
+        test("test success with grouping by model", async () => {
+            // Log in as a manager
+            await login(manager.username, "password", agent)
+            // Send a GET request to retrieve products grouped by model
+            const response = await agent.get(productsBaseURL + `?grouping=model&model=testProduct1`)
+            // Expect the response status to be 200 (OK)
+            expect(response.status).toBe(200)
 
-    // Test for retrieving products with missing category
-    test("test with missing category", async () => {
-        // Log in as a manager
-        await login(manager.username, "password", agent)
-        // Send a GET request to retrieve products with missing category
-        const response = await agent.get(productsBaseURL + `?grouping=category`)
-        // Expect the response status to be 422 (Unprocessable Entity)
-        expect(response.status).toBe(422)
+            // Filter expected products by model
+            const expected = products.filter(product => product.model === "testProduct1")
+
+            // Expect the response body to contain products with the specified model
+            expect(response.body).toStrictEqual(expect.arrayContaining(expected))
+        })
+
+        // Test for retrieving products with missing model
+        test("test with model missing", async () => {
+            // Log in as a manager
+            await login(manager.username, "password", agent)
+            // Send a GET request to retrieve products with missing model
+            const response = await agent.get(productsBaseURL + `?grouping=model`)
+            // Expect the response status to be 422 (Unprocessable Entity)
+            expect(response.status).toBe(422)
+        })
+
+        // Test for retrieving missing product
+        test("test missing product", async () => {
+            // Log in as a manager
+            await login(manager.username, "password", agent)
+            // Send a GET request to retrieve a missing product
+            const response = await agent.get(productsBaseURL + `?grouping=model&model=testProductNotExists`)
+            // Expect the response status to be 404 (Not Found)
+            expect(response.status).toBe(404)
+        })
     })
 
     // Test for retrieving products with category and model
@@ -1228,42 +1272,6 @@ describe("Get all products API tests", () => {
         const response2 = await agent.get(productsBaseURL + `?model=testProduct1`)
         // Expect the response status to be 422 (Unprocessable Entity)
         expect(response2.status).toBe(422)
-    })
-
-    // Test for retrieving products successfully with grouping by model
-    test("test success with grouping by model", async () => {
-        // Log in as a manager
-        await login(manager.username, "password", agent)
-        // Send a GET request to retrieve products grouped by model
-        const response = await agent.get(productsBaseURL + `?grouping=model&model=testProduct1`)
-        // Expect the response status to be 200 (OK)
-        expect(response.status).toBe(200)
-
-        // Filter expected products by model
-        const expected = products.filter(product => product.model === "testProduct1")
-
-        // Expect the response body to contain products with the specified model
-        expect(response.body).toStrictEqual(expect.arrayContaining(expected))
-    })
-
-    // Test for retrieving products with missing model
-    test("test with model missing", async () => {
-        // Log in as a manager
-        await login(manager.username, "password", agent)
-        // Send a GET request to retrieve products with missing model
-        const response = await agent.get(productsBaseURL + `?grouping=model`)
-        // Expect the response status to be 422 (Unprocessable Entity)
-        expect(response.status).toBe(422)
-    })
-
-    // Test for retrieving missing product
-    test("test missing product", async () => {
-        // Log in as a manager
-        await login(manager.username, "password", agent)
-        // Send a GET request to retrieve a missing product
-        const response = await agent.get(productsBaseURL + `?grouping=model&model=testProductNotExists`)
-        // Expect the response status to be 404 (Not Found)
-        expect(response.status).toBe(404)
     })
 })
 
@@ -1346,40 +1354,90 @@ describe("Get available products API tests", () => {
         expect(response.body).toStrictEqual(expect.arrayContaining(expected))
     })
 
-    // Test for retrieving available products grouped by category
-    test("test success with grouping by category", async () => {
-        // Log in as a manager
-        await login(manager.username, "password", agent)
-        // Send a GET request to retrieve available products grouped by category
-        const response = await agent.get(productsBaseURL + "/available?grouping=category&category=" + Category.SMARTPHONE)
-        // Expect the response status to be 200 (OK)
-        expect(response.status).toBe(200)
+    describe("grouping by category", () => {
+        // Test for retrieving available products grouped by category
+        test("test success with grouping by category", async () => {
+            // Log in as a manager
+            await login(manager.username, "password", agent)
+            // Send a GET request to retrieve available products grouped by category
+            const response = await agent.get(productsBaseURL + "/available?grouping=category&category=" + Category.SMARTPHONE)
+            // Expect the response status to be 200 (OK)
+            expect(response.status).toBe(200)
 
-        // Filter expected products with category SMARTPHONE and quantity greater than 0
-        const expected = products.filter(product => product.category === Category.SMARTPHONE && product.quantity > 0)
+            // Filter expected products with category SMARTPHONE and quantity greater than 0
+            const expected = products.filter(product => product.category === Category.SMARTPHONE && product.quantity > 0)
 
-        // Expect the response body to contain available products with category SMARTPHONE
-        expect(response.body).toStrictEqual(expect.arrayContaining(expected))
+            // Expect the response body to contain available products with category SMARTPHONE
+            expect(response.body).toStrictEqual(expect.arrayContaining(expected))
+        })
+
+        // Test for retrieving available products with invalid category
+        test("test with category invalid", async () => {
+            // Log in as a manager
+            await login(manager.username, "password", agent)
+            // Send a GET request to retrieve available products with invalid category
+            const response = await agent.get(productsBaseURL + "/available?grouping=category&category=invalid")
+            // Expect the response status to be 422 (Unprocessable Entity)
+            expect(response.status).toBe(422)
+        })
+
+        // Test for retrieving available products with missing category
+        test("test with missing category", async () => {
+            // Log in as a manager
+            await login(manager.username, "password", agent)
+            // Send a GET request to retrieve available products with missing category
+            const response = await agent.get(productsBaseURL + "/available?grouping=category")
+            // Expect the response status to be 422 (Unprocessable Entity)
+            expect(response.status).toBe(422)
+        })
     })
 
-    // Test for retrieving available products with invalid category
-    test("test with category invalid", async () => {
-        // Log in as a manager
-        await login(manager.username, "password", agent)
-        // Send a GET request to retrieve available products with invalid category
-        const response = await agent.get(productsBaseURL + "/available?grouping=category&category=invalid")
-        // Expect the response status to be 422 (Unprocessable Entity)
-        expect(response.status).toBe(422)
-    })
+    describe("grouping by model", () => {
+        // Test for retrieving available products grouped by model
+        test("test success with grouping by model", async () => {
+            // Log in as a manager
+            await login(manager.username, "password", agent)
+            // Send a GET request to retrieve available products grouped by model
+            const response = await agent.get(productsBaseURL + "/available?grouping=model&model=testProduct1")
+            // Expect the response status to be 200 (OK)
+            expect(response.status).toBe(200)
 
-    // Test for retrieving available products with missing category
-    test("test with missing category", async () => {
-        // Log in as a manager
-        await login(manager.username, "password", agent)
-        // Send a GET request to retrieve available products with missing category
-        const response = await agent.get(productsBaseURL + "/available?grouping=category")
-        // Expect the response status to be 422 (Unprocessable Entity)
-        expect(response.status).toBe(422)
+            // Filter expected products with model "testProduct1" and quantity greater than 0
+            const expected = products.filter(product => product.model === "testProduct1" && product.quantity > 0)
+
+            // Expect the response body to contain available products with model "testProduct1"
+            expect(response.body).toStrictEqual(expect.arrayContaining(expected))
+        })
+
+        // Test for retrieving available products with missing model
+        test("test with model missing", async () => {
+            // Log in as a manager
+            await login(manager.username, "password", agent)
+            // Send a GET request to retrieve available products with missing model
+            const response = await agent.get(productsBaseURL + "/available?grouping=model")
+            // Expect the response status to be 422 (Unprocessable Entity)
+            expect(response.status).toBe(422)
+        })
+
+        // Test for retrieving missing product
+        test("test missing product", async () => {
+            // Log in as a manager
+            await login(manager.username, "password", agent)
+            // Send a GET request to retrieve available products with missing model
+            const response = await agent.get(productsBaseURL + "/available?grouping=model&model=testProductNotExists")
+            // Expect the response status to be 404 (Not Found)
+            expect(response.status).toBe(404)
+        })
+
+        // Test for retrieving available products grouped by model with product not available
+        test("test with grouping by product and product not available", async () => {
+            // Log in as a manager
+            await login(manager.username, "password", agent)
+            // Send a GET request to retrieve available products with model "testProduct4" (not available)
+            const response = await agent.get(productsBaseURL + "/available?grouping=model&model=testProduct4")
+            // Expect the response status to be 404 (Not Found)
+            expect(response.status).toBe(404)
+        })
     })
 
     // Test for retrieving available products with category and model
@@ -1420,52 +1478,6 @@ describe("Get available products API tests", () => {
         const response2 = await agent.get(productsBaseURL + "/available?model=testProduct1")
         // Expect the response status to be 422 (Unprocessable Entity)
         expect(response2.status).toBe(422)
-    })
-
-    // Test for retrieving available products grouped by model
-    test("test success with grouping by model", async () => {
-        // Log in as a manager
-        await login(manager.username, "password", agent)
-        // Send a GET request to retrieve available products grouped by model
-        const response = await agent.get(productsBaseURL + "/available?grouping=model&model=testProduct1")
-        // Expect the response status to be 200 (OK)
-        expect(response.status).toBe(200)
-
-        // Filter expected products with model "testProduct1" and quantity greater than 0
-        const expected = products.filter(product => product.model === "testProduct1" && product.quantity > 0)
-
-        // Expect the response body to contain available products with model "testProduct1"
-        expect(response.body).toStrictEqual(expect.arrayContaining(expected))
-    })
-
-    // Test for retrieving available products with missing model
-    test("test with model missing", async () => {
-        // Log in as a manager
-        await login(manager.username, "password", agent)
-        // Send a GET request to retrieve available products with missing model
-        const response = await agent.get(productsBaseURL + "/available?grouping=model")
-        // Expect the response status to be 422 (Unprocessable Entity)
-        expect(response.status).toBe(422)
-    })
-
-    // Test for retrieving missing product
-    test("test missing product", async () => {
-        // Log in as a manager
-        await login(manager.username, "password", agent)
-        // Send a GET request to retrieve available products with missing model
-        const response = await agent.get(productsBaseURL + "/available?grouping=model&model=testProductNotExists")
-        // Expect the response status to be 404 (Not Found)
-        expect(response.status).toBe(404)
-    })
-
-    // Test for retrieving available products grouped by model with product not available
-    test("test with grouping by product and product not available", async () => {
-        // Log in as a manager
-        await login(manager.username, "password", agent)
-        // Send a GET request to retrieve available products with model "testProduct4" (not available)
-        const response = await agent.get(productsBaseURL + "/available?grouping=model&model=testProduct4")
-        // Expect the response status to be 404 (Not Found)
-        expect(response.status).toBe(404)
     })
 })
 

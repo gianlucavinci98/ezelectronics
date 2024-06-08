@@ -77,6 +77,39 @@ describe("POST /users", () => {
         const response2 = await request(app).post(usersBaseURL).send(testUser)
         expect(response2.status).toBe(409)
     })
+
+    test("should return 422 if mandatory parameters are missing", async () => {
+        let testUser = {
+            name: "test",
+            surname: "test",
+            password: "test",
+            role: Role.MANAGER,
+            address: "",
+            birthdate: "",
+        } as any
+        const response = await request(app).post(usersBaseURL).send(testUser)
+        expect(response.status).toBe(422)
+
+        testUser.username = "test"
+        delete testUser.name
+        const response2 = await request(app).post(usersBaseURL).send(testUser)
+        expect(response2.status).toBe(422)
+
+        testUser.name = "test"
+        delete testUser.surname
+        const response3 = await request(app).post(usersBaseURL).send(testUser)
+        expect(response3.status).toBe(422)
+
+        testUser.surname = "test"
+        delete testUser.password
+        const response4 = await request(app).post(usersBaseURL).send(testUser)
+        expect(response4.status).toBe(422)
+
+        testUser.password = "test"
+        delete testUser.role
+        const response5 = await request(app).post(usersBaseURL).send(testUser)
+        expect(response5.status).toBe(422)
+    })
 })
 
 describe("GET /users", () => {
@@ -179,6 +212,17 @@ describe("GET /users/roles/:role", () => {
     test("should return 401 if the user is not logged in", async () => {
         const response = await request(app).get(usersBaseURL + "/roles/" + Role.CUSTOMER)
         expect(response.status).toBe(401)
+    })
+
+    test("should return 422 if the role does not exist", async () => {
+        const admin = { username: "admin", name: "admin", surname: "admin", role: Role.ADMIN, address: null as null, birthdate: null as null }
+        const userDAO = new UserDAO()
+        await userDAO.createUser(admin.username, admin.name, admin.surname, "password", admin.role)
+
+        await login(admin.username, "password", agent)
+
+        const response = await agent.get(usersBaseURL + "/roles/invalid")
+        expect(response.status).toBe(422)
     })
 })
 
@@ -361,6 +405,17 @@ describe("DELETE /users/:username", () => {
     test("should return 401 if the user is not logged in", async () => {
         const response = await request(app).delete(usersBaseURL + "/test")
         expect(response.status).toBe(401)
+    })
+
+    test("should return 404 if the target user does not exist", async () => {
+        const user = { username: "test", name: "test", surname: "test", role: Role.ADMIN, address: null as null, birthdate: null as null }
+        const userDAO = new UserDAO()
+        await userDAO.createUser(user.username, user.name, user.surname, "password", user.role)
+
+        await login(user.username, "password", agent)
+
+        const response = await agent.delete(usersBaseURL + "/other")
+        expect(response.status).toBe(404)
     })
 })
 
