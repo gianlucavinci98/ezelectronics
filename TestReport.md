@@ -276,4 +276,5 @@ Official requirements are covered by integration tests. The following table show
 
 ### Coverage white box
 
-Report here the screenshot of coverage values obtained with jest-- coverage
+The table below represents the coverage obtained by all the tests performed on the application, excluding the acceptance tests.
+![Screenshot of obtained coverage](./assets/test_report/coverage.png)
