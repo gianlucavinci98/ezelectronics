@@ -1,4 +1,4 @@
-import { describe, test, expect, beforeEach, beforeAll, jest } from "@jest/globals"
+import { describe, test, expect, beforeEach, jest } from "@jest/globals"
 
 import { Category, Product } from "../../src/components/product"
 import ProductController from "../../src/controllers/productController"
@@ -12,13 +12,9 @@ beforeEach(() => {
     jest.clearAllMocks()
 })
 
-describe("ProductController tests", () => {
-    let productController: ProductController
+let productController: ProductController = new ProductController()
 
-    beforeAll(() => {
-        productController = new ProductController()
-    })
-
+describe("test registerProducts", () => {
     test("register products correctly inserts a new product", async () => {
         const product = new Product(100, "model", Category.APPLIANCE, "2020-01-01", "details", 10);
 
@@ -133,7 +129,9 @@ describe("ProductController tests", () => {
 
         expect(mock_registerProduct).toHaveBeenCalledTimes(0)
     })
+})
 
+describe("test changeProductQuantity", () => {
     test("changeProductQuantity correctly increases the quantity of a product", async () => {
         const product = new Product(100, "model", Category.APPLIANCE, "2020-01-01", "details", 10);
         const newQuantity = 5
@@ -181,7 +179,9 @@ describe("ProductController tests", () => {
 
         expect(mock_changeProductQuantity).toHaveBeenCalledTimes(0)
     })
+})
 
+describe("test sellProduct", () => {
     test("sellProduct correctly decreases the quantity of a product", async () => {
         const product = new Product(100, "model", Category.APPLIANCE, "2020-01-01", "details", 10);
         const quantityToSell = 5
@@ -259,7 +259,9 @@ describe("ProductController tests", () => {
 
         expect(mock_changeProductQuantity).toHaveBeenCalledTimes(0)
     })
+})
 
+describe("test getProducts", () => {
     test("getProducts returns all products when no grouping is provided", async () => {
         const mock_getProducts = jest.spyOn(ProductDAO.prototype, "getProducts").mockResolvedValueOnce([])
         const mock_getProductsByCategory = jest.spyOn(ProductDAO.prototype, "getProductsByCategory")
@@ -297,7 +299,9 @@ describe("ProductController tests", () => {
         expect(mock_getProducts).toHaveBeenCalledTimes(0)
         expect(mock_getProductsByCategory).toHaveBeenCalledTimes(0)
     })
+})
 
+describe("test getAvailableProducts", () => {
     test("getAvailableProducts returns all products when no grouping is provided", async () => {
         const mock_getAvailableProducts = jest.spyOn(ProductDAO.prototype, "getAvailableProducts").mockResolvedValueOnce([])
         const mock_getAvailableProductsByCategory = jest.spyOn(ProductDAO.prototype, "getAvailableProductsByCategory")
@@ -335,7 +339,9 @@ describe("ProductController tests", () => {
         expect(mock_getAvailableProducts).toHaveBeenCalledTimes(0)
         expect(mock_getAvailableProductsByCategory).toHaveBeenCalledTimes(0)
     })
+})
 
+describe("test deleteAllProducts", () => {
     test("deleteAllProducts deletes all products", async () => {
         const mock_deleteAllProducts = jest.spyOn(ProductDAO.prototype, "deleteAllProducts").mockResolvedValueOnce(true)
 
@@ -343,7 +349,9 @@ describe("ProductController tests", () => {
 
         expect(mock_deleteAllProducts).toHaveBeenCalledTimes(1)
     })
+})
 
+describe("test deleteProduct", () => {
     test("deleteProduct deletes a product by model", async () => {
         const product = new Product(100, "model", Category.APPLIANCE, "2020-01-01", "details", 10);
 

@@ -154,8 +154,8 @@ EZElectronics (read EaSy Electronics) is a software application designed to help
 | FR3.4.1 |            Show the list of all available products             |
 |  FR3.5  |      Show the list of all products with the same category      |
 | FR3.5.1 | Show the list of all available products with the same category |
-|  FR3.5  |       Show the list of all products with the same model        |
-| FR3.5.1 |  Show the list of all available products with the same model   |
+|  FR3.6  |       Show the list of all products with the same model        |
+| FR3.6.1 |  Show the list of all available products with the same model   |
 |  FR3.7  |                        Delete a product                        |
 |  FR3.8  |                      Delete all products                       |
 | **FR4** |                       **Manage reviews**                       |

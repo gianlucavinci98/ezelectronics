@@ -54,7 +54,7 @@ beforeEach(() => {
     })
 })
 
-describe("ProductRoutes tests", () => {
+describe("POST /ezelectronics/products", () => {
     test("POST /ezelectronics/products success", async () => {
         const product = {
             model: "model",
@@ -145,7 +145,9 @@ describe("ProductRoutes tests", () => {
 
         expect(mock_registerProducts).toHaveBeenCalledTimes(0)
     })
+})
 
+describe("PATCH /ezelectronics/products/:model", () => {
     test("PATCH /ezelectronics/products/:model success", async () => {
         const model = "model"
         const newQuantity = 1
@@ -196,7 +198,9 @@ describe("ProductRoutes tests", () => {
 
         expect(mock_changeProductQuantity).toHaveBeenCalledTimes(0)
     })
+})
 
+describe("PATCH /ezelectronics/products/:model/sell", () => {
     test("PATCH /ezelectronics/products/:model/sell success", async () => {
         const model = "model"
         const quantity = 1
@@ -247,7 +251,9 @@ describe("ProductRoutes tests", () => {
 
         expect(mock_sellProduct).toHaveBeenCalledTimes(0)
     })
+})
 
+describe("GET /ezelectronics/products", () => {
     test("GET /ezelectronics/products success", async () => {
         const mock_getProducts = jest.spyOn(ProductController.prototype, "getProducts").mockResolvedValueOnce([])
 
@@ -355,7 +361,9 @@ describe("ProductRoutes tests", () => {
         expect(mock_getProductsByCategory).toHaveBeenCalledTimes(1)
         expect(mock_getProductsByCategory).toHaveBeenCalledWith(grouping, undefined, model)
     })
+})
 
+describe("GET /ezelectronics/products/available", () => {
     test("GET /ezelectronics/products/available success", async () => {
         const mock_getAvailableProducts = jest.spyOn(ProductController.prototype, "getAvailableProducts").mockResolvedValueOnce([])
 
@@ -463,7 +471,9 @@ describe("ProductRoutes tests", () => {
         expect(mock_getAvailableProductsByCategory).toHaveBeenCalledTimes(1)
         expect(mock_getAvailableProductsByCategory).toHaveBeenCalledWith(grouping, undefined, model)
     })
+})
 
+describe("DELETE /ezelectronics/products/:model", () => {
     test("DELETE /ezelectronics/products/:model success", async () => {
         const model = "model"
         const mock_deleteProduct = jest.spyOn(ProductController.prototype, "deleteProduct").mockResolvedValueOnce(true)
@@ -485,7 +495,9 @@ describe("ProductRoutes tests", () => {
         expect(mock_deleteProduct).toHaveBeenCalledTimes(1)
         expect(mock_deleteProduct).toHaveBeenCalledWith(model)
     })
+})
 
+describe("DELETE /ezelectronics/products", () => {
     test("DELETE /ezelectronics/products success", async () => {
         const mock_deleteAllProducts = jest.spyOn(ProductController.prototype, "deleteAllProducts").mockResolvedValueOnce(true)
 

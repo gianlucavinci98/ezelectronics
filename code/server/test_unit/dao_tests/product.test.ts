@@ -1,8 +1,8 @@
-import { describe, test, expect, beforeAll, afterEach, jest } from "@jest/globals"
+import { describe, test, expect, afterEach, jest } from "@jest/globals"
 import ProductDAO from "../../src/dao/productDAO"
 import db from "../../src/db/db"
 import { ProductNotFoundError } from "../../src/errors/productError"
-import { Product, Category } from "../../src/components/product"
+import { Category } from "../../src/components/product"
 
 jest.mock("../../src/db/db")
 
@@ -10,13 +10,9 @@ afterEach(() => {
     jest.clearAllMocks()
 })
 
-describe('test ProductDAO', () => {
-    let productDAO: ProductDAO
+let productDAO: ProductDAO = new ProductDAO()
 
-    beforeAll(() => {
-        productDAO = new ProductDAO()
-    })
-
+describe("test registerProduct", () => {
     test('registerProduct success', async () => {
         const mock_db_run = jest.spyOn(db, 'run').mockImplementation((sql, params, callback) => {
             callback(null)
@@ -57,7 +53,9 @@ describe('test ProductDAO', () => {
             expect.any(Function)
         )
     })
+})
 
+describe("test changeProductQuantity", () => {
     test('changeProductQuantity success', async () => {
         const mock_db_run = jest.spyOn(db, 'run').mockImplementation((sql, params, callback) => {
             callback(null)
@@ -98,7 +96,9 @@ describe('test ProductDAO', () => {
             expect.any(Function)
         )
     })
+})
 
+describe("test getProduct", () => {
     test('getProduct success', async () => {
         const product = { sellingPrice: 100, model: 'Model1', category: Category.APPLIANCE, arrivalDate: '2022-01-01', details: 'Details1', quantity: 10 }
         const mock_db_get = jest.spyOn(db, 'get').mockImplementation((sql, params, callback) => {
@@ -154,7 +154,9 @@ describe('test ProductDAO', () => {
             expect.any(Function)
         )
     })
+})
 
+describe("test getProducts", () => {
     test('getProducts', async () => {
         const products = [
             { sellingPrice: 100, model: 'Model1', category: Category.APPLIANCE, arrivalDate: '2022-01-01', details: 'Details1', quantity: 10 },
@@ -199,7 +201,9 @@ describe('test ProductDAO', () => {
             expect.any(Function)
         )
     })
+})
 
+describe("test getProductsByCategory", () => {
     test('getProductsByCategory', async () => {
         const products = [
             { sellingPrice: 100, model: 'Model1', category: Category.APPLIANCE, arrivalDate: '2022-01-01', details: 'Details1', quantity: 10 },
@@ -244,7 +248,9 @@ describe('test ProductDAO', () => {
             expect.any(Function)
         )
     })
+})
 
+describe("test getAvailableProductsByCategory", () => {
     test('getAvailableProductsByCategory', async () => {
         const products = [
             { sellingPrice: 100, model: 'Model1', category: Category.APPLIANCE, arrivalDate: '2022-01-01', details: 'Details1', quantity: 10 },
@@ -291,7 +297,9 @@ describe('test ProductDAO', () => {
             expect.any(Function)
         )
     })
+})
 
+describe("test getProductAvailable", () => {
     test('getProductAvailable success', async () => {
         const product = { sellingPrice: 100, model: 'Model1', category: Category.APPLIANCE, arrivalDate: '2022-01-01', details: 'Details1', quantity: 10 }
         const mock_db_get = jest.spyOn(db, 'get').mockImplementation((sql, params, callback) => {
@@ -347,7 +355,9 @@ describe('test ProductDAO', () => {
             expect.any(Function)
         )
     })
+})
 
+describe("test getAvailableProducts", () => {
     test('getAvailableProducts', async () => {
         const products = [
             { sellingPrice: 100, model: 'Model1', category: Category.APPLIANCE, arrivalDate: '2022-01-01', details: 'Details1', quantity: 10 },
@@ -392,7 +402,9 @@ describe('test ProductDAO', () => {
             expect.any(Function)
         )
     })
+})
 
+describe("test deleteAllProducts", () => {
     test('deleteAllProducts', async () => {
         const mock_db_run = jest.spyOn(db, 'run').mockImplementation((sql, params, callback) => {
             callback(null)
@@ -433,7 +445,9 @@ describe('test ProductDAO', () => {
             expect.any(Function)
         )
     })
+})
 
+describe("test deleteProduct", () => {
     test('deleteProduct', async () => {
         const mock_db_run = jest.spyOn(db, 'run').mockImplementation((sql, params, callback) => {
             callback(null)
