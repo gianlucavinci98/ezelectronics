@@ -1,0 +1,22 @@
+DROP TABLE IF EXISTS cart_items;
+DROP TABLE IF EXISTS cart;
+CREATE TABLE cart (
+    id INTEGER PRIMARY KEY,
+    customer TEXT NOT NULL,
+    paid BOOLEAN NOT NULL DEFAULT FALSE,
+    paymentDate DATE NULL DEFAULT NULL,
+    total DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    FOREIGN KEY (customer) REFERENCES users(username)
+);
+CREATE TABLE cart_items (
+    cart INTEGER NOT NULL,
+    model TEXT NOT NULL,
+    quantity INTEGER NOT NULL,
+    category TEXT NOT NULL CHECK (
+        category IN ('Smartphone', 'Laptop', 'Appliance')
+    ),
+    price DECIMAL(10, 2) NOT NULL CHECK (price >= 0.00),
+    PRIMARY KEY (cart, model),
+    FOREIGN KEY (cart) REFERENCES cart(id) ON DELETE CASCADE,
+    FOREIGN KEY (model) REFERENCES product(model) ON DELETE CASCADE
+);

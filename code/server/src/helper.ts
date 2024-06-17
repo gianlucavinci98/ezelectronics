@@ -1,5 +1,6 @@
 const { validationResult } = require("express-validator")
 import express from "express"
+import { EzError } from "./errors/genericError"
 
 /**
  * The ErrorHandler class is used to handle errors in the application.
@@ -20,7 +21,7 @@ class ErrorHandler {
             errors.array().forEach((e: any) => {
                 error += "- Parameter: **" + e.param + "** - Reason: *" + e.msg + "* - Location: *" + e.location + "*\n\n"
             })
-            return res.status(422).json({ error: error })
+            return ErrorHandler.returnError(res, new EzError(422, error))
         }
         return next()
     }
@@ -31,11 +32,12 @@ class ErrorHandler {
      */
     static registerErrorHandler(router: express.Application) {
         router.use((err: any, req: any, res: any, next: any) => {
-            return res.status(err.customCode || 503).json({
-                error: err.customMessage || "Internal Server Error",
-                status: err.customCode || 503
-            });
+            return ErrorHandler.returnError(res, new EzError(err.customCode || 503, err.customMessage || "Internal Server Error"))
         })
+    }
+
+    static returnError(res: any, err: EzError) {
+        return res.status(err.customCode).json({ error: err.customMessage, status: err.customCode })
     }
 }
 

@@ -3,7 +3,8 @@ import ErrorHandler from "../helper"
 import { body, param, query } from "express-validator"
 import ProductController from "../controllers/productController"
 import Authenticator from "./auth"
-import { Product } from "../components/product"
+import { Product, Category } from "../components/product"
+import { DateError } from "../utilities"
 
 /**
  * Represents a class that defines the routes for handling proposals.
@@ -58,6 +59,21 @@ class ProductRoutes {
          */
         this.router.post(
             "/",
+            this.authenticator.isLoggedIn,
+            this.authenticator.isAdminOrManager,
+            body("model").isString().notEmpty(),
+            body("category").isString().isIn(Object.values(Category)),
+            body("quantity").isInt({ gt: 0 }),
+            body("details").isString(),
+            body("sellingPrice").isFloat({ gt: 0.0 }),
+            body("arrivalDate").optional({ nullable: true }).isDate({ format: "YYYY-MM-DD" }),
+            this.errorHandler.validateRequest,
+            (req: any, res: any, next: any) => {
+                if (req.body.arrivalDate !== undefined && new Date(req.body.arrivalDate) > new Date()) {
+                    return next(new DateError())
+                }
+                return next()
+            },
             (req: any, res: any, next: any) => this.controller.registerProducts(req.body.model, req.body.category, req.body.quantity, req.body.details, req.body.sellingPrice, req.body.arrivalDate)
                 .then(() => res.status(200).end())
                 .catch((err) => next(err))
@@ -74,8 +90,20 @@ class ProductRoutes {
          */
         this.router.patch(
             "/:model",
+            this.authenticator.isLoggedIn,
+            this.authenticator.isAdminOrManager,
+            param("model").isString().notEmpty(),
+            body("quantity").isInt({ gt: 0 }),
+            body("changeDate").optional({ nullable: true }).isDate({ format: "YYYY-MM-DD" }),
+            this.errorHandler.validateRequest,
+            (req: any, res: any, next: any) => {
+                if (req.body.changeDate !== undefined && new Date(req.body.changeDate) > new Date()) {
+                    return next(new DateError())
+                }
+                return next()
+            },
             (req: any, res: any, next: any) => this.controller.changeProductQuantity(req.params.model, req.body.quantity, req.body.changeDate)
-                .then((quantity: any /**number */) => res.status(200).json({ quantity: quantity }))
+                .then((quantity: number) => res.status(200).json({ quantity: quantity }))
                 .catch((err) => next(err))
         )
 
@@ -90,8 +118,20 @@ class ProductRoutes {
          */
         this.router.patch(
             "/:model/sell",
+            this.authenticator.isLoggedIn,
+            this.authenticator.isAdminOrManager,
+            param("model").isString().notEmpty(),
+            body("quantity").isInt({ gt: 0 }),
+            body("sellingDate").optional({ nullable: true }).isDate({ format: "YYYY-MM-DD" }),
+            this.errorHandler.validateRequest,
+            (req: any, res: any, next: any) => {
+                if (req.body.sellingDate !== undefined && new Date(req.body.sellingDate) > new Date()) {
+                    return next(new DateError())
+                }
+                return next()
+            },
             (req: any, res: any, next: any) => this.controller.sellProduct(req.params.model, req.body.quantity, req.body.sellingDate)
-                .then((quantity: any /**number */) => res.status(200).json({ quantity: quantity }))
+                .then((quantity: number) => res.status(200).json({ quantity: quantity }))
                 .catch((err) => {
                     console.log(err)
                     next(err)
@@ -109,8 +149,32 @@ class ProductRoutes {
          */
         this.router.get(
             "/",
+            this.authenticator.isLoggedIn,
+            this.authenticator.isAdminOrManager,
+            query("grouping").optional().isString().isIn(["category", "model"]),
+            query("category").optional().isString().isIn(Object.values(Category)),
+            query("model").optional().isString().notEmpty(),
+            this.errorHandler.validateRequest,
+            (req: any, res: any, next: any) => {
+                if (req.query.grouping === "category" && req.query.category === undefined) {
+                    return res.status(422).json({ error: "Category is required when grouping is category" })
+                }
+                if (req.query.grouping === "category" && req.query.model !== undefined) {
+                    return res.status(422).json({ error: "Model cannot be present when grouping is category" })
+                }
+                if (req.query.grouping === "model" && req.query.model === undefined) {
+                    return res.status(422).json({ error: "Model is required when grouping is model" })
+                }
+                if (req.query.grouping === "model" && req.query.category !== undefined) {
+                    return res.status(422).json({ error: "Category cannot be present when grouping is model" })
+                }
+                if (req.query.grouping === undefined && (req.query.category !== undefined || req.query.model !== undefined)) {
+                    return res.status(422).json({ error: "Grouping is required when category or model are present" })
+                }
+                return next()
+            },
             (req: any, res: any, next: any) => this.controller.getProducts(req.query.grouping, req.query.category, req.query.model)
-                .then((products: any /*Product[]*/) => res.status(200).json(products))
+                .then((products: Product[]) => res.status(200).json(products))
                 .catch((err) => {
                     console.log(err)
                     next(err)
@@ -128,8 +192,31 @@ class ProductRoutes {
          */
         this.router.get(
             "/available",
+            this.authenticator.isLoggedIn,
+            query("grouping").optional().isString().isIn(["category", "model"]),
+            query("category").optional().isString().isIn(Object.values(Category)),
+            query("model").optional().isString().notEmpty(),
+            this.errorHandler.validateRequest,
+            (req: any, res: any, next: any) => {
+                if (req.query.grouping === "category" && req.query.category === undefined) {
+                    return res.status(422).json({ error: "Category is required when grouping is category" })
+                }
+                if (req.query.grouping === "category" && req.query.model !== undefined) {
+                    return res.status(422).json({ error: "Model cannot be present when grouping is category" })
+                }
+                if (req.query.grouping === "model" && req.query.model === undefined) {
+                    return res.status(422).json({ error: "Model is required when grouping is model" })
+                }
+                if (req.query.grouping === "model" && req.query.category !== undefined) {
+                    return res.status(422).json({ error: "Category cannot be present when grouping is model" })
+                }
+                if (req.query.grouping === undefined && (req.query.category !== undefined || req.query.model !== undefined)) {
+                    return res.status(422).json({ error: "Grouping is required when category or model are present" })
+                }
+                return next()
+            },
             (req: any, res: any, next: any) => this.controller.getAvailableProducts(req.query.grouping, req.query.category, req.query.model)
-                .then((products: any/*Product[]*/) => res.status(200).json(products))
+                .then((products: Product[]) => res.status(200).json(products))
                 .catch((err) => next(err))
         )
 
@@ -140,6 +227,8 @@ class ProductRoutes {
          */
         this.router.delete(
             "/",
+            this.authenticator.isLoggedIn,
+            this.authenticator.isAdminOrManager,
             (req: any, res: any, next: any) => this.controller.deleteAllProducts()
                 .then(() => res.status(200).end())
                 .catch((err: any) => next(err))
@@ -153,12 +242,13 @@ class ProductRoutes {
          */
         this.router.delete(
             "/:model",
+            this.authenticator.isLoggedIn,
+            this.authenticator.isAdminOrManager,
+            param("model").isString().notEmpty(),
             (req: any, res: any, next: any) => this.controller.deleteProduct(req.params.model)
                 .then(() => res.status(200).end())
                 .catch((err: any) => next(err))
         )
-
-
     }
 }
 
