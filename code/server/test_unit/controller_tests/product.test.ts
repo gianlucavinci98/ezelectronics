@@ -328,14 +328,14 @@ describe("test getAvailableProducts", () => {
     })
 
     test("getAvailableProducts returns a product by model when grouping is 'model'", async () => {
-        const mock_getProductAvailable = jest.spyOn(ProductDAO.prototype, "getProductAvailable").mockResolvedValueOnce(new Product(100, "model", Category.APPLIANCE, "2020-01-01", "details", 10))
         const mock_getAvailableProducts = jest.spyOn(ProductDAO.prototype, "getAvailableProducts")
+        const mock_getProduct = jest.spyOn(ProductDAO.prototype, "getProduct").mockResolvedValueOnce(new Product(100, "model", Category.APPLIANCE, "2020-01-01", "details", 0))
         const mock_getAvailableProductsByCategory = jest.spyOn(ProductDAO.prototype, "getAvailableProductsByCategory")
 
         await productController.getAvailableProducts("model", null, "model")
 
-        expect(mock_getProductAvailable).toHaveBeenCalledTimes(1)
-        expect(mock_getProductAvailable).toHaveBeenCalledWith("model")
+        expect(mock_getProduct).toHaveBeenCalledTimes(1)
+        expect(mock_getProduct).toHaveBeenCalledWith("model")
         expect(mock_getAvailableProducts).toHaveBeenCalledTimes(0)
         expect(mock_getAvailableProductsByCategory).toHaveBeenCalledTimes(0)
     })

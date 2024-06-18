@@ -1435,8 +1435,8 @@ describe("Get available products API tests", () => {
             await login(manager.username, "password", agent)
             // Send a GET request to retrieve available products with model "testProduct4" (not available)
             const response = await agent.get(productsBaseURL + "/available?grouping=model&model=testProduct4")
-            // Expect the response status to be 404 (Not Found)
-            expect(response.status).toBe(404)
+            // Expect the response status to be 200 (OK)
+            expect(response.status).toBe(200)
         })
     })
 
