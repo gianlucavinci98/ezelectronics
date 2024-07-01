@@ -120,8 +120,10 @@ class ProductController {
     async getAvailableProducts(grouping: string | null, category: string | null, model: string | null): Promise<Product[]> {
         if (grouping === "category")
             return this.dao.getAvailableProductsByCategory(category);
-        if (grouping === "model")
-            return [await this.dao.getProductAvailable(model)];
+        if (grouping === "model") {
+            let p = await this.dao.getProduct(model)
+            return p.quantity > 0 ? [p] : []
+        }
         return this.dao.getAvailableProducts();
     }
 
